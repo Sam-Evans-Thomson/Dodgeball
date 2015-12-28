@@ -40,7 +40,7 @@ public class AddCatchAngle extends PowerUp {
     @Override
     public void applyEffect(Player p) {
         GamePanel.soundManager.addCatchAngle();
-        p.catchAngle += Math.PI/8.0;
+        p.catchAngle += Math.PI/11.0;
         if (p.catchAngle > 2*Math.PI) p.catchAngle = 2*Math.PI;
     }
 

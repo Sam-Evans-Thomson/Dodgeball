@@ -11,4 +11,9 @@ package dodgeballgame.Menus;
  */
 public class GeneralSettings extends Menu{
     
+    public GeneralSettings() {
+        init();
+    }
+
+    
 }

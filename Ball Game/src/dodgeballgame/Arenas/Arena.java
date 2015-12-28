@@ -129,7 +129,7 @@ public class Arena {
     }
     
     public void initGoals() {
-        cornerGoals();
+        sideGoals();
     }
 
     public void initHitBoxes() {
@@ -166,11 +166,11 @@ public class Arena {
     
     private void sideGoals(){
         HitBox goal1 = new HitBox(0,HEIGHT/2);
-        goal1.makeRect(15, HEIGHT/6);
+        goal1.makeRect(15, HEIGHT/12);
         arenaTeam2Goal.add(goal1);
         
         HitBox goal2 = new HitBox(WIDTH,HEIGHT/2);
-        goal2.makeRect(15, HEIGHT/6);
+        goal2.makeRect(15, HEIGHT/12);
         arenaTeam1Goal.add(goal2);
     }
 }

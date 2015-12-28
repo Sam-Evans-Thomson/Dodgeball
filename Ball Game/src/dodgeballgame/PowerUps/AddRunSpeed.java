@@ -32,7 +32,7 @@ public class AddRunSpeed extends PowerUp {
     @Override
     public void applyEffect(Player p) {
         GamePanel.soundManager.addRunSpeed();
-        p.maxSpeed += 30;
+        p.maxSpeed += 50;
     }
 
 }

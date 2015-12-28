@@ -95,12 +95,12 @@ public class SoundManager {
         sounds.get(7+i).play();
     }
     
-    public void track1() {
+    public void music() {
         music.get(0).changeVolume(-10);
         music.get(0).loop();
     }
     
-    public void stopTrack1() {
+    public void stopMusic() {
         music.get(0).pause();
     }
     

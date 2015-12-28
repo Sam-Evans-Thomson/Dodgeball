@@ -15,9 +15,12 @@ import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import javax.imageio.ImageIO;
 
 import org.lwjgl.glfw.*;
  
@@ -98,6 +101,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public static int winScore;
     public static GameTimer gameTimer;
     
+    private BufferedImage loading;
+    
     public GamePanel() {
         super();
         setPreferredSize(new Dimension(screenWIDTH,screenHEIGHT));
@@ -118,7 +123,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     
     @Override
     public void run() {
-        init();
         loop();    
     }
     
@@ -126,16 +130,23 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         // Find screen dimensions.
         // Set screen dimensions
         
-        /****** draw Loading Screen ******/
-        gameTimer = new GameTimer();
-        running = true;
-        gameState = MENU;        
-        
         //Initialising images
         image = new BufferedImage(screenWIDTH, screenHEIGHT, BufferedImage.TYPE_INT_RGB);
         image2 = new BufferedImage(screenWIDTH, screenHEIGHT, BufferedImage.TYPE_INT_RGB);
         g = (Graphics2D) image.getGraphics();
         g2 = (Graphics2D) image2.getGraphics();
+        
+        /****** draw Loading Screen ******/
+        draw();
+        try {
+            loading = ImageIO.read(new File("Images/Loading.png"));
+        } catch(IOException e) {}
+        renderLoading();
+        draw();
+        
+        gameTimer = new GameTimer();
+        running = true;
+        gameState = MENU;        
 
         // Setup Timer
         timer = new Timer();
@@ -248,7 +259,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         gameTimer.resume();
         soundManager.addHealth();
         soundManager.changeMusicVolume(-20);
-        soundManager.track1();
+        soundManager.music();
         
         playerArray.stream().forEach((p) -> {
             p.catchTimer.refresh();
@@ -272,6 +283,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     
     private void loop() {
 
+        
+        init();
+        
         long lastTime = System.nanoTime();
         long startTime = 0;
         long URDTimeMillis;
@@ -287,6 +301,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         
         // Game Loop
         while(running) {
+            
+            
             
             // Poll for window events. The key callback above will only be
             // invoked during this call.
@@ -341,8 +357,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
                 frameCount = 0;
                 totalTime = 0;
             }
-
-            
         }
     }
     
@@ -488,8 +502,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     }
 
     private void renderMenu() {
-        
         menu.render(g);
+    }
+    
+    private void renderLoading() {
+        g.drawImage(loading, 0,0, null);
     }
     
     private void draw() {

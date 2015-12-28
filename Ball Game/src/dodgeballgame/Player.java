@@ -137,7 +137,7 @@ public class Player {
                
         invincibleTime = 2d;
         baseSpeed = speed = 500.0;
-        maxSpeed = 500;
+        maxSpeed = 800;
         throwSpeed = 500.0;
         prevPos = new Vec2(pos.getX(),pos.getY());
         delta = new Vec2(0,0);
@@ -199,7 +199,7 @@ public class Player {
     }
     
     private void updateThrowValues() {
-        double movVelFactor = 0.5;
+        double movVelFactor = 0.3;
         
         Vec2 throwDelta = new Vec2((movVelFactor*delta.getX()/d)+throwSpeed*Math.cos(angle),
                                     (movVelFactor*delta.getY()/d)+throwSpeed*Math.sin(angle));

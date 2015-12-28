@@ -43,6 +43,7 @@ public class AddBall extends PowerUp {
     public void applyEffect(Player p) {
         p.numBalls++;
         GamePanel.soundManager.addBall();
+        p.catchTimer.refresh();
     }
 
     
