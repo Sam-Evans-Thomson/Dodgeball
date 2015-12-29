@@ -41,7 +41,7 @@ public class BoolSetting extends Setting{
     
     @Override
     public String toString() {
-        return "BOOL" + " - " + name + " - " + getValue();
+        return "BOOL" + " - " + name + " - " + getValue() + " - " + start + " - " + end + " - " + inc;
     }
     
 

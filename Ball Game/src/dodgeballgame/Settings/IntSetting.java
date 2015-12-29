@@ -59,6 +59,6 @@ public class IntSetting extends Setting {
     
     @Override
     public String toString() {
-        return "INT" + " - " + name + " - " + getValue();
+        return "INT" + " - " + name + " - " + getValue() + " - " + start + " - " + end + " - " + inc;
     }
 }

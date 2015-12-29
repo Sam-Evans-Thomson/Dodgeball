@@ -15,13 +15,15 @@ import javax.swing.JFrame;
 public class Game {
     
     private static JFrame window;
+    private static GamePanel gamePanel;
     
     public static void main(String[] args) {
         
     window = new JFrame("First Game");
     window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
-    window.setContentPane(new GamePanel());
+    gamePanel = new GamePanel();
+    window.setContentPane(gamePanel);
     
     window.pack();
     window.setVisible(true);
@@ -29,6 +31,7 @@ public class Game {
     }   
     
     public static void close() {
+        gamePanel.exit();
         window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
     }
 }

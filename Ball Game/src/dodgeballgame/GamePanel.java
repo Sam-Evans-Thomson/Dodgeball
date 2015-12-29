@@ -369,6 +369,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             gameTimer.pause();
         }
     }  
+    
+    public void exit() {
+        generalSettings.save();
+    }
     /*************************************************************************/
     // GAME UPDATE//
     /*************************************************************************/

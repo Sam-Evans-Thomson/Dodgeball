@@ -56,6 +56,6 @@ public class DoubleSetting extends Setting {
     
     @Override
     public String toString() {
-        return "DOUBLE" + " - " + name + " - " + getValue();
+        return "DOUBLE" + " - " + name + " - " + getValue() + " - " + start + " - " + end + " - " + inc;
     }
 }

@@ -86,4 +86,8 @@ public class GeneralSettings {
         val = val/3.0 - 100.0/3.0;
         GamePanel.soundManager.changeSoundVolume((int)val);
     }
+    
+    public void save() {
+        settings.save();
+    }
 }

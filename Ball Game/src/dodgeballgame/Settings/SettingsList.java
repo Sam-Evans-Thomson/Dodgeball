@@ -90,13 +90,19 @@ public class SettingsList {
         if (path!=null) {
             FileManager fm = new FileManager(path);
             try {
+                String[] settings = new String[settingsList.size()];
+                int cnt = 0;
                 for (Setting s : settingsList) {
-                    fm.writeLine(s.toString());
+                    settings[cnt] = s.toString();
+                    cnt++;
                 }
+                fm.writeLine(settings);
+                fm.close();
             } catch (IOException e) {}
         } else {
             System.out.println("[SAVING] Path for settings list was not appropriate.");
         }
+        
     }
     
 }

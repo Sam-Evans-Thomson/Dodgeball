@@ -23,7 +23,7 @@ import javax.imageio.ImageIO;
  */
 public class GeneralSettingsMenu extends Menu{
     
-    GeneralSettings settings;
+    public GeneralSettings settings;
     private int[] pos;
     final int NUM_SETTINGS;
     int fontSizeLarge, fontSizeSmall;
@@ -108,6 +108,10 @@ public class GeneralSettingsMenu extends Menu{
     
     public void apply() {
         settings.apply();
+    }
+    
+    public void save() {
+        settings.save();
     }
 
     @Override
