@@ -10,27 +10,28 @@ package dodgeballgame.Settings;
  * @author Sam
  */
 public class Setting {
-        
-        double val;
+
         String name;
+        double start;
+        double end;
+        double inc;
         
-        public Setting(double val, String name) {
-            this.val = val;
-            this.name = name;
+        public void setLimits(double start, double end, double inc) {
+            this.start = start;
+            this.end = end;
+            this.inc = inc;
         }
         
-        public Setting(int val, String name) {
-            this.val = (int)val;
-            this.name = name;
+        public void changeValue(int i) {
+            
         }
         
-        public Setting(boolean val, String name) {
-            this.val = (val) ? 1d : 0d;
-            this.name = name;
+        public String getValueString() {
+            return "";
         }
         
-        public double getValue() {
-            return val;
+        public double getDouble() {
+            return 0d;
         }
         
         public String getName() {
@@ -39,6 +40,6 @@ public class Setting {
         
         @Override
         public String toString() {
-            return (name + " - " + val);
+            return "";
         }
     }

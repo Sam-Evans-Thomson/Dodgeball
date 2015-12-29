@@ -26,11 +26,16 @@ public class SoundManager {
     float musicVolume;
     float quietMusicVolume;
     
+    boolean soundIsOn;
+    boolean musicIsOn;
+    
     public SoundManager() {
         init();
     }
     
     private void init() {
+        soundIsOn = true;
+        musicIsOn = true;
         soundVolume = 0f;
         musicVolume = -20f;
         quietMusicVolume = -35f;
@@ -60,48 +65,50 @@ public class SoundManager {
     }
     
     public void addHealth() {
-        sounds.get(0).play();
+        if(soundIsOn) sounds.get(0).play();
     }
     
     public void addCatchAngle() {
-        sounds.get(1).play();
+        if(soundIsOn) sounds.get(1).play();
     }
     
     public void addBall()  {
-        sounds.get(2).play();
+        if(soundIsOn) sounds.get(2).play();
     }
     
     public void catchBall() {
-        sounds.get(3).play();
+        if(soundIsOn) sounds.get(3).play();
     }
     
     public void addCatchReach() {
-        sounds.get(4).play();
+        if(soundIsOn) sounds.get(4).play();
     }
     
     public void addRunSpeed() {
-        sounds.get(5).play();
+        if(soundIsOn) sounds.get(5).play();
     }
     
     public void addThrowSpeed() {
-        sounds.get(5).play();
+        if(soundIsOn) sounds.get(5).play();
     }
     
     public void takeHealth() {
-        sounds.get(6).play();
+        if(soundIsOn) sounds.get(6).play();
     }
     
     public void menu(int i) {
-        sounds.get(7+i).play();
+        if(soundIsOn) sounds.get(7+i).play();
     }
     
     public void music() {
-        music.get(0).changeVolume(-10);
-        music.get(0).loop();
+        if (musicIsOn) {
+           music.get(0).loop(); 
+        }
     }
     
     public void stopMusic() {
-        music.get(0).pause();
+        music.get(0).stop();
+        musicIsOn = false;
     }
     
     public void changeSoundVolume(int vol) {
@@ -123,6 +130,14 @@ public class SoundManager {
         sounds.stream().forEach((ap) -> {
             ap.stop();
         });
+    }
+    
+    public void setSound(boolean bool) {
+        soundIsOn = bool;
+    }
+    
+    public void setMusic(boolean bool) {
+        musicIsOn = bool;
     }
     
 }

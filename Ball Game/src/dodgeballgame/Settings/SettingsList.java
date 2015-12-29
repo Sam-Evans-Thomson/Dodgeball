@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class SettingsList {
     
-    private ArrayList<Setting> settingsList;
+    private ArrayList<Setting> settingsList = new ArrayList<>();
     private int length;
     private String path;
     
@@ -42,8 +42,8 @@ public class SettingsList {
         return settingsList.get(i);
     }
     
-    public double getValue(int i) {
-        return settingsList.get(i).getValue();
+    public double getDouble(int i) {
+        return settingsList.get(i).getDouble();
     }
     
     public String getName(int i) {
@@ -61,7 +61,24 @@ public class SettingsList {
                 String[] strArray = fm.openFile();
                 for (String s : strArray) {
                     String[] setting = s.split(" - ");
-                    add(new Setting(Double.parseDouble(setting[1]),setting[0]));
+
+                    if (setting[0].equals("BOOL")) {
+                        add(new BoolSetting(
+                                Boolean.parseBoolean(setting[2]), 
+                                setting[1]));
+                    } else if (setting[0].equals("DOUBLE")) {
+                        add(new DoubleSetting(Double.parseDouble(setting[2]), 
+                                setting[1], 
+                                Double.parseDouble(setting[3]), 
+                                Double.parseDouble(setting[4]), 
+                                Double.parseDouble(setting[5])));
+                    } else if (setting[0].equals("INT")) {
+                        add(new IntSetting(Integer.parseInt(setting[2]),
+                                setting[1],  
+                                Double.parseDouble(setting[3]), 
+                                Double.parseDouble(setting[4]), 
+                                Double.parseDouble(setting[5])));
+                    }
                 }
             } catch (IOException e) {}
         } else {

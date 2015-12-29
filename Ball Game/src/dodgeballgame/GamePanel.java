@@ -91,7 +91,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public static CharacterMenu characterMenu;
     public static PowerMenu powerMenu;
     public static MatchSettings matchSettings;
-    public static GeneralSettings generalSettings;
+    public static GeneralSettingsMenu generalSettings;
     
     public static boolean friendlyFire;
     public static boolean musicOn;
@@ -162,7 +162,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         characterMenu = new CharacterMenu();
         powerMenu = new PowerMenu();
         matchSettings = new MatchSettings();
-        generalSettings = new GeneralSettings();
+        generalSettings = new GeneralSettingsMenu();
         
         
         //Managers
@@ -180,6 +180,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         initControllers();
         
         newGame(SettingsMenu.valuesList);
+        generalSettings.apply();
     }
     
     public static void initControllers() {
@@ -258,7 +259,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         }
         gameTimer.resume();
         soundManager.addHealth();
-        soundManager.changeMusicVolume(-20);
         soundManager.music();
         
         playerArray.stream().forEach((p) -> {
@@ -364,7 +364,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         if(gameState == MENU) {
             gameState = COUNTIN;
         } else if (gameState == PLAY) {
-            soundManager.changeMusicVolume(-35);
+            soundManager.stopAll();
             gameState = MENU;
             gameTimer.pause();
         }
