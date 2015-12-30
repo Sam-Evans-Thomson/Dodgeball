@@ -59,7 +59,7 @@ public class Menu {
         WIDTH = GamePanel.screenWIDTH;
         
         MENU_WIDTH = (int)(0.83*WIDTH);
-        MENU_HEIGHT = (int)(0.74*HEIGHT);
+        MENU_HEIGHT = (int)(0.80*HEIGHT);
         
         INNER_MENU_WIDTH = (int)(0.75*WIDTH);
         INNER_MENU_HEIGHT = (int)(0.55*HEIGHT);
@@ -99,10 +99,10 @@ public class Menu {
     
     public void render(Graphics2D g) {
         g.setPaint(Color.black);
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-        g.fillRect(0,0,WIDTH, HEIGHT - 80);
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+        g.fillRect(0,0,WIDTH, HEIGHT);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-        g.drawImage(menu,(WIDTH - MENU_WIDTH)/2 , (HEIGHT - MENU_HEIGHT-70)/2, null);
+        g.drawImage(menu,(WIDTH - MENU_WIDTH)/2 , (HEIGHT - MENU_HEIGHT)/2 - MENU_HEIGHT/16, null);
         renderMenu(g);
     }
     

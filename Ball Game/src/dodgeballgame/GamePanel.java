@@ -145,6 +145,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         draw();
         
         gameTimer = new GameTimer();
+        gameTimer.pause();
         running = true;
         gameState = MENU;        
 
@@ -181,6 +182,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         
         newGame(SettingsMenu.valuesList);
         generalSettings.apply();
+        g.setColor(Color.black);
+        g.fillRect(0,0,screenWIDTH, screenHEIGHT);
+        draw();
     }
     
     public static void initControllers() {
@@ -210,7 +214,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         team1Score = team2Score = 0;
         
         
-        GameTimer.reset();
+        gameTimer.reset();
         
         
         playerArray = new ArrayList<>();
@@ -245,10 +249,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         gameTimer.resetCountIn();
         int lastTime = 10;
         int thisTime;
+        
         while(gameTimer.countInTime<3){
             thisTime = (int)gameTimer.countInTime;
-            render();
             if(thisTime != lastTime) soundManager.menu(6);
+            
+            playerArray.stream().forEach((p) -> {
+                p.catchTimer.refresh();
+            });
+            render();
             g.setColor(Color.black);
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
             g.fillRect(0, 0,screenWIDTH , screenHEIGHT);
@@ -257,13 +266,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             draw();
             lastTime = thisTime;
         }
-        gameTimer.resume();
         soundManager.addHealth();
         soundManager.music();
-        
-        playerArray.stream().forEach((p) -> {
-            p.catchTimer.refresh();
-        });
+        gameTimer.resume();
     }
     
     public static void changeScore(int team, int amount) {
@@ -283,7 +288,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     
     private void loop() {
 
-        
         init();
         
         long lastTime = System.nanoTime();
@@ -332,11 +336,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
                 lastTime = startTime;
                 
             } else if (gameState == COUNTIN) {
-                
                 countIn();
                 gameState = PLAY;
                 startTime = System.nanoTime();
-                
             }
             
             draw();
@@ -465,7 +467,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     // Do necessary calculations
     private static void update(float delta) {
-        gameTimer.update(delta);
+        gameTimer.update();
         
         for (int i = 0; i<ballArray.size(); i++) {
             ballArray.get(i).update(delta);
@@ -506,6 +508,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     }
 
     private void renderMenu() {
+        render();
         menu.render(g);
     }
     

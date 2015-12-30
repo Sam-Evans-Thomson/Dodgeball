@@ -19,12 +19,15 @@ public class GameTimer {
     static Timer timer;
     static boolean timing;
     
-    static public double startTime;
-    static public double pauseTime;
-    static public double currentTime;
+    static private double startTime;
+    static private double pauseTime;
+    static private double currentTime;
     
     public double countInTime;
     public double startCountInTime;
+    
+    public int xPos = GamePanel.arenaWIDTH/2;
+    public int yPos = GamePanel.arenaHEIGHT + 60;
             
     
     public GameTimer() {
@@ -32,7 +35,7 @@ public class GameTimer {
         timing = false;
         startTime = 0d;
         currentTime = 0d;
-        countInTime = startCountInTime = 0;
+        countInTime = startCountInTime = 0d;
     }
     
     public static void start() {
@@ -47,33 +50,40 @@ public class GameTimer {
     
     public static void resume() {
         timing = true;
+        startTime += (getTime() - pauseTime);
+        System.out.println(currentTime + "  -  " + startTime);
     }
     
     public static void reset() {
         timing = false;
-        currentTime = startTime = 0d;
+        pauseTime = startTime = getTime();
+        currentTime = 0d;
     }
 
-    public static double getTime() {
+    private static double getTime() {
         return timer.getTime();
     }
     
-    public static void update(double delta) {
+    public static void update() {
         if (timing) {
-            currentTime += delta;
+            currentTime = getTime() - startTime;
         } 
     }
     
+    public static double getRunTime() {
+        return currentTime;
+    }
+    
     public void render(Graphics2D g) {
-        int cTimeMinute = (int)currentTime/60;
-        int cTimeSecond = (int)currentTime%60;
-        int cTimeMSecond = (int)((currentTime-(int)currentTime)*10);
+        int cTimeMinute = (int)(currentTime)/60;
+        int cTimeSecond = (int)(currentTime)%60;
+        int cTimeMSecond = (int)((currentTime-(int)(currentTime))*10);
         g.setColor(new Color(200,0,0));
         g.setFont(new Font("Sans Serif", Font.BOLD, 50));
         if(cTimeMinute == 0) {
-            centreString(cTimeSecond + "." + cTimeMSecond, g, GamePanel.screenWIDTH/2,GamePanel.screenHEIGHT/12);
+            centreString(cTimeSecond + "." + cTimeMSecond, g, xPos,yPos);
         } else {
-            centreString(cTimeMinute + ":" + cTimeSecond + "." + cTimeMSecond, g, GamePanel.screenWIDTH/2,GamePanel.screenHEIGHT/12);
+            centreString(cTimeMinute + ":" + cTimeSecond + "." + cTimeMSecond, g, xPos, yPos);
         }
     }
     

@@ -125,7 +125,14 @@ public class Player {
         catchTimer = new Timer();
         playerImage = playerImageA;
         
-        playerScoreOffsetX = pNumber*GamePanel.arenaWIDTH/GamePanel.NUM_PLAYERS + 20;
+        if (team == 0) {
+            playerScoreOffsetX = pNumber*GamePanel.arenaWIDTH/6 + 20;
+        } else {
+            playerScoreOffsetX = GamePanel.arenaWIDTH/2 + ((pNumber+1)/2)*GamePanel.arenaWIDTH/6 + 20;
+        }
+        
+        
+        
         playerScoreOffsetY = GamePanel.arenaHEIGHT + 60;
         
         W = H = 100; 

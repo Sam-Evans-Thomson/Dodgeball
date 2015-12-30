@@ -95,6 +95,7 @@ public class SettingsMenu extends Menu {
         
         for (int i = 0; i < 9; i++) {
             float opacity = (float)(5f-Math.sqrt((i-4)*(i-4)))/5f;
+            int fontSize = (int)((float)fontSizeLarge*((5f-Math.sqrt((i-4)*(i-4)))/7.5f + 0.333f));
             
             int cursorPlace = (cursor[1] + i - 4) % NUM_SETTINGS;
             if(cursorPlace < 0) cursorPlace += NUM_SETTINGS;      
@@ -108,8 +109,8 @@ public class SettingsMenu extends Menu {
                 g.fillRect(x2 - 80,y + i*yOffset - fontSizeSmall, 160,fontSizeSmall + 2); 
                 g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
             } else {
-                g.setColor(new Color(80,80,180));
-                g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
+                g.setColor(new Color(40,40,100));
+                g.setFont(new Font("Sans Serif", Font.BOLD, fontSize));
                 g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
             }
             g.drawString(namesList[cursorPlace], x, y + i*yOffset);
@@ -172,7 +173,7 @@ public class SettingsMenu extends Menu {
                 break;
             case 5 : value = moveThrough(0,1,value,i);
                 break;
-            case 6 : value = moveThrough(1,100,value,i);
+            case 6 : value = moveThrough(1,99,value,i);
                 break;
             case 7 : value = moveThrough(0,1,value,0.1*i);
                 break;

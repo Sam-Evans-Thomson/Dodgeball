@@ -43,8 +43,8 @@ public class Arena {
     private static BufferedImage backgroundImage;
     private static BufferedImage scaledBackgroundImage;
     
-    double WIDTH = GamePanel.arenaWIDTH;
-    double HEIGHT = GamePanel.arenaHEIGHT;
+    int WIDTH = (int)GamePanel.arenaWIDTH;
+    int HEIGHT = (int)GamePanel.arenaHEIGHT;
         
     public Arena() {
     }
@@ -54,9 +54,12 @@ public class Arena {
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
         g.setColor(new Color(250,250,250));
         g.setFont(new Font("Sans Serif", Font.BOLD, 500));
-        centreString("" + GamePanel.team1Score, g, GamePanel.arenaWIDTH/4,GamePanel.arenaHEIGHT/2+150);
-        centreString("" + GamePanel.team2Score, g, 3*GamePanel.arenaWIDTH/4,GamePanel.arenaHEIGHT/2+150);
-        
+        centreString("" + GamePanel.team1Score, g, WIDTH/2 - WIDTH/4, HEIGHT/2+150);
+        centreString("" + GamePanel.team2Score, g, WIDTH/2 + WIDTH/4, HEIGHT/2+150);
+        g.setFont(new Font("Sans Serif", Font.BOLD, 200));
+        centreString("" + (int)GamePanel.settingsMenu.valuesList[6], g,WIDTH/2 - 130,HEIGHT);
+        centreString("" + (int)GamePanel.settingsMenu.valuesList[6], g,WIDTH/2 + 130,HEIGHT);
+        g.fillRect(WIDTH/2 - WIDTH/8, 16*HEIGHT/20,WIDTH/4, HEIGHT/40);
         if (goalsActive){
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
             g.setColor(new Color(255,100,100));
