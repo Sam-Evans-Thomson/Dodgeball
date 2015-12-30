@@ -7,7 +7,7 @@ package dodgeballgame.Menus;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
-import dodgeballgame.Settings.SpecificSettings.GeneralSettings;
+import dodgeballgame.Settings.SpecificSettings.MatchSettings;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
@@ -21,21 +21,26 @@ import javax.imageio.ImageIO;
  *
  * @author Sam
  */
-public class GeneralSettingsMenu extends Menu{
+public class MatchSettingsMenu extends Menu{
     
-    public GeneralSettings settings;
+    /**
+     *
+     */
+    
+    private final String PATH = "D:/Users/Sam/Documents/Ideas/Dodgeball/Settings/DefaultSaves/DefaultMatchSettings.txt";
+    public static MatchSettings settings;
+    public MatchSettings settings2;
     private int[] pos;
     final int NUM_SETTINGS;
     int fontSizeLarge, fontSizeSmall;
     
     public static boolean accept;
-    
     BufferedImage selectImage, acceptImage;
     
-    public GeneralSettingsMenu() {
+    public MatchSettingsMenu() {
         
         accept = false;
-        settings = new GeneralSettings();
+        settings = new MatchSettings(PATH);
         NUM_SETTINGS = settings.size();
         pos = new int[]{1,NUM_SETTINGS};
         
@@ -54,6 +59,8 @@ public class GeneralSettingsMenu extends Menu{
         selectImage = im.scale((double)WIDTH/1920d);
         im.setImage(acceptImage);
         acceptImage = im.scale((double)WIDTH/1920d);
+        
+        applyLoad();
         
     }
 
@@ -103,21 +110,29 @@ public class GeneralSettingsMenu extends Menu{
     }
     
     private void changeValue(int i) {
+        if (!accept) {
+            settings2 = new MatchSettings(settings);
+            accept = true;
+        }
         settings.changeValue(cursor[1],i);
     }
     
-    public void apply() {
-        settings.apply();
+    public void applyLoad() {
+        GamePanel.matchSettings = settings;
+        GamePanel.newGame();
     }
     
+    // Saving these settings to the default file.
     public void save() {
         settings.save();
     }
 
+    
     @Override
     public void select() {
         if (accept) {
             GamePanel.soundManager.menu(6);
+            applyLoad();
         }
     }
     
@@ -151,12 +166,15 @@ public class GeneralSettingsMenu extends Menu{
         GamePanel.soundManager.menu(8);
         changeValue(-10);
     }
-    
-    
+
     @Override
     public void back() {
         GamePanel.soundManager.menu(7);
-        GamePanel.menu = GamePanel.startMenu;
+        if (accept) {
+            accept = false;
+            settings = new MatchSettings(settings2);
+        } else {
+        GamePanel.menu = GamePanel.startMatchSettingsMenu;
+        }
     }
 }
-

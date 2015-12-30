@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dodgeballgame.Settings;
+package dodgeballgame.Settings.SpecificSettings;
 
 import dodgeballgame.GamePanel;
+import dodgeballgame.Settings.Setting;
+import dodgeballgame.Settings.SettingsList;
 
 /**
  *

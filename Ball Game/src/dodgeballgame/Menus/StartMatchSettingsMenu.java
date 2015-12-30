@@ -8,9 +8,6 @@ package dodgeballgame.Menus;
 import dodgeballgame.Game;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
-import static dodgeballgame.Menus.SettingsMenu.accept;
-import static dodgeballgame.Menus.SettingsMenu.applyLoad;
-import static dodgeballgame.Menus.SettingsMenu.valuesList;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -23,7 +20,7 @@ import javax.imageio.ImageIO;
  *
  * @author Sam
  */
-public class MatchSettings extends Menu{
+public class StartMatchSettingsMenu extends Menu{
     
     private int[] pos = {1,4};
     
@@ -36,7 +33,7 @@ public class MatchSettings extends Menu{
     BufferedImage selectImage;
     BufferedImage acceptImage;
     
-    public MatchSettings() {
+    public StartMatchSettingsMenu() {
         
         accept = false;
         positions = pos;
@@ -108,7 +105,7 @@ public class MatchSettings extends Menu{
     }
     
     public static void applyLoad() {
-        GamePanel.newGame(valuesList);
+        GamePanel.newGame();
         accept = false;
     }
     
@@ -124,7 +121,7 @@ public class MatchSettings extends Menu{
         } else if (cursor[1] == 2) {
             //GamePanel.menu = GamePanel.powerMenu;
         } else if (cursor[1] == 3) {
-            GamePanel.menu = GamePanel.settingsMenu;
+            GamePanel.menu = GamePanel.matchSettingsMenu;
         }
     }
     
@@ -139,4 +136,5 @@ public class MatchSettings extends Menu{
     public void back() {
         GamePanel.menu = GamePanel.startMenu;
     }
+
 }

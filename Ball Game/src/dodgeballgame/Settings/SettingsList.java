@@ -15,9 +15,9 @@ import java.util.ArrayList;
  */
 public class SettingsList {
     
-    private ArrayList<Setting> settingsList = new ArrayList<>();
-    private int length;
-    private String path;
+    public ArrayList<Setting> settingsList = new ArrayList<>();
+    public int length;
+    public String path;
     
     public SettingsList() {
         length = 0;
@@ -28,9 +28,20 @@ public class SettingsList {
         read();
     }
     
+    public SettingsList(SettingsList sList) {
+        settingsList = sList.settingsList;
+        if (path!= null) path = sList.path;
+        length = sList.length;
+    }
+    
+    public void set(SettingsList list) {
+        settingsList = list.settingsList;
+        if (path!= null) path = list.path;
+        length = list.length;
+    }
+    
     public void setPath(String path) {
         this.path = path;
-        read();
     }
     
     public void add(Setting setting) {
@@ -40,6 +51,18 @@ public class SettingsList {
     
     public Setting get(int i) {
         return settingsList.get(i);
+    }
+    
+    public String getString(int i) {
+        return settingsList.get(i).toString();
+    }
+    
+    public String getValueString(int i) {
+        return settingsList.get(i).getValueString();
+    }
+        
+    public void changeValue(int setting, int amount) {
+        settingsList.get(setting).changeValue(amount);
     }
     
     public double getDouble(int i) {
@@ -54,7 +77,7 @@ public class SettingsList {
         return settingsList.size();
     }
     
-    private void read() {
+    public void read() {
         if (path!=null) {
             FileManager fm = new FileManager(path);
             try {

@@ -131,33 +131,20 @@ public class Player {
             playerScoreOffsetX = GamePanel.arenaWIDTH/2 + ((pNumber+1)/2)*GamePanel.arenaWIDTH/6 + 20;
         }
         
-        
+        initStats();
         
         playerScoreOffsetY = GamePanel.arenaHEIGHT + 60;
         
-        W = H = 100; 
         pGraphics = new PlayerGraphics(W,H);
         health = startHealth;
         DELTA = new Vec2(0,0);
         aimAngle = new Vec2(0,0);
-        numPowerUps = 0;
-               
+        
         invincibleTime = 2d;
-        baseSpeed = speed = 500.0;
-        maxSpeed = 800;
-        throwSpeed = 500.0;
         prevPos = new Vec2(pos.getX(),pos.getY());
         delta = new Vec2(0,0);
         prevDelta = new Vec2(0,0);
-        angle = 0;
-        radius = 150;
-        catchAngle = (1.2*Math.PI)/4.0;
-        inCatchArea = false;
-        numBalls = startBalls;
-        numBallsInArea = 0;
-        
-        nextBall = new Ball(0, 0, 0, 0, team, pNumber);
-                
+
         // Player Boundaries
         leftLimit = team*GamePanel.arenaWIDTH/2 + W/2;
         rightLimit = (team+1)*GamePanel.arenaWIDTH/2 - W/2;
@@ -180,6 +167,22 @@ public class Player {
         }
     }
     
+    public void initStats() {
+        health = startHealth;
+        numBalls = startBalls;
+        baseSpeed = speed = 500.0;
+        maxSpeed = 800;
+        throwSpeed = 500.0;
+        numPowerUps = 0;
+        angle = 0;
+        radius = 150;
+        catchAngle = (1.2*Math.PI)/4.0;
+        nextBall = new Ball(0, 0, 0, 0, team, pNumber);
+        W = H = 100; 
+        numBallsInArea = 0;
+        inCatchArea = false;
+    }
+    
     public void update(float d) {
         
         if (!solid) {
@@ -200,7 +203,7 @@ public class Player {
     }
     
     private void updateMovementValues(float d) {   
-        speed=maxSpeed;
+        speed=baseSpeed;
         frameSpeed = d*speed;
         delta = DELTA.multiply(frameSpeed);
     }
@@ -437,23 +440,11 @@ public class Player {
             GamePanel.powerUpManager.addPowerUp(1-team);
         }
          
-        
-        W = H = 100; 
-        health = startHealth;
+        initStats();
+
         DELTA = new Vec2(0,0);
         aimAngle = new Vec2(0,0);
-        numPowerUps = 0;
-        
-        baseSpeed = speed = 100.0;
-        maxSpeed = 500;
-        throwSpeed = 600.0;
-        angle = 0;
-        radius = 150;
-        catchAngle = (1.2*Math.PI)/4.0;
-        inCatchArea = false;
         numBalls = 0;
-        numBallsInArea = 0;
-        
         catchHitbox = new HitBox(pos.getX(),pos.getY());
         catchHitbox.makeArc(catchAngle, angle, radius);
     }

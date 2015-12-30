@@ -7,7 +7,6 @@ package dodgeballgame.Menus;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.Menus.Menu;
-import dodgeballgame.Menus.SettingsMenu;
 import dodgeballgame.Player;
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -94,7 +93,7 @@ public class WinScreen extends Menu{
     
     @Override
     public void back() {
-        GamePanel.newGame(SettingsMenu.valuesList);
+        GamePanel.newGame();
         GamePanel.menu = GamePanel.startMenu;
     }
 }

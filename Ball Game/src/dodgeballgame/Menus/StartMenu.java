@@ -83,9 +83,9 @@ public class StartMenu extends Menu {
     @Override
     public void select() {
         if (cursor[1] == 0) {
-            GamePanel.menu = GamePanel.matchSettings;
+            GamePanel.menu = GamePanel.startMatchSettingsMenu;
         } else if (cursor[1] == 1) {
-            GamePanel.menu = GamePanel.generalSettings;
+            GamePanel.menu = GamePanel.generalSettingsMenu;
         } else if (cursor[1] == 2) {
             GamePanel.menu = GamePanel.characterMenu;
         } else if (cursor[1] == 3) {

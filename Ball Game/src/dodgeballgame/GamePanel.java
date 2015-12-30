@@ -11,6 +11,7 @@ import dodgeballgame.Menus.WinScreen;
 import dodgeballgame.Balls.Ball;
 import dodgeballgame.Menus.*;
 import dodgeballgame.PowerUps.PowerUp;
+import dodgeballgame.Settings.SpecificSettings.MatchSettings;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.image.*;
@@ -62,7 +63,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public static ArrayList<Ball> ballArray;
     public static ArrayList<PowerUp> powerUpArray;
     public static Arena arena;
-    public static PowerUpManager powerUpManager;
+    public static ItemManager powerUpManager;
 
     public static final int screenWIDTH = 1920;
     public static final int screenHEIGHT = 980;
@@ -80,18 +81,20 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private Graphics2D g;
     private Graphics2D g2;
     
+    public static MatchSettings matchSettings;
+    
     public static dodgeballgame.Menus.Menu menu;
     public static StartMenu startMenu;
-    public static SettingsMenu settingsMenu;
     public static LoadMenu loadMenu;
     public static SoundManager soundManager;
-    public static PowerUpMenu powerUpMenu;
+    public static ItemMenu powerUpMenu;
     public static WinScreen winScreen;
     public static ArenaMenu arenaMenu;
     public static CharacterMenu characterMenu;
     public static PowerMenu powerMenu;
-    public static MatchSettings matchSettings;
-    public static GeneralSettingsMenu generalSettings;
+    public static MatchSettingsMenu matchSettingsMenu;
+    public static GeneralSettingsMenu generalSettingsMenu;
+    public static StartMatchSettingsMenu startMatchSettingsMenu;
     
     public static boolean friendlyFire;
     public static boolean musicOn;
@@ -152,22 +155,24 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         // Setup Timer
         timer = new Timer();
         
+        matchSettings = new MatchSettings();
+        
         // MENUS
         startMenu = new StartMenu();
         menu = new StartMenu();
         loadMenu = new LoadMenu();
-        settingsMenu = new SettingsMenu();
-        powerUpMenu = new PowerUpMenu();
+        powerUpMenu = new ItemMenu();
         winScreen = new WinScreen();
         arenaMenu = new ArenaMenu();
         characterMenu = new CharacterMenu();
         powerMenu = new PowerMenu();
-        matchSettings = new MatchSettings();
-        generalSettings = new GeneralSettingsMenu();
         
+        generalSettingsMenu = new GeneralSettingsMenu();
+        startMatchSettingsMenu = new StartMatchSettingsMenu();
         
+
         //Managers
-        powerUpManager = new PowerUpManager();
+        powerUpManager = new ItemManager();
         soundManager = new SoundManager();
         
        // Setup an error callback. The default implementation
@@ -179,9 +184,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             throw new IllegalStateException("Unable to initialize GLFW");
         
         initControllers();
-        
-        newGame(SettingsMenu.valuesList);
-        generalSettings.apply();
+        matchSettingsMenu = new MatchSettingsMenu();
+        newGame();
+        generalSettingsMenu.apply();
         g.setColor(Color.black);
         g.fillRect(0,0,screenWIDTH, screenHEIGHT);
         draw();
@@ -197,7 +202,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             }
         }
         
-        SettingsMenu.valuesList[0] = numControllers;
         playerControllers = new int[numControllers];
         
         buttonStates = new int[numControllers][14];
@@ -209,29 +213,16 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         else System.out.println(numControllers + " controllers connected.");
     }
     
-    public static void newGame(double[] settings) {
+    public static void newGame() {
         
         team1Score = team2Score = 0;
-        
-        
         gameTimer.reset();
-        
-        
         playerArray = new ArrayList<>();
         ballArray = new ArrayList<>();
         powerUpArray = new ArrayList<>();
         arena = new Arena();
         
-        NUM_PLAYERS =           (int)   settings[0];
-        Player.startHealth =    (int)   settings[1];
-        Player.startBalls =     (int)   settings[2];
-        arena.bounceFactor =            settings[3];
-        arena.softBounceFactor =       (settings[4] == 1) ?  0.2 : arena.bounceFactor;
-        friendlyFire =                 (settings[5] == 1);
-        winScore =              (int)   settings[6];
-        PowerUpManager.spawnChance =    settings[7];
-        Player.pointsPerGoal =  (int)   settings[8];
-        Arena.goalsActive =            (settings[9] == 1);
+        matchSettings.apply();
         
         arena.init();
         
@@ -373,7 +364,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     }  
     
     public void exit() {
-        generalSettings.save();
+        generalSettingsMenu.save();
     }
     /*************************************************************************/
     // GAME UPDATE//

@@ -18,9 +18,9 @@ import java.util.Random;
  *
  * @author Sam
  */
-public class PowerUpManager {
+public class ItemManager {
     
-    static double spawnChance = 1.0;
+    public static double spawnChance = 1.0;
     
     Random rand = new Random();
     static double totalFreq;
@@ -35,7 +35,7 @@ public class PowerUpManager {
     public static int[][] powerUpFreqs = new int[4][4];
     public static double[][] powerUpSeeds = new double[4][4];
     
-    public PowerUpManager() {
+    public ItemManager() {
         powerUpFreqs[0][0] = 3;
         powerUpFreqs[0][1] = 1;
         powerUpFreqs[0][2] = 1;
@@ -139,10 +139,7 @@ public class PowerUpManager {
 
     private void hitBoxShrink(Vec2 pos) {
     }
-    
-    
 
-    
     public void addPowerUp(int team) {
         double x = (GamePanel.arenaWIDTH/2-40)*rand.nextDouble() + 20 + team*GamePanel.arenaWIDTH/2;
         double y = (GamePanel.arenaHEIGHT/2-40)*rand.nextDouble() + 20 + team*GamePanel.arenaHEIGHT/2;
@@ -208,9 +205,5 @@ public class PowerUpManager {
                 break;     
             }
         }
-        
-        
-       
-    }
-    
+    }   
 }

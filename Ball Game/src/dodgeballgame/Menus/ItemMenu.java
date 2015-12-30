@@ -7,7 +7,7 @@ package dodgeballgame.Menus;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
-import dodgeballgame.PowerUpManager;
+import dodgeballgame.ItemManager;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -20,12 +20,11 @@ import javax.imageio.ImageIO;
  *
  * @author Sam
  */
-public class PowerUpMenu extends Menu {
+public class ItemMenu extends Menu {
 
     BufferedImage[][] images;
     
     private int[] pos = {4,4};    
-    private Object PowerManager;
     
     public int xPos = INNER_X_START;
     public int yPos = INNER_Y_START;
@@ -39,7 +38,7 @@ public class PowerUpMenu extends Menu {
     
     BufferedImage selectImage;
     
-    public PowerUpMenu() {
+    public ItemMenu() {
         positions = pos;
         images = new BufferedImage[4][4];
         
@@ -61,7 +60,7 @@ public class PowerUpMenu extends Menu {
                 
                 // RE_DO ALL THIS;
                 
-                int freq = PowerUpManager.powerUpFreqs[i][j];
+                int freq = ItemManager.powerUpFreqs[i][j];
                 int xPos2 = i*width/4 + xPos;
                 int yPos2 = j*height/4 + yPos;
                 g.drawImage(images[i][j],(int)xPos2 + 15,(int)yPos2 + 15,null);
@@ -140,7 +139,7 @@ public class PowerUpMenu extends Menu {
     @Override
     public void select() {
         GamePanel.soundManager.menu(6);
-        PowerUpManager.incFreq(cursor[0],cursor[1],1);
+        ItemManager.incFreq(cursor[0],cursor[1],1);
     }
     
     @Override
@@ -153,20 +152,20 @@ public class PowerUpMenu extends Menu {
     @Override
     public void back() {
         GamePanel.soundManager.menu(7);
-        GamePanel.menu = GamePanel.matchSettings;
+        GamePanel.menu = GamePanel.matchSettingsMenu;
     }
     
     @Override
     public void rightTrigger() {
         
-        PowerUpManager.incFreq(cursor[0],cursor[1],1);
-        GamePanel.soundManager.menu((int)PowerUpManager.powerUpFreqs[cursor[0]][cursor[1]]);
+        ItemManager.incFreq(cursor[0],cursor[1],1);
+        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursor[0]][cursor[1]]);
     }
     
     @Override
     public void leftTrigger() {
-        PowerUpManager.decFreq(cursor[0],cursor[1],1);
-        GamePanel.soundManager.menu((int)PowerUpManager.powerUpFreqs[cursor[0]][cursor[1]]);
+        ItemManager.decFreq(cursor[0],cursor[1],1);
+        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursor[0]][cursor[1]]);
     }
 }
 

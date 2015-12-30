@@ -6,12 +6,9 @@
 package dodgeballgame.Menus;
 
 import dodgeballgame.FileManager.FileManager;
-import dodgeballgame.Game;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
-import static dodgeballgame.Menus.SettingsMenu.NUM_SETTINGS;
-import static dodgeballgame.Menus.SettingsMenu.namesList;
-import dodgeballgame.PowerUpManager;
+import dodgeballgame.Settings.SpecificSettings.MatchSettings;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
@@ -28,14 +25,15 @@ import javax.imageio.ImageIO;
  */
 public class LoadMenu extends Menu {
     
-    public String SAVE_DIRECTORY = new String("D:/Users/Sam/Documents/Ideas/Dodgeball/GameSaves/save");
-    public String SAVE_INFO = new String("D:/Users/Sam/Documents/Ideas/Dodgeball/GameSaves/info.txt");
+    public String DEFAULT_DIRECTORY = "D:/Users/Sam/Documents/Ideas/Dodgeball/Settings/DefaultSaves/save";
+    public String SAVE_DIRECTORY = "D:/Users/Sam/Documents/Ideas/Dodgeball/Settings/UserSaves";
+    public String SAVE_INFO = "D:/Users/Sam/Documents/Ideas/Dodgeball/Settings/UserSaves/info.txt";
     
     FileManager fileManager;
     
     private int numSaves;
     private String[] saveNames;
-    private String[][] saves;
+    private ArrayList<MatchSettings> saves;
     
     int back;
     
@@ -51,7 +49,8 @@ public class LoadMenu extends Menu {
         fontSizeLarge = WIDTH/40;
         fontSizeSmall = WIDTH/50;
         back = 0;
-        numSaves = 0;
+        saves = new ArrayList<>();
+        numSaves = new File(SAVE_DIRECTORY).list().length - 1;
         fileManager = new FileManager(SAVE_INFO);
         loadSaves();
         pos[0] = 1;
@@ -60,6 +59,7 @@ public class LoadMenu extends Menu {
         savePopup = false;
         
         try {
+            saveNames = fileManager.openFile();
             popup = ImageIO.read(new File("Images/savePopup.png"));
         } catch (IOException e) {
             
@@ -121,68 +121,22 @@ public class LoadMenu extends Menu {
     }
     
     private void loadSaves() {
-        try {
-            numSaves = fileManager.countLines() - 1;
-            String[] saveFile  = fileManager.openFile();
-            saveNames = new String[numSaves];
-            for(int i = 1; i<saveFile.length; i++) {
-                saveNames[i-1] = saveFile[i];
-            }
-            
-            saves = new String[numSaves][];
-        } catch (IOException e) {}
-        
         for (int i = 0; i<numSaves; i++) {
-            String filePath = new String(SAVE_DIRECTORY + i + ".txt");
-            try {
-                FileManager fm = new FileManager(filePath);
-                String[] saveData = fm.openFile();
-                saves[i] = saveData;
-            } catch (IOException e) {}   
+            String filePath = new String(SAVE_DIRECTORY + "/save" + i + ".txt");
+            saves.add(new MatchSettings(filePath));  
         }  
-           
     }
     
     private void applySave() {
-        FileManager fm = new FileManager(SAVE_DIRECTORY + cursor[1] + ".txt");
-        String[] entries = new String[SettingsMenu.valuesList.length + 16];
-        for( int i = 0; i<SettingsMenu.valuesList.length; i++) {
-            entries[i] = new String("" + SettingsMenu.valuesList[i]); 
-        }
-        int i = SettingsMenu.valuesList.length;
-        for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 4; y++) {
-                entries[i] = new String("" + PowerUpManager.powerUpFreqs[x][y]);
-                i++;
-            }
-        }
-
-        try {
-            
-        fm.writeLine(entries);
-        } catch (IOException e) {
-            
-        } 
-        fm.close();
+        String filePath = SAVE_DIRECTORY + "/save" + cursor[1] + ".txt";
+        MatchSettings save = new MatchSettings(MatchSettingsMenu.settings);
+        save.setPath(filePath);
+        save.save();
     }
     
     private void applyLoad() {
         loadSaves();
-        String[] currentSave = saves[cursor[1]];
-        
-        for (int i = 0; i<SettingsMenu.NUM_SETTINGS; i++) {
-            SettingsMenu.valuesList[i] = Double.parseDouble(currentSave[i]);
-        }
-        int i = SettingsMenu.NUM_SETTINGS;
-        for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 4; y++) {
-                System.out.println(Integer.parseInt(currentSave[i]));
-                PowerUpManager.powerUpFreqs[x][y] = Integer.parseInt(currentSave[i]);
-                i++;
-            }
-        }
-
-        SettingsMenu.applyLoad();
+        StartMatchSettingsMenu.applyLoad();
     }
     
     @Override
@@ -191,7 +145,7 @@ public class LoadMenu extends Menu {
         if (savePopup) {
             applyLoad();
             savePopup = false;
-            GamePanel.menu = GamePanel.matchSettings;
+            GamePanel.menu = GamePanel.matchSettingsMenu;
         } else {
 
         }
@@ -203,7 +157,7 @@ public class LoadMenu extends Menu {
         if (savePopup) {
             applySave();
             savePopup = false;
-            GamePanel.menu = GamePanel.matchSettings;
+            GamePanel.menu = GamePanel.matchSettingsMenu;
         } else {
 
         }
@@ -225,7 +179,7 @@ public class LoadMenu extends Menu {
         if (savePopup) {
             savePopup = false;
         } else {
-            GamePanel.menu = GamePanel.matchSettings;
+            GamePanel.menu = GamePanel.matchSettingsMenu;
         }
     }
 }

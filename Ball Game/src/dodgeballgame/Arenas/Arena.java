@@ -57,8 +57,8 @@ public class Arena {
         centreString("" + GamePanel.team1Score, g, WIDTH/2 - WIDTH/4, HEIGHT/2+150);
         centreString("" + GamePanel.team2Score, g, WIDTH/2 + WIDTH/4, HEIGHT/2+150);
         g.setFont(new Font("Sans Serif", Font.BOLD, 200));
-        centreString("" + (int)GamePanel.settingsMenu.valuesList[6], g,WIDTH/2 - 130,HEIGHT);
-        centreString("" + (int)GamePanel.settingsMenu.valuesList[6], g,WIDTH/2 + 130,HEIGHT);
+        centreString("" + (int)GamePanel.matchSettings.getDouble(6), g,WIDTH/2 - 130,HEIGHT);
+        centreString("" + (int)GamePanel.matchSettings.getDouble(6), g,WIDTH/2 + 130,HEIGHT);
         g.fillRect(WIDTH/2 - WIDTH/8, 16*HEIGHT/20,WIDTH/4, HEIGHT/40);
         if (goalsActive){
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));

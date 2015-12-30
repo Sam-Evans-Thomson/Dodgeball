@@ -222,7 +222,7 @@ public class Ball {
             GamePanel.playerArray.get(player).scoreGoal(team);
             GamePanel.soundManager.addHealth();
             delete();
-        } else if(GamePanel.settingsMenu.valuesList[5] != 0) {         //If friendly fire is off
+        } else if(GamePanel.matchSettings.getDouble(5) != 0) {         //If friendly fire is off
             GamePanel.playerArray.get(player).scoreGoal(team);
             GamePanel.soundManager.addHealth();
             delete();
