@@ -7,8 +7,9 @@ package dodgeballgame.Player;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBox;
+import dodgeballgame.Powers.NoPower;
+import dodgeballgame.Powers.Power;
 import dodgeballgame.Timer;
-import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -53,12 +54,15 @@ public class Player {
     public int numBalls;
     public int numPowerUps;
     public double catchAngle, radius;   //The radius and angle of the catch area
+    public Power currentPower;
+    public Power noPower = new NoPower(new Vec2(0,0));
     
     // Components
     public PlayerGraphicsComponent graphicsComp;
     public PlayerPhysicsComponent physicsComp;
     public PlayerSoundComponent soundComp;
     public InputComponent inputComponent;
+    public PlayerStateComponent stateComp;
     
 
     public Player(int team, int pNumber, double x, double y) {
@@ -80,6 +84,7 @@ public class Player {
         graphicsComp = new PlayerGraphicsComponent(this);
         soundComp = new PlayerSoundComponent(this);
         inputComponent = (pNumber == 0) ? new PrimeInputComponent(this) : new InputComponent(this);
+        stateComp = new PlayerStateComponent(this);
         
         physicsComp.init();
         graphicsComp.init();
@@ -97,6 +102,7 @@ public class Player {
     }
     
     public void initStats() {
+        currentPower = noPower;
         health = startHealth;
         numBalls = startBalls;
         
@@ -116,6 +122,7 @@ public class Player {
      * 
      **/
     public void update(float d) {
+        stateComp.update(d);
         physicsComp.update(d);
     }
 
@@ -135,8 +142,12 @@ public class Player {
         graphicsComp.setCatchGlow();
     }
     
-    public void setPowerUpGlow(Color color) {
-        graphicsComp.setPowerUpGlow(color);
+    public void setItemGlow(Color color) {
+        graphicsComp.setItemGlow(color);
+    }
+    
+    public void setPowerGlow(Color color) {
+        graphicsComp.setPowerGlow(color);
     }
     
     public HitBox getCatchHitbox() {
@@ -168,13 +179,17 @@ public class Player {
     }
     
     ///// EVENTS //////
+    public void usePower() {
+        currentPower.applyEffect(this);
+        currentPower = noPower;
+    }
     
     public void hitPlayer() {
         hbTimer.refresh();
         solid = false;
         GamePanel.changeScore(1-team,1);
-        GamePanel.powerUpManager.addPowerUp(1-team);
-        GamePanel.powerUpManager.addBall(1-team); 
+        GamePanel.itemManager.addPowerUp(1-team);
+        GamePanel.itemManager.addBall(1-team); 
         if (health > 1) {
             health--;
             graphicsComp.hitPlayer();
@@ -184,8 +199,8 @@ public class Player {
     
     public void hitPlayer(int i) {
         GamePanel.changeScore(1-team,1);
-        GamePanel.powerUpManager.addPowerUp(1-team);
-        GamePanel.powerUpManager.addBall(1-team); 
+        GamePanel.itemManager.addPowerUp(1-team);
+        GamePanel.itemManager.addBall(1-team); 
         hbTimer.refresh();
         solid = false;
         if (health > 1) {
@@ -198,10 +213,10 @@ public class Player {
     public void death() {
 
         for (int i = 0; i < numBalls; i++) {
-            GamePanel.powerUpManager.addBall(1-team);
+            GamePanel.itemManager.addBall(1-team);
         }
         for (int i = 0; i < numPowerUps/2; i++) {
-            GamePanel.powerUpManager.addPowerUp(1-team);
+            GamePanel.itemManager.addPowerUp(1-team);
         }
          
         initStats();

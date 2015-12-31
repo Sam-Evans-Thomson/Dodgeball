@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dodgeballgame.PowerUps;
+package dodgeballgame.Powers;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.Player.Player;
@@ -17,21 +17,21 @@ import javax.imageio.ImageIO;
  *
  * @author Sam
  */
-public class AddCatchReach extends PowerUp {
-    
-    public AddCatchReach(Vec2 pos) {    
+public class SlowPower extends Power{
+
+    public SlowPower(Vec2 pos) {
         super(pos);
-        color = new Color(200,200,0);
+        color = new Color(100,255,100);
         try {
-            image = ImageIO.read(new File("Images/addCatchReach.png"));
+            image = ImageIO.read(new File("Images/Powers/slow.png"));
         } catch (IOException e) {
         }
     }
     
     @Override
     public void applyEffect(Player p) {
-        GamePanel.soundManager.addCatchReach();
-        p.radius += 10;
+        for (Player player: GamePanel.playerArray) {
+            if (player.team != p.team) player.stateComp.slowed();
+        }
     }
-
 }

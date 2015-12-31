@@ -9,7 +9,7 @@ import dodgeballgame.Balls.Ball;
 import dodgeballgame.BounceCalculator;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBox;
-import dodgeballgame.PowerUps.PowerUp;
+import dodgeballgame.Items.Item;
 import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
 import java.util.ArrayList;
@@ -93,7 +93,6 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     }
     
     private void updateMovementValues(float d) {
-        speed=baseSpeed;
         frameSpeed = d*speed;
         prevDelta.set(p.delta);
         p.delta = p.DELTA.multiply(frameSpeed);
@@ -225,13 +224,13 @@ public class PlayerPhysicsComponent implements PlayerComponent{
             }
         }
         //Catch powerUp
-        for (int i=0; i<GamePanel.powerUpArray.size(); i++) {
-            PowerUp pUp = GamePanel.powerUpArray.get(i);
+        for (int i=0; i<GamePanel.itemArray.size(); i++) {
+            Item pUp = GamePanel.itemArray.get(i);
             if(pUp.inCatchArea[p.pNumber]) {
-                p.graphicsComp.setPowerUpGlow(pUp.color);
+                p.graphicsComp.setItemGlow(pUp.color);
                 pUp.applyEffect(p);
                 pUp.incPowerUpCount(p);
-                GamePanel.powerUpArray.remove(pUp);
+                GamePanel.itemArray.remove(pUp);
                 i--;
                 p.catchTimer.refresh();
             }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dodgeballgame.PowerUps;
+package dodgeballgame.Powers;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.Player.Player;
@@ -17,24 +17,21 @@ import javax.imageio.ImageIO;
  *
  * @author Sam
  */
-public class AddHealth extends PowerUp {
+public class LargeCatchPower extends Power{
 
-    
-    
-    public AddHealth(Vec2 pos) {
+    public LargeCatchPower(Vec2 pos) {
         super(pos);
         color = new Color(100,255,100);
         try {
-            image = ImageIO.read(new File("Images/addHealth.png"));
+            image = ImageIO.read(new File("Images/Powers/largeCatch.png"));
         } catch (IOException e) {
         }
     }
     
     @Override
     public void applyEffect(Player p) {
-        p.health++;
-        GamePanel.soundManager.addHealth();
+        for (Player player: GamePanel.playerArray) {
+            if (player.team == p.team) player.stateComp.largeCatch();
+        }
     }
-
-
 }

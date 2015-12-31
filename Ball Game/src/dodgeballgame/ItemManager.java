@@ -5,13 +5,13 @@
  */
 package dodgeballgame;
 
-import dodgeballgame.PowerUps.AddCatchAngle;
-import dodgeballgame.PowerUps.AddBall;
-import dodgeballgame.PowerUps.AddCatchReach;
-import dodgeballgame.PowerUps.AddHealth;
-import dodgeballgame.PowerUps.AddRunSpeed;
-import dodgeballgame.PowerUps.AddThrowSpeed;
-import dodgeballgame.PowerUps.TakeHealth;
+import dodgeballgame.Items.AddCatchAngle;
+import dodgeballgame.Items.AddBall;
+import dodgeballgame.Items.AddCatchReach;
+import dodgeballgame.Items.AddHealth;
+import dodgeballgame.Items.AddRunSpeed;
+import dodgeballgame.Items.AddThrowSpeed;
+import dodgeballgame.Items.TakeHealth;
 import java.util.Random;
 
 /**
@@ -107,34 +107,34 @@ public class ItemManager {
     }
     
     private void addHealth(Vec2 pos) {
-        GamePanel.powerUpArray.add(new AddHealth(pos));
+        GamePanel.itemArray.add(new AddHealth(pos));
     }
 
     private void addRunSpeed(Vec2 pos) {
-        GamePanel.powerUpArray.add(new AddRunSpeed(pos));
+        GamePanel.itemArray.add(new AddRunSpeed(pos));
     }
 
     private void addCatchAngle(Vec2 pos) {
-        GamePanel.powerUpArray.add(new AddCatchAngle(pos));
+        GamePanel.itemArray.add(new AddCatchAngle(pos));
     }
     
     private void addCatchReach(Vec2 pos) {
-        GamePanel.powerUpArray.add(new AddCatchReach(pos));
+        GamePanel.itemArray.add(new AddCatchReach(pos));
     }
     
     private void addThrowSpeed(Vec2 pos) {
-        GamePanel.powerUpArray.add(new AddThrowSpeed(pos));
+        GamePanel.itemArray.add(new AddThrowSpeed(pos));
     }
     
     private void takeHealth(Vec2 pos) {
-        GamePanel.powerUpArray.add(new TakeHealth(pos));
+        GamePanel.itemArray.add(new TakeHealth(pos));
     }
     
     public void addBall(int team) {
         double x = (GamePanel.arenaWIDTH/2-40)*rand.nextDouble() + 20 + team*GamePanel.arenaWIDTH/2;
         double y = (GamePanel.arenaHEIGHT/2-40)*rand.nextDouble() + 20 + team*GamePanel.arenaHEIGHT/2;
         Vec2 pos = new Vec2(x,y);
-        GamePanel.powerUpArray.add(new AddBall(pos));
+        GamePanel.itemArray.add(new AddBall(pos));
     }
 
     private void hitBoxShrink(Vec2 pos) {

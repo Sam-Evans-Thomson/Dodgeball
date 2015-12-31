@@ -44,23 +44,8 @@ public class PrimeInputComponent extends InputComponent{
     }
 
     @Override
-    public void pressLB() {
-
-    }
-
-    @Override
-    public void pressRB() {
-
-    }
-
-    @Override
     public void pressSta() {
         GamePanel.changeGameState();
-    }
-
-    @Override
-    public void pressLTh() {
-        
     }
 
     @Override
@@ -68,11 +53,6 @@ public class PrimeInputComponent extends InputComponent{
         if (GamePanel.gameState == GamePanel.MENU) {
             GamePanel.menu.selectButton();
         }
-    }
-
-    @Override
-    public void pressRTh() {
-        
     }
 
     @Override

@@ -22,25 +22,19 @@ public class InputComponent {
     }
     
     public void pressA() {
-        if (p.pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.select();
-        }
+
     }
 
     public void pressB() {
-        if (p.pNumber == 0) {
-            if (GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.back();
-            }
-        }
+
     }
 
     public void pressX() {
-        if(p.pNumber == 0) GamePanel.menu.xButton();
+
     }
 
     public void pressY() {
-        if(p.pNumber == 0) GamePanel.menu.yButton();
+
     }
 
     public void pressLB() {
@@ -48,13 +42,11 @@ public class InputComponent {
     }
 
     public void pressRB() {
-
+        p.usePower();
     }
 
     public void pressSta() {
-        if (p.pNumber == 0) {
-            GamePanel.changeGameState();
-        }
+
     }
 
     public void pressLTh() {
@@ -62,9 +54,7 @@ public class InputComponent {
     }
 
     public void pressSel() {
-        if (p.pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-            GamePanel.menu.selectButton();
-        }
+
     }
 
     public void pressRTh() {
@@ -72,22 +62,15 @@ public class InputComponent {
     }
 
     public void pressU() {
-        if (p.pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.moveCursor(0, -1);
-        }
+
     }
 
     public void pressR() {
-        if (p.pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.moveCursor(1, 0);
-                GamePanel.menu.right();
-        }
+
     }
 
     public void pressD() {
-        if (p.pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.moveCursor(0, 1);
-        }
+
     }
 
     public void pressL() {

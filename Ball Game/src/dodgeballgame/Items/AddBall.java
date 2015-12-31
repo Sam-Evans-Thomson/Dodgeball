@@ -2,12 +2,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dodgeballgame.PowerUps;
+package dodgeballgame.Items;
 
 import dodgeballgame.GamePanel;
+import dodgeballgame.ImageEditor;
 import dodgeballgame.Player.Player;
 import dodgeballgame.Vec2;
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -16,24 +19,26 @@ import javax.imageio.ImageIO;
  *
  * @author Sam
  */
-public class AddCatchAngle extends PowerUp {
-    
+public class AddBall extends Item {
 
-    public AddCatchAngle(Vec2 pos) {
-        
+    public AddBall(Vec2 pos) {
         super(pos);
-        color = new Color(200,200,0);
+        color = new Color(255,255,200);
         try {
-            image = ImageIO.read(new File("Images/addCatchAngle.png"));
+            image = ImageIO.read(new File("Images/Balls/ball.png"));
         } catch (IOException e) {
         }
     }
     
     @Override
     public void applyEffect(Player p) {
-        GamePanel.soundManager.addCatchAngle();
-        p.catchAngle += Math.PI/11.0;
-        if (p.catchAngle > 2*Math.PI) p.catchAngle = 2*Math.PI;
+        p.numBalls++;
+        GamePanel.soundManager.addBall();
+        p.catchTimer.refresh();
     }
-
+    
+    @Override
+    public void hitBall() {
+        
+    }
 }

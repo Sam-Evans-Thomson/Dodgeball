@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dodgeballgame.PowerUps;
+package dodgeballgame.Items;
 
 
 import dodgeballgame.GamePanel;
@@ -20,23 +20,21 @@ import sun.audio.AudioStream;
  *
  * @author Sam
  */
-public class PowerUp {
+public class Item {
     
     public Vec2 pos;
     private boolean collected;
     double W, H;
-    double r;
+    public double r;
     public HitBox hb;
     public Color color;
-    BufferedImage image;
-    
-    AudioStream audioStream;
+    public BufferedImage image;
     
     public ImageEditor imageEditor;
     
     public boolean[] inCatchArea;
     
-    public PowerUp(Vec2 pos) {
+    public Item(Vec2 pos) {
         this.pos = pos;
             
         init();
@@ -45,7 +43,7 @@ public class PowerUp {
     private void init() {
         collected = false;
         W = H = 30;
-        r = 20;
+        r = 40;
         hb = new HitBox(pos);
         hb.makeCircle(r);
         inCatchArea = new boolean[GamePanel.NUM_PLAYERS];
@@ -69,8 +67,8 @@ public class PowerUp {
             if(p.getPlayerHitbox().collision(hb)) {
                 applyEffect(p);
                 incPowerUpCount(p);
-                p.setPowerUpGlow(color);
-                GamePanel.powerUpArray.remove(this);
+                p.setItemGlow(color);
+                GamePanel.itemArray.remove(this);
                 return;
             }
             if(p.getCatchHitbox().collisionPoint(pos)) {
@@ -81,12 +79,12 @@ public class PowerUp {
     
     public void render(Graphics2D g) {
         imageEditor = new ImageEditor(image);
-        BufferedImage bi = imageEditor.scale(r/50);
+        BufferedImage bi = imageEditor.scale(r/image.getHeight());
         g.drawImage(bi, (int)(pos.getX()-W/2), (int)(pos.getY()-H/2), null);
     }
     
     public void hitBall() {
-        GamePanel.powerUpArray.remove(this);
+        GamePanel.itemArray.remove(this);
     }
     
 }

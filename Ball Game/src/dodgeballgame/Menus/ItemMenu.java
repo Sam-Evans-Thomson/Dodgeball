@@ -67,7 +67,7 @@ public class ItemMenu extends Menu {
                 g.setColor(new Color(50,50,50));
                 g.drawRect(xPos2, yPos2, width/4,height/4);
                 g.drawRect(xPos2+1, yPos2+1, width/4-2,height/4-2);
-                if(GamePanel.powerUpManager.powerUpFreqs[i][j]==0) {
+                if(GamePanel.itemManager.powerUpFreqs[i][j]==0) {
                     g.setColor(Color.black);
                     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
                     g.fillRect(xPos2, yPos2, width/4,height/4);

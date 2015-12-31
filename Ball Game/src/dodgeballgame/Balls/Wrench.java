@@ -9,7 +9,7 @@ import dodgeballgame.GamePanel;
 import dodgeballgame.HitBox;
 import dodgeballgame.ImageEditor;
 import dodgeballgame.Player.Player;
-import dodgeballgame.PowerUps.PowerUp;
+import dodgeballgame.Items.Item;
 import dodgeballgame.Vec2;
 import java.awt.Graphics2D;
 import java.io.File;
@@ -114,7 +114,7 @@ public class Wrench extends Ball{
             }
         }
         
-        for(PowerUp pu : GamePanel.powerUpArray) {
+        for(Item pu : GamePanel.itemArray) {
             if(pu.hb.collision(ballHitbox)) {
 
                 pu.hitBall();

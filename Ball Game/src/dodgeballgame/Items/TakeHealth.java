@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dodgeballgame.PowerUps;
+package dodgeballgame.Items;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.Player.Player;
@@ -17,21 +17,28 @@ import javax.imageio.ImageIO;
  *
  * @author Sam
  */
-public class AddThrowSpeed extends PowerUp {
+public class TakeHealth extends Item {
+
     
-    public AddThrowSpeed(Vec2 pos) {    
+    
+    public TakeHealth(Vec2 pos) {
         super(pos);
-        color = new Color(140,220,255);
+        color = new Color(100,255,100);
         try {
-            image = ImageIO.read(new File("Images/addThrowSpeed.png"));
+            image = ImageIO.read(new File("Images/takeHealth.png"));
         } catch (IOException e) {
         }
     }
     
     @Override
     public void applyEffect(Player p) {
-        GamePanel.soundManager.addThrowSpeed();
-        p.physicsComp.throwSpeed += 60;
+        if (p.health > 1) {
+            p.health--;
+            p.setGetHit();
+        }
+
+        GamePanel.soundManager.takeHealth();
     }
+
 
 }

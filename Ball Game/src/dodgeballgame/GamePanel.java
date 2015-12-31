@@ -11,7 +11,8 @@ import dodgeballgame.Arenas.Arena;
 import dodgeballgame.Menus.WinScreen;
 import dodgeballgame.Balls.Ball;
 import dodgeballgame.Menus.*;
-import dodgeballgame.PowerUps.PowerUp;
+import dodgeballgame.Items.Item;
+import dodgeballgame.Powers.Power;
 import dodgeballgame.Settings.SpecificSettings.MatchSettings;
 import javax.swing.JPanel;
 import java.awt.*;
@@ -62,9 +63,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     
     public static ArrayList<Player> playerArray;
     public static ArrayList<Ball> ballArray;
-    public static ArrayList<PowerUp> powerUpArray;
+    public static ArrayList<Item> itemArray;
+    public static ArrayList<Power> powerArray;
     public static Arena arena;
-    public static ItemManager powerUpManager;
+    public static ItemManager itemManager;
+    public static PowerManager powerManager;
 
     public static final int screenWIDTH = 1920;
     public static final int screenHEIGHT = 980;
@@ -173,7 +176,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         
 
         //Managers
-        powerUpManager = new ItemManager();
+        itemManager = new ItemManager();
+        powerManager = new PowerManager();
         soundManager = new SoundManager();
         
        // Setup an error callback. The default implementation
@@ -220,7 +224,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         gameTimer.reset();
         playerArray = new ArrayList<>();
         ballArray = new ArrayList<>();
-        powerUpArray = new ArrayList<>();
+        itemArray = new ArrayList<>();
+        powerArray = new ArrayList<>();
+        powerManager.addRandom(new Vec2(200,200));
         arena = new Arena();
         
         matchSettings.apply();
@@ -467,8 +473,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         for (int i = 0; i<playerArray.size(); i++) {
             playerArray.get(i).update(delta);
         }
-        for (int i = 0; i<powerUpArray.size(); i++) {
-            powerUpArray.get(i).update();
+        for (int i = 0; i<itemArray.size(); i++) {
+            itemArray.get(i).update();
+        }
+        for (int i = 0; i<powerArray.size(); i++) {
+            powerArray.get(i).update();
         }
         
     }
@@ -484,8 +493,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         for (int i = 0; i<ballArray.size(); i++) {
             ballArray.get(i).render(g);
         }
-        for (int i = 0; i<powerUpArray.size(); i++) {
-            powerUpArray.get(i).render(g);
+        for (int i = 0; i<itemArray.size(); i++) {
+            itemArray.get(i).render(g);
+        }
+        for (int i = 0; i<powerArray.size(); i++) {
+            powerArray.get(i).render(g);
         }
         for (int i = 0; i<playerArray.size(); i++) {
             playerArray.get(i).render(g);

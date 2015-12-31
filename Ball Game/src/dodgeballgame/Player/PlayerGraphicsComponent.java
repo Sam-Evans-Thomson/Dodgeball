@@ -58,9 +58,9 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         playerImage = playerImageA;
         
         if (p.team == 0) {
-            playerScoreOffsetX = p.pNumber*GamePanel.arenaWIDTH/6 + 20;
+            playerScoreOffsetX = p.pNumber*GamePanel.arenaWIDTH/4 + 20;
         } else {
-            playerScoreOffsetX = GamePanel.arenaWIDTH/2 + ((p.pNumber+1)/2)*GamePanel.arenaWIDTH/6 + 20;
+            playerScoreOffsetX = 11*GamePanel.arenaWIDTH/20 + ((p.pNumber-1)/2)*GamePanel.arenaWIDTH/6 + 20;
         }
         
         playerScoreOffsetY = GamePanel.arenaHEIGHT + 60;
@@ -76,8 +76,8 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         
         catchTime = 1.0;
         catchTimer.init();
-        powerUpTime = 1.0;
-        powerUpTimer.init();
+        itemGlowTime = 1.0;
+        itemGlowTimer.init();
         hitTimer.init();
         hitTime = 1;
         hitTimeMax = Player.invincibleTime;
@@ -152,6 +152,10 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         imageEditor.setImage(ball);
         BufferedImage biBall = imageEditor.scale(0.6);
         g.drawImage(biBall, playerScoreOffsetX + 200, playerScoreOffsetY-50, null);
+        
+        imageEditor.setImage(p.currentPower.image);
+        BufferedImage biPower = imageEditor.scale(0.2);
+        g.drawImage(biPower, playerScoreOffsetX + 300, playerScoreOffsetY-50, null);
 
         Tools.centreString(("" + p.numBalls), g, playerScoreOffsetX + 229, playerScoreOffsetY-14);
     }
@@ -201,33 +205,38 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         catchTime = catchTimer.getDifference();
     }
     
-    ////// POWER UP ////////////
+    ////// ITEMS ////////////
     
-    public final Timer powerUpTimer = new Timer();
-    private double powerUpTime;
+    public final Timer itemGlowTimer = new Timer();
+    private double itemGlowTime;
     private final double powerUpTimeMax = 0.2;
     public int[][] powerUpGlow;
     public double powerUpGlowRadius = 200.0;
-    private Color powerUpGlowColor;
+    private Color itemGlowColor;
     
     public Graphics2D powerUpGlow(Color c, Graphics2D g, Vec2 pos) {
         
-        if (powerUpTime < powerUpTimeMax) {
-            float opacity = (float)(powerUpTimeMax - powerUpTime)*0.8f/(float)powerUpTimeMax;
-            g.setColor(powerUpGlowColor);
+        if (itemGlowTime < powerUpTimeMax) {
+            float opacity = (float)(powerUpTimeMax - itemGlowTime)*0.8f/(float)powerUpTimeMax;
+            g.setColor(itemGlowColor);
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-            double size = 100.0 + (powerUpGlowRadius - 100)*powerUpTime/powerUpTimeMax;
+            double size = 100.0 + (powerUpGlowRadius - 100)*itemGlowTime/powerUpTimeMax;
             g.fillOval((int)(pos.getX()-size/2), (int)(pos.getY()-size/2),(int)size, (int)size);
-            powerUpTime = powerUpTimer.getDifference();
+            itemGlowTime = itemGlowTimer.getDifference();
         }
         
         return g;        
     }
 
-    public void setPowerUpGlow(Color c) {
-        powerUpGlowColor = c;
-        powerUpTimer.refresh();
-        powerUpTime = powerUpTimer.getDifference();
+    public void setItemGlow(Color c) {
+        itemGlowColor = c;
+        itemGlowTimer.refresh();
+        itemGlowTime = itemGlowTimer.getDifference();
+    }
+    
+    /////// POWERS   ///////////////
+    public void setPowerGlow(Color c) {
+        
     }
     
 
