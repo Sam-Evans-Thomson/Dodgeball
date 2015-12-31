@@ -6,7 +6,7 @@
 package dodgeballgame.Balls;
 
 import dodgeballgame.GamePanel;
-import dodgeballgame.Player;
+import dodgeballgame.Player.Player;
 import dodgeballgame.Vec2;
 
 /**

@@ -5,7 +5,6 @@
  */
 package dodgeballgame.Menus;
 
-import dodgeballgame.Game;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
 import java.awt.Color;

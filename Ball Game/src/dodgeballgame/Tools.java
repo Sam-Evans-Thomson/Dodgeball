@@ -1,0 +1,38 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package dodgeballgame;
+
+import java.awt.Graphics2D;
+
+/**
+ *
+ * @author Sam
+ */
+public class Tools {
+    
+    public Tools() {
+        
+    }
+    
+    // make sure an angle is between 0 and 2*Pi.
+    public static double refreshAngle(double a) {
+        while (a < 0) {
+            a+=2.0*Math.PI;
+        }
+        while (a > 2*Math.PI) {
+            a-=2.0*Math.PI;
+        }
+        return a;
+    }
+    
+    // prints a string centred on the specified spot.
+    public static void centreString(String s, Graphics2D g, int x, int y) {
+        int stringLen = (int)
+            g.getFontMetrics().getStringBounds(s, g).getWidth();
+        g.drawString(s, x - stringLen/2, y);
+    }
+
+}

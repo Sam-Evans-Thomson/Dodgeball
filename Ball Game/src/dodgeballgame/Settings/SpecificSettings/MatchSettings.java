@@ -7,9 +7,8 @@ package dodgeballgame.Settings.SpecificSettings;
 
 import dodgeballgame.Arenas.Arena;
 import dodgeballgame.GamePanel;
-import dodgeballgame.Player;
+import dodgeballgame.Player.Player;
 import dodgeballgame.ItemManager;
-import dodgeballgame.Settings.Setting;
 import dodgeballgame.Settings.SettingsList;
 
 /**

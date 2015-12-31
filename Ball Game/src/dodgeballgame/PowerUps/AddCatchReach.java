@@ -6,8 +6,7 @@
 package dodgeballgame.PowerUps;
 
 import dodgeballgame.GamePanel;
-import dodgeballgame.Player;
-import dodgeballgame.ImageEditor;
+import dodgeballgame.Player.Player;
 import dodgeballgame.Vec2;
 import java.awt.Color;
 import java.io.File;

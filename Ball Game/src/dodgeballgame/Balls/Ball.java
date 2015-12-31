@@ -10,11 +10,9 @@ import dodgeballgame.BounceCalculator;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBox;
 import dodgeballgame.ImageEditor;
-import dodgeballgame.Player;
+import dodgeballgame.Player.Player;
 import dodgeballgame.PowerUps.PowerUp;
-import dodgeballgame.SoundManager;
 import dodgeballgame.Vec2;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -137,12 +135,12 @@ public class Ball {
     
     public void checkHitboxes() {
         for(Player p : GamePanel.playerArray) {
-            if(p.playerHitbox.collision(ballHitbox)) {
+            if(p.getPlayerHitbox().collision(ballHitbox)) {
                 
                 if(!GamePanel.friendlyFire && p.team == team) {
                     p.numBalls++;
                     GamePanel.soundManager.catchBall();
-                    p.pGraphics.setCatchGlow();
+                    p.setCatchGlow();
                     GamePanel.ballArray.remove(this);
                 } else if (p.solid){
                     hitPlayer(p);
@@ -150,7 +148,7 @@ public class Ball {
                 }
                 
             }
-            if(p.catchHitbox.collisionPoint(pos)) {
+            if(p.getCatchHitbox().collisionPoint(pos)) {
                 inCatchArea[p.pNumber] = true;
             } else inCatchArea[p.pNumber] = false;
         }

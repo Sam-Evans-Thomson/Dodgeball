@@ -5,20 +5,12 @@
 package dodgeballgame.PowerUps;
 
 import dodgeballgame.GamePanel;
-import dodgeballgame.Player;
+import dodgeballgame.Player.Player;
 import dodgeballgame.Vec2;
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 
 /**
  *

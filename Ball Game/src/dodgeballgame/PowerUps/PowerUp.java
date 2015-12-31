@@ -9,7 +9,7 @@ package dodgeballgame.PowerUps;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBox;
 import dodgeballgame.ImageEditor;
-import dodgeballgame.Player;
+import dodgeballgame.Player.Player;
 import dodgeballgame.Vec2;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -66,14 +66,14 @@ public class PowerUp {
     
     public void update() {
         for(Player p : GamePanel.playerArray) {
-            if(p.playerHitbox.collision(hb)) {
+            if(p.getPlayerHitbox().collision(hb)) {
                 applyEffect(p);
                 incPowerUpCount(p);
-                p.pGraphics.setPowerUpGlow(color);
+                p.setPowerUpGlow(color);
                 GamePanel.powerUpArray.remove(this);
                 return;
             }
-            if(p.catchHitbox.collisionPoint(pos)) {
+            if(p.getCatchHitbox().collisionPoint(pos)) {
                 inCatchArea[p.pNumber] = true;
             } else inCatchArea[p.pNumber] = false;
         }

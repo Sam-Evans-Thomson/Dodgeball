@@ -5,7 +5,6 @@
  */
 package dodgeballgame.Settings.SpecificSettings;
 
-import dodgeballgame.Settings.Setting;
 import dodgeballgame.Settings.SettingsList;
 
 /**

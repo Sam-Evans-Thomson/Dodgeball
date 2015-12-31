@@ -6,6 +6,7 @@
 package dodgeballgame;
 
 
+import dodgeballgame.Player.Player;
 import dodgeballgame.Arenas.Arena;
 import dodgeballgame.Menus.WinScreen;
 import dodgeballgame.Balls.Ball;
@@ -246,7 +247,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             if(thisTime != lastTime) soundManager.menu(6);
             
             playerArray.stream().forEach((p) -> {
-                p.catchTimer.refresh();
+                p.refreshCatchTimer();
             });
             render();
             g.setColor(Color.black);

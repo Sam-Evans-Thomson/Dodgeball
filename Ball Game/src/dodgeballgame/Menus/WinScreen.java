@@ -7,8 +7,7 @@ package dodgeballgame.Menus;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.Menus.Menu;
-import dodgeballgame.Player;
-import java.awt.AlphaComposite;
+import dodgeballgame.Player.Player;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -71,9 +70,9 @@ public class WinScreen extends Menu{
             Player p = GamePanel.playerArray.get(i);
             BufferedImage image;
             if(p.team == winTeam) {
-                image = p.playerImageA;  
+                image = p.graphicsComp.playerImageA;  
             } else {
-                image = p.playerImageB;
+                image = p.graphicsComp.playerImageB;
             }
             g.drawImage(image, (int)GamePanel.arenaWIDTH/4 - 100 + 200*(p.pNumber) + 400*p.team, 700, null);
             

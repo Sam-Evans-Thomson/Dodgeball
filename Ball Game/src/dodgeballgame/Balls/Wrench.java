@@ -8,11 +8,10 @@ package dodgeballgame.Balls;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBox;
 import dodgeballgame.ImageEditor;
-import dodgeballgame.Player;
+import dodgeballgame.Player.Player;
 import dodgeballgame.PowerUps.PowerUp;
 import dodgeballgame.Vec2;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -90,7 +89,7 @@ public class Wrench extends Ball{
     @Override
     public void checkHitboxes() {
         for(Player p : GamePanel.playerArray) {
-            if(p.playerHitbox.collision(ballHitbox)) {
+            if(p.getPlayerHitbox().collision(ballHitbox)) {
                 
                 if(!GamePanel.friendlyFire && p.team == team) {
 
