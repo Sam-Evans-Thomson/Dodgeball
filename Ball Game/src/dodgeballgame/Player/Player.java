@@ -39,7 +39,7 @@ public class Player {
     public boolean solid;       // Does the player collide with balls?
 
     // INPUTS
-    private float leftTrig, rightTrig;
+    public float leftTrig, rightTrig;
     public Vec2 DELTA;          // The values directly from left Thumb stick.
     
     // Settings
@@ -58,6 +58,7 @@ public class Player {
     public PlayerGraphicsComponent graphicsComp;
     public PlayerPhysicsComponent physicsComp;
     public PlayerSoundComponent soundComp;
+    public InputComponent inputComponent;
     
 
     public Player(int team, int pNumber, double x, double y) {
@@ -68,12 +69,17 @@ public class Player {
         init();
     }
     
+     /*************************************************************/
+    // INITIALIZATION
+    //
+    
     private void init() {
         initStats();
         
         physicsComp = new PlayerPhysicsComponent(this);
         graphicsComp = new PlayerGraphicsComponent(this);
         soundComp = new PlayerSoundComponent(this);
+        inputComponent = (pNumber == 0) ? new PrimeInputComponent(this) : new InputComponent(this);
         
         physicsComp.init();
         graphicsComp.init();
@@ -100,6 +106,10 @@ public class Player {
         W = H = 100; 
 
     }
+    
+    /*************************************************************/
+    // UPDATE
+    //
     
     public void update(float d) {
         physicsComp.update(d);
@@ -209,123 +219,5 @@ public class Player {
     // INPUTS
     //
     
-    public void pressA() {
-        if (pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.select();
-        }
-    }
-
-    public void pressB() {
-        if (pNumber == 0) {
-            if (GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.back();
-            }
-        }
-    }
-
-    public void pressX() {
-        if(pNumber == 0) GamePanel.menu.xButton();
-    }
-
-    public void pressY() {
-        if(pNumber == 0) GamePanel.menu.yButton();
-    }
-
-    public void pressLB() {
-
-    }
-
-    public void pressRB() {
-
-    }
-
-    public void pressSta() {
-        if (pNumber == 0) {
-            GamePanel.changeGameState();
-        }
-    }
-
-    public void pressLTh() {
-        
-    }
-
-    public void pressSel() {
-        if (pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-            GamePanel.menu.selectButton();
-        }
-    }
-
-    public void pressRTh() {
-        
-    }
-
-    public void pressU() {
-        if (pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.moveCursor(0, -1);
-        }
-    }
-
-    public void pressR() {
-        if (pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.moveCursor(1, 0);
-                GamePanel.menu.right();
-        }
-    }
-
-    public void pressD() {
-        if (pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.moveCursor(0, 1);
-        }
-    }
-
-    public void pressL() {
-        if (pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.moveCursor(-1, 0);
-                GamePanel.menu.left();
-        }
-    }
-
-    public void axesLJoy(float DX, float DY) {
-        if (pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-                
-        } else if (GamePanel.gameState == GamePanel.PLAY) {
-            DELTA.set(DX,DY);
-        }
-    }
-
-    public void axesRJoy(float DX, float DY) {
-        if (pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-                
-        } else if (GamePanel.gameState == GamePanel.PLAY) {
-            aimAngle = new Vec2(DX,DY);
-            angle = Tools.refreshAngle(aimAngle.getAngle()); 
-            physicsComp.catchHitbox.setAngle(angle);
-        }
-    }
-
-    public void leftTrigger(float axesS) {
-        if (pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-            if(axesS > 0.7 && leftTrig<0.7) {
-                GamePanel.menu.leftTrigger();
-            }
-        } else if (GamePanel.gameState == GamePanel.PLAY) {
-            if(axesS > 0.7 && leftTrig < 0.7) {
-                catchBall();
-            } 
-        }   
-        leftTrig = axesS;
-    }
-
-    public void rightTrigger(float axesS) {
-        if (pNumber == 0 && GamePanel.gameState == GamePanel.MENU) {
-            if(axesS > 0.7 && rightTrig<0.7) {
-                GamePanel.menu.rightTrigger();
-            }
-        } else if (GamePanel.gameState == GamePanel.PLAY) {
-            if(axesS > 0.7 && rightTrig<0.7) {
-                throwBall();
-            } 
-        }  
-        rightTrig = axesS;
-    }
+    
 }

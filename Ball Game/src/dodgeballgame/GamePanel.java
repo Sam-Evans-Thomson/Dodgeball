@@ -415,32 +415,32 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             
             //float[] prevAxesS = prevAxesStates[i];
             
-            if((buttonS[0]==GLFW_PRESS)&&(buttonS[0]!=prevButtons[0])) p.pressA();
-            if(buttonS[1]==GLFW_PRESS&&buttonS[1]!=prevButtons[1]) p.pressB();
-            if(buttonS[2]==GLFW_PRESS&&buttonS[2]!=prevButtons[2]) p.pressX();
-            if(buttonS[3]==GLFW_PRESS&&buttonS[3]!=prevButtons[3]) p.pressY();
-            if(buttonS[4]==GLFW_PRESS&&buttonS[4]!=prevButtons[4]) p.pressLB();
-            if(buttonS[5]==GLFW_PRESS&&buttonS[5]!=prevButtons[5]) p.pressRB();
-            if(buttonS[6]==GLFW_PRESS&&buttonS[6]!=prevButtons[6]) p.pressSel();
-            if(buttonS[7]==GLFW_PRESS&&buttonS[7]!=prevButtons[7]) p.pressSta();
-            if(buttonS[8]==GLFW_PRESS&&buttonS[8]!=prevButtons[8]) p.pressLTh();
-            if(buttonS[9]==GLFW_PRESS&&buttonS[9]!=prevButtons[9]) p.pressRTh();
-            if(buttonS[10]==GLFW_PRESS&&buttonS[10]!=prevButtons[10]) p.pressU();
-            if(buttonS[11]==GLFW_PRESS&&buttonS[11]!=prevButtons[11]) p.pressR();
-            if(buttonS[12]==GLFW_PRESS&&buttonS[12]!=prevButtons[12]) p.pressD();
-            if(buttonS[13]==GLFW_PRESS&&buttonS[13]!=prevButtons[13]) p.pressL();
+            if((buttonS[0]==GLFW_PRESS)&&(buttonS[0]!=prevButtons[0])) p.inputComponent.pressA();
+            if(buttonS[1]==GLFW_PRESS&&buttonS[1]!=prevButtons[1]) p.inputComponent.pressB();
+            if(buttonS[2]==GLFW_PRESS&&buttonS[2]!=prevButtons[2]) p.inputComponent.pressX();
+            if(buttonS[3]==GLFW_PRESS&&buttonS[3]!=prevButtons[3]) p.inputComponent.pressY();
+            if(buttonS[4]==GLFW_PRESS&&buttonS[4]!=prevButtons[4]) p.inputComponent.pressLB();
+            if(buttonS[5]==GLFW_PRESS&&buttonS[5]!=prevButtons[5]) p.inputComponent.pressRB();
+            if(buttonS[6]==GLFW_PRESS&&buttonS[6]!=prevButtons[6]) p.inputComponent.pressSel();
+            if(buttonS[7]==GLFW_PRESS&&buttonS[7]!=prevButtons[7]) p.inputComponent.pressSta();
+            if(buttonS[8]==GLFW_PRESS&&buttonS[8]!=prevButtons[8]) p.inputComponent.pressLTh();
+            if(buttonS[9]==GLFW_PRESS&&buttonS[9]!=prevButtons[9]) p.inputComponent.pressRTh();
+            if(buttonS[10]==GLFW_PRESS&&buttonS[10]!=prevButtons[10]) p.inputComponent.pressU();
+            if(buttonS[11]==GLFW_PRESS&&buttonS[11]!=prevButtons[11]) p.inputComponent.pressR();
+            if(buttonS[12]==GLFW_PRESS&&buttonS[12]!=prevButtons[12]) p.inputComponent.pressD();
+            if(buttonS[13]==GLFW_PRESS&&buttonS[13]!=prevButtons[13]) p.inputComponent.pressL();
             
             if(Math.sqrt(axesS[0]*axesS[0] + axesS[1]*axesS[1])< 0.25) {
-                p.axesLJoy(0f,0f);
+                p.inputComponent.axesLJoy(0f,0f);
             } else {
-                p.axesLJoy(axesS[0],axesS[1]);
+                p.inputComponent.axesLJoy(axesS[0],axesS[1]);
             }
             if(Math.sqrt(axesS[5]*axesS[5] + axesS[4]*axesS[4])> 0.5) {
-                p.axesRJoy(axesS[5],axesS[4]);
+                p.inputComponent.axesRJoy(axesS[5],axesS[4]);
             }
             
-            p.leftTrigger(axesS[2]);
-            p.rightTrigger(axesS[3]);
+            p.inputComponent.leftTrigger(axesS[2]);
+            p.inputComponent.rightTrigger(axesS[3]);
             
                        
         }
