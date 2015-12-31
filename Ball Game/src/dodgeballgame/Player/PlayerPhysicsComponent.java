@@ -12,6 +12,7 @@ import dodgeballgame.HitBox;
 import dodgeballgame.PowerUps.PowerUp;
 import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
+import java.util.ArrayList;
 
 /**
  *
@@ -80,23 +81,27 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         }
         
         this.d = d;
-        
+
         updateMovementValues(d);
-        updatePosition();
+        
+        updatePosition(p.delta);
+        resolveMove(p.delta);        
+        prevPos.set(p.pos);
+        
         updateThrowValues();
         
-        prevPos.set(p.pos);
-        prevDelta.set(p.delta);
     }
     
     private void updateMovementValues(float d) {
         speed=baseSpeed;
         frameSpeed = d*speed;
+        prevDelta.set(p.delta);
         p.delta = p.DELTA.multiply(frameSpeed);
     }
     
-    private void updatePosition() {
-        moveBy(p.delta);
+    private void updatePosition(Vec2 vec) { 
+        p.pos = p.pos.add(vec);
+        updateHitbox(); 
     }
 
     private void updateHitbox() {
@@ -106,17 +111,17 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         catchHitbox.setRadius(p.radius);
     }
     
-    public void moveBy(Vec2 vec) {
-        
-        p.pos = p.pos.add(vec);
-        updateHitbox();
-        
+    private void resolveMove(Vec2 vec) {
+        resolveCollisions(vec, GamePanel.arena.arenaPlayerHitbox);
+        if(p.team == 0)         resolveCollisions(vec, GamePanel.arena.arenaTeam1Hitbox);
+        else if(p.team == 1)    resolveCollisions(vec, GamePanel.arena.arenaTeam2Hitbox);
+        resolvePlayerCollisions(vec);
+    }
+    
+    public void resolveCollisions(Vec2 vec, ArrayList<HitBox> array) {
         Vec2 d2;
-        Vec2 dir;
-        Vec2 dir2;
-       
-        //check if in wall and update the position accordingly
-        for(HitBox hb : GamePanel.arena.arenaPlayerHitbox) {
+        
+        for(HitBox hb : array) {
             if(hb.collision(playerHitbox)) {
 
                 HitBox test1 = new HitBox((int)p.pos.getX(), (int)prevPos.getY());
@@ -131,69 +136,33 @@ public class PlayerPhysicsComponent implements PlayerComponent{
                 } else {
                     d2 = new Vec2(-(vec.getX()),-(vec.getY()));
                 }
-                p.pos = p.pos.add(d2);
-                updateHitbox();
+                updatePosition(d2);
             }
         }
-        
-        if (p.team == 0) {
-            for(HitBox hb : GamePanel.arena.arenaTeam1Hitbox) {
-                if(hb.collision(playerHitbox)) {
-
-                    HitBox test1 = new HitBox((int)p.pos.getX(), (int)prevPos.getY());
-                    test1.makeCircle(p.H/2);
-                    HitBox test2 = new HitBox((int)prevPos.getX(), (int)p.pos.getY());
-                    test2.makeCircle(p.H/2);
-
-                    if (hb.collision(test1) && !hb.collision(test2)) {
-                        d2 = new Vec2(-(vec.getX()),0);   
-                    } else if (hb.collision(test2) && !hb.collision(test1)) {
-                        d2 = new Vec2(0,-(vec.getY()));
-                    } else {
-                        d2 = new Vec2(-(vec.getX()),-(vec.getY()));
-                    }
-                    p.pos = p.pos.add(d2);
-                    updateHitbox();
-                }
-            }
-        } else if (p.team == 1) {
-            for(HitBox hb : GamePanel.arena.arenaTeam2Hitbox) {
-                if(hb.collision(playerHitbox)) {
-
-                    HitBox test1 = new HitBox((int)p.pos.getX(), (int)prevPos.getY());
-                    test1.makeCircle(p.H/2);
-                    HitBox test2 = new HitBox((int)prevPos.getX(), (int)p.pos.getY());
-                    test2.makeCircle(p.H/2);
-
-                    if (hb.collision(test1) && !hb.collision(test2)) {
-                        d2 = new Vec2(-(vec.getX()),0);   
-                    } else if (hb.collision(test2) && !hb.collision(test1)) {
-                        d2 = new Vec2(0,-(vec.getY()));
-                    } else {
-                        d2 = new Vec2(-(vec.getX()),-(vec.getY()));
-                    }
-                    p.pos = p.pos.add(d2);
-                    updateHitbox();
-                }
-            }
-        }
+    }
+    
+    public void resolvePlayerCollisions(Vec2 vec) {
 
         //check if in player
         for(int i = 0; i < GamePanel.NUM_PLAYERS; i++) {
             Player player = GamePanel.playerArray.get(i);
+
             if (!(p.equals(player)) && player.physicsComp.playerHitbox.collision(playerHitbox)) {
-                speed = baseSpeed;
-                double mag = p.delta.getMagnitude();
-                double angle = p.pos.getAngle(player.pos);
-                
-                dir = new Vec2(angle, mag, 1);
-                dir2 = new Vec2(angle, -mag, 1);
-                
-                moveBy(dir2);
-                player.physicsComp.moveBy(dir);
+                pushPlayer(player, vec);
             }
         }
-    }  
+    }
+    
+    public void pushPlayer(Player player, Vec2 delta) {
+        double angle = p.pos.getAngle(player.pos);  // angle away from this player.
+        double mag = delta.getMagnitude();
+        Vec2 pdelta = new Vec2(angle,mag,1);
+        
+        player.physicsComp.updatePosition(pdelta);
+        player.physicsComp.resolveMove(pdelta);
+        player.physicsComp.prevPos.set(player.physicsComp.p.pos);
+        
+    }
     
     ////////////// CATCHING AND THROWING //////////////////
     

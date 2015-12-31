@@ -70,6 +70,7 @@ public class Vec2 {
         return angle;
     }
     
+    // from - to.
     public double getAngle(Vec2 vec) {
         Vec2 v = new Vec2(vec.getX() - x, vec.getY() - y);
 
