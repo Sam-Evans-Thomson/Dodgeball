@@ -31,7 +31,7 @@ public class LargeCatchPower extends Power{
     @Override
     public void applyEffect(Player p) {
         for (Player player: GamePanel.playerArray) {
-            if (player.team == p.team) player.stateComp.largeCatch();
+            if (player.team == p.team) player.stateComp.largeCatchArea();
         }
     }
 }

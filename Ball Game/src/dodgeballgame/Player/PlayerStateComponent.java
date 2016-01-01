@@ -5,6 +5,7 @@
  */
 package dodgeballgame.Player;
 
+import dodgeballgame.StateComponent;
 import dodgeballgame.Timer;
 
 /**
@@ -14,79 +15,56 @@ import dodgeballgame.Timer;
 public class PlayerStateComponent implements PlayerComponent{
     
     Player p;
-    
-    
-    
+
     public PlayerStateComponent(Player p) {
         this.p = p;
-        slowed = false;
+        init();
     }
 
     @Override
     public void init() {
+        largeCatchArea = new StateComponent(new double[]{radius,angle},lgcTime);
+        slowed = new StateComponent(new double[]{slowSpeed}, slowTime);
     }
 
     @Override
     public void update(float d) {
-        if(slowed)checkSlowed();
-        if(largeCatch)checkLargeCatch();
+        if(slowed.hasExpired()) endSlowed(); 
+        if(largeCatchArea.hasExpired()) endLargeCatchArea();
     }
     
-    //////Slowed//////////
-    public boolean slowed;
-    final double slowedLength = 5;
-    final double slowSpeed = 200;
-    public double origSpeed;
-    Timer slowedTimer;
-    private double slowedTime;
+    
+    public StateComponent largeCatchArea;
+    public double radius = 200d;
+    public double angle = 6.2d;
+    public double lgcTime = 5;
+    
+    public void largeCatchArea() {
+        if(!largeCatchArea.active) largeCatchArea.setOrigValues(new double[]{p.radius, p.catchAngle});
+        largeCatchArea.apply();
+        p.radius = largeCatchArea.getValue(0);
+        p.catchAngle  = largeCatchArea.getValue(1);
+    }
+    
+    public void endLargeCatchArea() {
+        p.radius = largeCatchArea.getOrigValue(0);
+        p.catchAngle  = largeCatchArea.getOrigValue(1);
+    }
+    
+    
+    public StateComponent slowed;
+    public double slowSpeed = 200;
+    public double slowTime = 5;
     
     public void slowed() {
-        if(!slowed) origSpeed = p.physicsComp.speed;
-        slowed = true;
-        slowedTimer = new Timer();
-        slowedTimer.refresh();
-        slowedTime = slowedTimer.getDifference();
-        p.physicsComp.speed=slowSpeed;
+        if(!slowed.active) slowed.setOrigValues(new double[]{p.physicsComp.speed});
+        slowed.apply();
+        p.physicsComp.speed = slowed.getValue(0);
     }
     
-    public void checkSlowed() {
-        slowedTime = slowedTimer.getDifference();
-        if (slowedTime>slowedLength) {
-            slowed = !slowed;
-            p.physicsComp.speed = origSpeed;
-        }
+    public void endSlowed() {
+        p.physicsComp.speed = slowed.getOrigValue(0);
     }
     
-    ///// Large Catch ///////
-    public boolean largeCatch;
-    final double largeCatchLength = 5;
-    final double largeRadius = 200;
-    final double largeAngle = 6.0;
-    public double origRadius;
-    public double origAngle;
-    Timer largeCatchTimer;
-    private double largeCatchTime;
-    
-    public void largeCatch() {
-        if(!largeCatch) {
-            origRadius = p.radius;
-            origAngle = p.catchAngle;
-        }
-        largeCatch = true;
-        largeCatchTimer = new Timer();
-        largeCatchTimer.refresh();
-        largeCatchTime = largeCatchTimer.getDifference();
-        p.radius = largeRadius;
-        p.catchAngle  = largeAngle;
-    }
-    
-    public void checkLargeCatch() {
-        largeCatchTime = largeCatchTimer.getDifference();
-        if (largeCatchTime>largeCatchLength) {
-            largeCatch = !largeCatch;
-            p.radius = origRadius;
-            p.catchAngle  = origAngle;
-        }
-    }
 }
 
