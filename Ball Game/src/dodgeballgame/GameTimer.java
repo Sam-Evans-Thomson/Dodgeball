@@ -51,7 +51,6 @@ public class GameTimer {
     public static void resume() {
         timing = true;
         startTime += (getTime() - pauseTime);
-        System.out.println(currentTime + "  -  " + startTime);
     }
     
     public static void reset() {

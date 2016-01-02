@@ -54,8 +54,6 @@ public class Wrench extends Ball{
         
         imageWidth = ball.getWidth();
         
-        System.out.println(imageWidth);
-        
         imageEditor = new ImageEditor(ball);
         ball = imageEditor.scale(2*r/imageWidth);
         

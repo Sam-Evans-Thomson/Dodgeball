@@ -286,7 +286,6 @@ public class Player {
     }
     
     private void spawnPowerCheck() {
-        System.out.println("spawnPowerCHeck");
         if(pointsCount>=pointsPerPower) {
             GamePanel.powerManager.addPower(team);
             pointsCount = 0;
