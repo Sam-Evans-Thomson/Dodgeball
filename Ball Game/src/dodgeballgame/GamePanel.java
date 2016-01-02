@@ -226,7 +226,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         ballArray = new ArrayList<>();
         itemArray = new ArrayList<>();
         powerArray = new ArrayList<>();
-        powerManager.addRandom(new Vec2(200,200));
         arena = new Arena();
         
         matchSettings.apply();
@@ -317,6 +316,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
                 while(frameTime < 1f/FPSGoal) {
                     startTime = System.nanoTime();
                     float delta = ((float)(startTime - lastTime)/1000000000f);
+                    // Does this fix the player start mvoement issue?
+                    if (delta > 1f/20f) delta = 1f/20f;
+                    ///////
                     input();
                     update(delta);
                     frameTime += (double)delta;

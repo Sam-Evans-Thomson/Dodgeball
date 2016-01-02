@@ -26,7 +26,7 @@ public class Wrench extends Ball{
     
     double imageWidth;
     
-    public Wrench(double speed, double x, double y, double angle, int team, int player) {
+    public Wrench(double speed, double x, double y, double angle, int team, Player player) {
         super(speed, x, y, angle, team, player);
         
         init();
@@ -82,7 +82,7 @@ public class Wrench extends Ball{
     
     @Override
     public void hitPlayer(Player p) {
-        p.hitPlayer(2);
+        p.hitPlayer(player,2);
         delete();
     }
     

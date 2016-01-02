@@ -7,6 +7,7 @@ package dodgeballgame.Items;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.Player.Player;
+import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
 import java.awt.Color;
 import java.io.File;
@@ -26,6 +27,7 @@ public class AddRunSpeed extends Item {
             image = ImageIO.read(new File("Images/addRunSpeed.png"));
         } catch (IOException e) {
         }
+        image = Tools.sizeImage(image, r);
     }
     
     @Override

@@ -27,7 +27,6 @@ public class Player {
     public Vec2 delta;                                      // Change in position
     private float d;                                        // time delta
     
-    // need to figure these out
     public double angle;                        // Catch Area + Aiming angle
     public Vec2 aimAngle;                          
     public double throwAngle;  
@@ -44,6 +43,10 @@ public class Player {
     public Vec2 DELTA;          // The values directly from left Thumb stick.
     
     // Settings
+    public static int killsPerPower;
+    public static int goalsPerPower;
+    public static int hitsPerPower;
+    public static int pointsPerPower;
     public static double invincibleTime;    //The time length of invincibility
     public static int pointsPerGoal;
     public static int startHealth;
@@ -52,10 +55,34 @@ public class Player {
     // Current Values
     public int health;
     public int numBalls;
-    public int numPowerUps;
+    public int numItems;
+    
+    public int pointsCount;
+    public int killsCount;
+    public int goalsCount;
+    public int hitsCount;
+    
     public double catchAngle, radius;   //The radius and angle of the catch area
     public Power currentPower;
     public Power noPower = new NoPower(new Vec2(0,0));
+    public Power activePower;
+    
+    // stats
+    public int points;
+    public int kills;
+    public int ownKills;
+    public int goals;
+    public int ownGoals;
+    public int hits;
+    public int ownHits;
+    public int gotHits;
+    public int ownGotHits;
+    public int catches;
+    public int ballThrows;
+    public int items;
+    public int powers;
+    public int deaths;
+    public double distanceTravelled;
     
     // Components
     public PlayerGraphicsComponent graphicsComp;
@@ -98,15 +125,22 @@ public class Player {
         
         hbTimer = new Timer();
         catchTimer = new Timer();
+        
+        kills = goals = ownKills = ownGoals = hits = ownHits = deaths = 0;
+        gotHits = ownGotHits = points = 0;
+        goalsCount = hitsCount = pointsCount = killsCount = 0;
+        distanceTravelled = 0d;
 
     }
     
+    // These are stats that get set on death.
     public void initStats() {
         currentPower = noPower;
+        activePower = noPower;
         health = startHealth;
         numBalls = startBalls;
         
-        numPowerUps = 0;
+        numItems = 0;
         radius = 150;
         catchAngle = (1.2*Math.PI)/4.0;
         W = H = 100; 
@@ -180,26 +214,17 @@ public class Player {
     
     ///// EVENTS //////
     public void usePower() {
+        powers++;
         currentPower.applyEffect(this);
         currentPower = noPower;
     }
     
-    public void hitPlayer() {
-        hbTimer.refresh();
-        solid = false;
+    public void hitPlayer(Player p, int i) {
+        if (p.team != team) gotHits++;
+        else ownGotHits++;
+        
         GamePanel.changeScore(1-team,1);
-        GamePanel.itemManager.addPowerUp(1-team);
-        GamePanel.itemManager.addBall(1-team); 
-        if (health > 1) {
-            health--;
-            graphicsComp.hitPlayer();
-        }
-        else death();
-    }
-    
-    public void hitPlayer(int i) {
-        GamePanel.changeScore(1-team,1);
-        GamePanel.itemManager.addPowerUp(1-team);
+        GamePanel.itemManager.addItem(1-team);
         GamePanel.itemManager.addBall(1-team); 
         hbTimer.refresh();
         solid = false;
@@ -210,13 +235,24 @@ public class Player {
         else death();
     }
     
+    public void hitOtherPlayer(Player p, int i) {
+        if (p.team != team) {
+            hits++;
+            hitsCount++;
+            points+=i;
+            pointsCount+=i;
+        }
+        else ownHits++;
+        spawnPowerCheck();
+    }
+    
     public void death() {
-
+        deaths++;
         for (int i = 0; i < numBalls; i++) {
             GamePanel.itemManager.addBall(1-team);
         }
-        for (int i = 0; i < numPowerUps/2; i++) {
-            GamePanel.itemManager.addPowerUp(1-team);
+        for (int i = 0; i < numItems/2; i++) {
+            GamePanel.itemManager.addItem(1-team);
         }
          
         initStats();
@@ -226,11 +262,47 @@ public class Player {
         numBalls = 0;
 
     }
+    
+    public void killedPlayer(Player p) {
+        if (p.team != team) {
+            kills++;
+            killsCount++;
+        }
+        else ownKills++;
+        spawnPowerCheck();
+    }
 
     public void scoreGoal(int team) {
+        if (this.team == team) {
+            goals++;
+            goalsCount++;
+            points += pointsPerGoal;
+        }
+        else ownGoals++;
         GamePanel.changeScore(team, pointsPerGoal);
         numBalls++;
         catchTimer.refresh();
+        spawnPowerCheck();
+    }
+    
+    private void spawnPowerCheck() {
+        System.out.println("spawnPowerCHeck");
+        if(pointsCount>=pointsPerPower) {
+            GamePanel.powerManager.addPower(team);
+            pointsCount = 0;
+        }
+        if(goalsCount>=goalsPerPower) {
+            GamePanel.powerManager.addPower(team);
+            goalsCount = 0;
+        }
+        if(killsCount>=killsPerPower) {
+            GamePanel.powerManager.addPower(team);
+            killsCount = 0;
+        }
+        if(hitsCount>=hitsPerPower) {
+            GamePanel.powerManager.addPower(team);
+            hitsCount = 0;
+        }
     }
 
     

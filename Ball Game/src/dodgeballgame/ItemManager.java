@@ -140,13 +140,11 @@ public class ItemManager {
     private void hitBoxShrink(Vec2 pos) {
     }
 
-    public void addPowerUp(int team) {
+    public void addItem(int team) {
         double x = (GamePanel.arenaWIDTH/2-40)*rand.nextDouble() + 20 + team*GamePanel.arenaWIDTH/2;
         double y = (GamePanel.arenaHEIGHT/2-40)*rand.nextDouble() + 20 + team*GamePanel.arenaHEIGHT/2;
         Vec2 pos = new Vec2(x,y);
-        
-        
-        
+
         double max = 0;
         double numAvailable = 0;
         double numTotal = 0;

@@ -5,6 +5,8 @@
  */
 package dodgeballgame.Powers;
 
+import dodgeballgame.GamePanel;
+import dodgeballgame.Player.Player;
 import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
 import java.awt.Color;
@@ -16,15 +18,21 @@ import javax.imageio.ImageIO;
  *
  * @author Sam
  */
-public class NoPower extends Power{
+public class RandomPower extends Power{
 
-    public NoPower(Vec2 pos) {
+    public RandomPower(Vec2 pos) {
         super(pos);
+        color = new Color(100,255,100);
         try {
-            image = ImageIO.read(new File("Images/Powers/noPower.png"));
+            image = ImageIO.read(new File("Images/Powers/random.png"));
         } catch (IOException e) {
         }
         image = Tools.sizeImage(image, r);
     }
     
+    @Override
+    public void applyEffect(Player p) {
+        Power power = GamePanel.powerManager.makeRandom(new Vec2(0,0));
+        power.applyEffect(p);
+    }
 }

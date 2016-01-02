@@ -31,7 +31,7 @@ public class Ball {
     public double r;
     
     public int team;
-    public int player;
+    public Player player;
     
     public float d;
     
@@ -47,7 +47,7 @@ public class Ball {
     
     double imageWidth;
     
-    public Ball(double speed, double x, double y, double angle, int team, int player) {
+    public Ball(double speed, double x, double y, double angle, int team, Player player) {
         this.team = team;
         this.speed = speed;
         pos = new Vec2(x,y);
@@ -67,7 +67,7 @@ public class Ball {
         init();
     }
     
-    public void setBall(double speed, double x, double y, double angle, int team, int player) {
+    public void setBall(double speed, double x, double y, double angle, int team, Player player) {
         this.team = team;
         this.speed = speed;
         pos = new Vec2(x,y);
@@ -198,7 +198,8 @@ public class Ball {
     }
     
     public void hitPlayer(Player p) {
-        p.hitPlayer();
+        p.hitPlayer(player, 1);
+        player.hitOtherPlayer(p,1);
         delete();
     }
     
@@ -214,14 +215,14 @@ public class Ball {
         }
     }
     
-    public void hitGoal(int player, int team) {
+    public void hitGoal(Player player, int team) {
         
-        if(GamePanel.playerArray.get(player).team == team) {// if you hit your goal
-            GamePanel.playerArray.get(player).scoreGoal(team);
+        if(player.team == team) {// if you hit your goal
+            player.scoreGoal(team);
             GamePanel.soundManager.addHealth();
             delete();
         } else if(GamePanel.matchSettings.getDouble(5) != 0) {         //If friendly fire is off
-            GamePanel.playerArray.get(player).scoreGoal(team);
+            player.scoreGoal(team);
             GamePanel.soundManager.addHealth();
             delete();
         }

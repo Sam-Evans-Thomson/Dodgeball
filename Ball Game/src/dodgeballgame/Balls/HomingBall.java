@@ -15,7 +15,7 @@ import dodgeballgame.Vec2;
  */
 public class HomingBall extends Ball {
     
-    public HomingBall(double speed, double x, double y, double angle, int team, int player) {
+    public HomingBall(double speed, double x, double y, double angle, int team, Player player) {
         super(speed,x,y,angle,team, player);
         
         init();

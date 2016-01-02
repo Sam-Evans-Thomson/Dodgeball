@@ -6,6 +6,7 @@
 package dodgeballgame;
 
 import dodgeballgame.Powers.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -14,28 +15,42 @@ import java.util.Random;
  */
 public class PowerManager {
     
-    private final int NUM_POWERS = 2;
+    private final int NUM_POWERS = 3;
+    public int[] powers = new int[NUM_POWERS];
+    
+    Random rand = new Random();
+    
+    ArrayList<Power> activePowers = new ArrayList();
     
     public PowerManager() {
-
+        for (int i=0 ;i < NUM_POWERS; i++) powers[i] = 1;
+        loadActivePowers();
     }
     
-    public void addSlowed(Vec2 pos) {
-        GamePanel.powerArray.add(new SlowPower(pos));
+    public void loadActivePowers() {
+        Vec2 vec = new Vec2(0,0);
+        activePowers = new ArrayList();
+        if (powers[0] == 1) activePowers.add(new SlowPower(vec));
+        if (powers[1] == 1) activePowers.add(new LargeCatchPower(vec));
+        if (powers[2] == 1) activePowers.add(new RandomPower(vec));
     }
     
-    public void addLargeCatch(Vec2 pos) {
-        GamePanel.powerArray.add(new LargeCatchPower(pos));
+    private void add(Power power) {
+        GamePanel.powerArray.add(power);
     }
     
-    public void addRandom(Vec2 pos) {
-        Random rand = new Random();
-        int seed = rand.nextInt(NUM_POWERS);
+    public void addPower(int team) {
+        double x = (GamePanel.arenaWIDTH/2-40)*rand.nextDouble() + 20 + team*GamePanel.arenaWIDTH/2;
+        double y = (GamePanel.arenaHEIGHT/2-40)*rand.nextDouble() + 20 + team*GamePanel.arenaHEIGHT/2;
+        Vec2 pos = new Vec2(x,y);
         
-        switch (seed) {
-            case 0 : addSlowed(pos);
-                break;
-            case 1 : addLargeCatch(pos);
-        }
+        add(makeRandom(pos));
+    }
+    
+    public Power makeRandom(Vec2 pos) {
+        int seed = rand.nextInt(powers.length);
+        Power randomPower = activePowers.get(seed);
+        randomPower.setPos(pos);
+        return randomPower;
     }
 }

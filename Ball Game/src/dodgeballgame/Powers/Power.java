@@ -6,13 +6,9 @@
 package dodgeballgame.Powers;
 
 import dodgeballgame.GamePanel;
-import dodgeballgame.HitBox;
 import dodgeballgame.Items.Item;
 import dodgeballgame.Player.Player;
 import dodgeballgame.Vec2;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 /**
  *
@@ -24,6 +20,11 @@ public class Power extends Item{
     public Power(Vec2 pos) {
         super(pos);
         r = 60;
+    }
+    
+    public void setPos(Vec2 pos) {
+        this.pos = pos;
+        this.hb.setPos(pos);
     }
     
     @Override
@@ -40,9 +41,6 @@ public class Power extends Item{
                 GamePanel.powerArray.remove(this);
                 return;
             }
-            if(p.getCatchHitbox().collisionPoint(pos)) {
-                inCatchArea[p.pNumber] = true;
-            } else inCatchArea[p.pNumber] = false;
         }
     }
     

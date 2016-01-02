@@ -10,6 +10,7 @@ import dodgeballgame.GamePanel;
 import dodgeballgame.HitBox;
 import dodgeballgame.ImageEditor;
 import dodgeballgame.Player.Player;
+import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -47,7 +48,6 @@ public class Item {
         hb = new HitBox(pos);
         hb.makeCircle(r);
         inCatchArea = new boolean[GamePanel.NUM_PLAYERS];
-        
     }
     
     public void applyEffect() {
@@ -59,7 +59,7 @@ public class Item {
     }
     
     public void incPowerUpCount(Player p) {
-        p.numPowerUps++;
+        p.numItems++;
     }
     
     public void update() {
@@ -78,9 +78,7 @@ public class Item {
     }
     
     public void render(Graphics2D g) {
-        imageEditor = new ImageEditor(image);
-        BufferedImage bi = imageEditor.scale(r/image.getHeight());
-        g.drawImage(bi, (int)(pos.getX()-W/2), (int)(pos.getY()-H/2), null);
+        g.drawImage(image, (int)(pos.getX()-W/2), (int)(pos.getY()-H/2), null);
     }
     
     public void hitBall() {

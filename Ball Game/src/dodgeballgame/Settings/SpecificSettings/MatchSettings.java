@@ -57,6 +57,10 @@ public class MatchSettings extends SettingsList {
         itemSpawnChance();
         pointsPerGoal();
         goalsOnOff();
+        goalsPerPower();
+        killsPerPower();
+        hitsPerPower();
+        pointsPerPower();
     }
     
     // Number of players - [2 to numControllers]
@@ -117,5 +121,25 @@ public class MatchSettings extends SettingsList {
     private void goalsOnOff() {
         boolean val = ((int)getDouble(9)==1);
         Arena.goalsActive = val;
+    }
+
+    private void goalsPerPower() {
+        int val = (int)getDouble(10);
+        Player.goalsPerPower = val;
+    }
+
+    private void killsPerPower() {
+        int val = (int)getDouble(11);
+        Player.killsPerPower = val;
+    }
+
+    private void hitsPerPower() {
+        int val = (int)getDouble(12);
+        Player.hitsPerPower = val;
+    }
+
+    private void pointsPerPower() {
+        int val = (int)getDouble(13);
+        Player.pointsPerPower = val;
     }
 }

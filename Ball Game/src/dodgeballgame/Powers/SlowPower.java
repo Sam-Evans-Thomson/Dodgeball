@@ -7,6 +7,7 @@ package dodgeballgame.Powers;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.Player.Player;
+import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
 import java.awt.Color;
 import java.io.File;
@@ -26,6 +27,7 @@ public class SlowPower extends Power{
             image = ImageIO.read(new File("Images/Powers/slow.png"));
         } catch (IOException e) {
         }
+        image = Tools.sizeImage(image, r);
     }
     
     @Override

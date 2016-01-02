@@ -54,6 +54,10 @@ public class PlayerGraphicsComponent implements PlayerComponent{
             ball = ImageIO.read(new File("Images/Balls/ball.png"));
         } catch (IOException e) {
         }
+        playerImageA = Tools.sizeImage(playerImageA, p.H);
+        playerImageB = Tools.sizeImage(playerImageB, p.H);
+        heart = Tools.sizeImage(heart, 60);
+        ball = Tools.sizeImage(ball, 60);
         
         playerImage = playerImageA;
         
@@ -107,6 +111,7 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         
         g.drawImage(playerImage, (int)(p.pos.getX()-p.W/2), (int)(p.pos.getY()-p.H/2), null);
         
+        renderPower(g);
         renderScore(g);
     }
     
@@ -135,29 +140,32 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     }
     
     private void renderScore(Graphics2D g) {
-        imageEditor = new ImageEditor(playerImage);
-        BufferedImage bi = imageEditor.scale(0.6);
-        g.drawImage(bi, playerScoreOffsetX, playerScoreOffsetY-50, null);
         
+        g.drawImage(Tools.scaleImage(playerImage,0.6), playerScoreOffsetX, playerScoreOffsetY-50, null);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-        imageEditor.setImage(heart);
-        BufferedImage biHeart = imageEditor.scale(0.6);
-        g.drawImage(biHeart, playerScoreOffsetX + 100, playerScoreOffsetY-50, null);
+        g.drawImage(heart, playerScoreOffsetX + 100, playerScoreOffsetY-50, null);
         
         g.setColor(new Color(0,0,0));
         g.setFont(new Font("Sans Serif", Font.BOLD, 24));
         
         Tools.centreString(("" + p.health), g, playerScoreOffsetX + 129, playerScoreOffsetY-14);
-        
-        imageEditor.setImage(ball);
-        BufferedImage biBall = imageEditor.scale(0.6);
-        g.drawImage(biBall, playerScoreOffsetX + 200, playerScoreOffsetY-50, null);
-        
-        imageEditor.setImage(p.currentPower.image);
-        BufferedImage biPower = imageEditor.scale(0.2);
-        g.drawImage(biPower, playerScoreOffsetX + 300, playerScoreOffsetY-50, null);
+
+        g.drawImage(ball, playerScoreOffsetX + 200, playerScoreOffsetY-50, null);
+
+        g.drawImage(p.currentPower.image, playerScoreOffsetX + 300, playerScoreOffsetY-50, null);
 
         Tools.centreString(("" + p.numBalls), g, playerScoreOffsetX + 229, playerScoreOffsetY-14);
+    }
+    
+    private void renderPower(Graphics2D g) {
+        if(p.activePower != p.noPower) {
+            BufferedImage img = p.activePower.image;
+            double[] times = p.stateComp.activeState.getTimes();
+            float opacity = (float)(1d - times[0]/times[1]);
+            if(opacity < 0) opacity = 0f;
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+            g.drawImage(img, (int)p.pos.getX() - (int)p.activePower.r/2, (int)p.pos.getY() - (int)(1.2*p.H), null);
+        }
     }
     
     /////// GETTING HIT /////////////

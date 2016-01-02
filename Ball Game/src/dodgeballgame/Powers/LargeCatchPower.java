@@ -7,6 +7,7 @@ package dodgeballgame.Powers;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.Player.Player;
+import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
 import java.awt.Color;
 import java.io.File;
@@ -26,12 +27,15 @@ public class LargeCatchPower extends Power{
             image = ImageIO.read(new File("Images/Powers/largeCatch.png"));
         } catch (IOException e) {
         }
+        image = Tools.sizeImage(image, r);
     }
     
     @Override
     public void applyEffect(Player p) {
         for (Player player: GamePanel.playerArray) {
-            if (player.team == p.team) player.stateComp.largeCatchArea();
+            if (player.team == p.team) {
+                player.stateComp.largeCatchArea();
+            }
         }
     }
 }

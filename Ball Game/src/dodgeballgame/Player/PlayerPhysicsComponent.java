@@ -85,7 +85,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         updateMovementValues(d);
         
         updatePosition(p.delta);
-        resolveMove(p.delta);        
+        resolveMove(p.delta); 
         prevPos.set(p.pos);
         
         updateThrowValues();
@@ -115,6 +115,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         if(p.team == 0)         resolveCollisions(vec, GamePanel.arena.arenaTeam1Hitbox);
         else if(p.team == 1)    resolveCollisions(vec, GamePanel.arena.arenaTeam2Hitbox);
         resolvePlayerCollisions(vec);
+        p.distanceTravelled += prevPos.getMagnitude(p.pos);
     }
     
     public void resolveCollisions(Vec2 vec, ArrayList<HitBox> array) {
@@ -184,8 +185,8 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     public void throwBall() {
         double x = p.pos.getX()+ 1.15*p.radius*Math.cos(p.angle);
         double y = p.pos.getY()+ 1.15*p.radius*Math.sin(p.angle);
-        Ball b = new Ball(relThrowSpeed, x, y, p.throwAngle, p.team, p.pNumber);
-        b.setBall(relThrowSpeed, x, y, p.throwAngle, p.team, p.pNumber);
+        Ball b = new Ball(relThrowSpeed, x, y, p.throwAngle, p.team, p);
+        b.setBall(relThrowSpeed, x, y, p.throwAngle, p.team, p);
         
         int count = 0;
         for(HitBox hb : GamePanel.arena.arenaBallHitbox) {
@@ -205,6 +206,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         }
         
         if(p.numBalls > 0 && count<1) {
+            p.ballThrows++;
             GamePanel.ballArray.add(b);
             p.numBalls--;
             p.catchTimer.refresh();
@@ -215,6 +217,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         for (int i=0; i<GamePanel.ballArray.size(); i++) {
             Ball b = GamePanel.ballArray.get(i);
             if(b.inCatchArea[p.pNumber]) {
+                p.catches++;
                 p.numBalls++;
                 GamePanel.soundManager.catchBall();
                 p.graphicsComp.setCatchGlow();
@@ -227,6 +230,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         for (int i=0; i<GamePanel.itemArray.size(); i++) {
             Item pUp = GamePanel.itemArray.get(i);
             if(pUp.inCatchArea[p.pNumber]) {
+                p.items++;
                 p.graphicsComp.setItemGlow(pUp.color);
                 pUp.applyEffect(p);
                 pUp.incPowerUpCount(p);

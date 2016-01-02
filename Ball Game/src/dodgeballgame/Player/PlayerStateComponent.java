@@ -5,8 +5,9 @@
  */
 package dodgeballgame.Player;
 
+import dodgeballgame.Powers.*;
 import dodgeballgame.StateComponent;
-import dodgeballgame.Timer;
+import dodgeballgame.Vec2;
 
 /**
  *
@@ -15,16 +16,15 @@ import dodgeballgame.Timer;
 public class PlayerStateComponent implements PlayerComponent{
     
     Player p;
-
+    public StateComponent largeCatchArea = new StateComponent(new double[]{200d,6.2d},5);
+    public StateComponent slowed = new StateComponent(new double[]{200d},5);
+    public StateComponent noState = new StateComponent(new double[]{0},0);
+    
+    public StateComponent activeState;
+    
     public PlayerStateComponent(Player p) {
         this.p = p;
-        init();
-    }
-
-    @Override
-    public void init() {
-        largeCatchArea = new StateComponent(new double[]{radius,angle},lgcTime);
-        slowed = new StateComponent(new double[]{slowSpeed}, slowTime);
+        activeState = noState;
     }
 
     @Override
@@ -33,15 +33,12 @@ public class PlayerStateComponent implements PlayerComponent{
         if(largeCatchArea.hasExpired()) endLargeCatchArea();
     }
     
-    
-    public StateComponent largeCatchArea;
-    public double radius = 200d;
-    public double angle = 6.2d;
-    public double lgcTime = 5;
-    
     public void largeCatchArea() {
         if(!largeCatchArea.active) largeCatchArea.setOrigValues(new double[]{p.radius, p.catchAngle});
+        p.activePower = new LargeCatchPower(new Vec2(0,0));
+        
         largeCatchArea.apply();
+        activeState = largeCatchArea;
         p.radius = largeCatchArea.getValue(0);
         p.catchAngle  = largeCatchArea.getValue(1);
     }
@@ -49,21 +46,29 @@ public class PlayerStateComponent implements PlayerComponent{
     public void endLargeCatchArea() {
         p.radius = largeCatchArea.getOrigValue(0);
         p.catchAngle  = largeCatchArea.getOrigValue(1);
+        
+        p.activePower = p.noPower;
+        activeState = noState;
     }
-    
-    
-    public StateComponent slowed;
-    public double slowSpeed = 200;
-    public double slowTime = 5;
-    
+
     public void slowed() {
         if(!slowed.active) slowed.setOrigValues(new double[]{p.physicsComp.speed});
+        p.activePower = new SlowPower(new Vec2(0,0));
+        
         slowed.apply();
+        activeState = slowed;
         p.physicsComp.speed = slowed.getValue(0);
     }
     
     public void endSlowed() {
         p.physicsComp.speed = slowed.getOrigValue(0);
+        
+        p.activePower = p.noPower;
+        activeState = noState;
+    }
+
+    @Override
+    public void init() {
     }
     
 }

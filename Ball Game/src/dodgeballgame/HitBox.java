@@ -91,6 +91,9 @@ public class HitBox {
         r = (int)((double)r*scale);
     }
     
+    public void setPos(Vec2 pos) {
+        this.pos = pos;
+    }
         
     public void scaleRect(double scalex, double scaley) {
         pos.setX(scalex*pos.getX());

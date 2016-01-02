@@ -6,6 +6,7 @@
 package dodgeballgame;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 /**
  *
@@ -35,4 +36,13 @@ public class Tools {
         g.drawString(s, x - stringLen/2, y);
     }
 
+    public static BufferedImage scaleImage(BufferedImage im, double scale) {
+        ImageEditor imageEditor = new ImageEditor(im);
+        return imageEditor.scale(scale);
+    }
+    
+    public static BufferedImage sizeImage(BufferedImage im, double size) {
+        ImageEditor imageEditor = new ImageEditor(im);
+        return imageEditor.scale(size/im.getWidth());
+    }
 }

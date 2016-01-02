@@ -7,6 +7,7 @@ package dodgeballgame.Items;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
 import dodgeballgame.Player.Player;
+import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -28,6 +29,7 @@ public class AddBall extends Item {
             image = ImageIO.read(new File("Images/Balls/ball.png"));
         } catch (IOException e) {
         }
+        image = Tools.sizeImage(image, r);
     }
     
     @Override

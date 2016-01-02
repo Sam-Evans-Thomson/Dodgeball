@@ -45,6 +45,11 @@ public class StateComponent {
         return origValues[i];
     }
     
+    public double[] getTimes() {
+        time = timer.getDifference();
+        return new double[]{time,length};
+    }
+    
     public boolean hasExpired() {
         time = timer.getDifference();
         return (active && time > length);

@@ -6,6 +6,7 @@ package dodgeballgame.Items;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.Player.Player;
+import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
 import java.awt.Color;
 import java.io.File;
@@ -27,6 +28,7 @@ public class AddCatchAngle extends Item {
             image = ImageIO.read(new File("Images/addCatchAngle.png"));
         } catch (IOException e) {
         }
+        image = Tools.sizeImage(image, r);
     }
     
     @Override
