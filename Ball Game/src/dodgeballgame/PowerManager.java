@@ -49,7 +49,7 @@ public class PowerManager {
     
     public Power makeRandom(Vec2 pos) {
         int seed = rand.nextInt(powers.length);
-        Power randomPower = activePowers.get(seed);
+        Power randomPower = activePowers.get(seed).copy();
         randomPower.setPos(pos);
         return randomPower;
     }

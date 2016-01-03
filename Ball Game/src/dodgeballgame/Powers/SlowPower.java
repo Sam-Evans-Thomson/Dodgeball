@@ -36,4 +36,9 @@ public class SlowPower extends Power{
             if (player.team != p.team) player.stateComp.slowed();
         }
     }
+    
+    @Override
+    public Power copy() {
+        return new SlowPower(pos);
+    }
 }

@@ -35,4 +35,9 @@ public class RandomPower extends Power{
         Power power = GamePanel.powerManager.makeRandom(new Vec2(0,0));
         power.applyEffect(p);
     }
+    
+    @Override
+    public Power copy() {
+        return new RandomPower(pos);
+    }
 }

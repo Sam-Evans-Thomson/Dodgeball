@@ -38,4 +38,9 @@ public class LargeCatchPower extends Power{
             }
         }
     }
+    
+    @Override
+    public Power copy() {
+        return new LargeCatchPower(pos);
+    }
 }

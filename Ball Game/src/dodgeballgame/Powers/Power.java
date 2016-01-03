@@ -53,4 +53,7 @@ public class Power extends Item{
         
     }
     
+    public Power copy() {
+        return new Power(pos);
+    }
 }
