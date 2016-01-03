@@ -33,7 +33,8 @@ public class Menu {
     public int INNER_Y_END;
     
     public int[] positions;
-    public int[] cursor;
+    public int[] cursor0, cursor2, cursor3, cursor1;
+    public int[][] cursors;
     
     public int[][] menuArray;
     public int[] currentMenu;
@@ -51,8 +52,11 @@ public class Menu {
     public void init() {
         menuArray = new int[2][];
         
-        cursor = new int[2];
-        cursor[0] = cursor[1] = 0;
+        cursor0 = new int[]{0,0};
+        cursor1 = new int[]{0,0};
+        cursor2 = new int[]{0,0};
+        cursor3 = new int[]{0,0};
+        cursors = new int[][]{cursor0, cursor1, cursor2, cursor3};
 
         HEIGHT = GamePanel.screenHEIGHT;
         WIDTH = GamePanel.screenWIDTH;
@@ -81,19 +85,19 @@ public class Menu {
         
     }
     
-    public void moveCursor(int x, int y) {
+    public void moveCursor(int player, int x, int y) {
         GamePanel.soundManager.menu(8);
         if (x>1) x = 1;
         else if (x<-1) x = -1;
         if (y>1) y = 1;
         else if (y<-1) y = -1;
         
-        cursor[0] += x;
-        cursor[1] += y;
-        if (cursor[0] < 0) cursor[0] = positions[0] - 1;
-        if (cursor[1] < 0) cursor[1] = positions[1] - 1;
-        cursor[0]%=positions[0];
-        cursor[1]%=positions[1];
+        cursors[player][0] += x;
+        cursors[player][1] += y;
+        if (cursors[player][0] < 0) cursors[player][0] = positions[0] - 1;
+        if (cursors[player][1] < 0) cursors[player][1] = positions[1] - 1;
+        cursors[player][0]%=positions[0];
+        cursors[player][1]%=positions[1];
     }
     
     public void render(Graphics2D g) {

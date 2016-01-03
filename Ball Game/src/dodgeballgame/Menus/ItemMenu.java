@@ -84,19 +84,19 @@ public class ItemMenu extends Menu {
             }
         }  
         g.setColor(new Color(255,255,255));
-        g.drawRect(cursor[0]*width/4 + xPos,
-                cursor[1]*height/4 + yPos, 
+        g.drawRect(cursor0[0]*width/4 + xPos,
+                cursor0[1]*height/4 + yPos, 
                 width/4,
                 height/4);
         g.setColor(new Color(200,100,255));
-        g.drawRect(cursor[0]*width/4 + xPos + 1,
-                cursor[1]*height/4 + yPos + 1, 
+        g.drawRect(cursor0[0]*width/4 + xPos + 1,
+                cursor0[1]*height/4 + yPos + 1, 
                 width/4 - 2,
                 height/4 - 2);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
         g.setColor(Color.white);
-        g.fillRect(cursor[0]*width/4 + xPos + 1,
-                cursor[1]*height/4 + yPos + 1, 
+        g.fillRect(cursor0[0]*width/4 + xPos + 1,
+                cursor0[1]*height/4 + yPos + 1, 
                 width/4 - 2,
                 height/4 - 2);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
@@ -139,7 +139,7 @@ public class ItemMenu extends Menu {
     @Override
     public void select() {
         GamePanel.soundManager.menu(6);
-        ItemManager.incFreq(cursor[0],cursor[1],1);
+        ItemManager.incFreq(cursor0[0],cursor0[1],1);
     }
     
     @Override
@@ -158,14 +158,14 @@ public class ItemMenu extends Menu {
     @Override
     public void rightTrigger() {
         
-        ItemManager.incFreq(cursor[0],cursor[1],1);
-        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursor[0]][cursor[1]]);
+        ItemManager.incFreq(cursor0[0],cursor0[1],1);
+        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursor0[0]][cursor0[1]]);
     }
     
     @Override
     public void leftTrigger() {
-        ItemManager.decFreq(cursor[0],cursor[1],1);
-        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursor[0]][cursor[1]]);
+        ItemManager.decFreq(cursor0[0],cursor0[1],1);
+        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursor0[0]][cursor0[1]]);
     }
 }
 

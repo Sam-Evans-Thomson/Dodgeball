@@ -22,7 +22,8 @@ public class PrimeInputComponent extends InputComponent{
     @Override
     public void pressA() {
         if (GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.select();
+            if (GamePanel.menu.equals(GamePanel.characterMenu))GamePanel.characterMenu.select(p);
+            else GamePanel.menu.select();
         }
     }
 
@@ -52,36 +53,6 @@ public class PrimeInputComponent extends InputComponent{
     public void pressSel() {
         if (GamePanel.gameState == GamePanel.MENU) {
             GamePanel.menu.selectButton();
-        }
-    }
-
-    @Override
-    public void pressU() {
-        if (GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.moveCursor(0, -1);
-        }
-    }
-
-    @Override
-    public void pressR() {
-        if (GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.moveCursor(1, 0);
-                GamePanel.menu.right();
-        }
-    }
-
-    @Override
-    public void pressD() {
-        if (GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.moveCursor(0, 1);
-        }
-    }
-
-    @Override
-    public void pressL() {
-        if (GamePanel.gameState == GamePanel.MENU) {
-                GamePanel.menu.moveCursor(-1, 0);
-                GamePanel.menu.left();
         }
     }
 

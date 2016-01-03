@@ -59,7 +59,7 @@ public class StartMatchSettingsMenu extends Menu{
 
         g.setPaint(Color.white);
         
-        if (cursor[1] == 0) {
+        if (cursor0[1] == 0) {
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
             centreString("ARENA", g, WIDTH/2, INNER_Y_START + yOffset);
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
@@ -67,7 +67,7 @@ public class StartMatchSettingsMenu extends Menu{
             centreString("ITEMS", g, WIDTH/2, INNER_Y_START + yOffset*2);
             centreString("POWERS", g, WIDTH/2, INNER_Y_START + yOffset*3);
             centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + yOffset*4);
-        } else if(cursor[1] == 1) {
+        } else if(cursor0[1] == 1) {
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
             centreString("ITEMS", g, WIDTH/2, INNER_Y_START + 2*yOffset);
             g.setColor(new Color(80,80,180));
@@ -75,7 +75,7 @@ public class StartMatchSettingsMenu extends Menu{
             centreString("ARENA", g, WIDTH/2, INNER_Y_START + yOffset);            
             centreString("POWERS", g, WIDTH/2, INNER_Y_START + 3*yOffset);
             centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + 4*yOffset);
-        } else if(cursor[1] == 2) {
+        } else if(cursor0[1] == 2) {
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
             centreString("POWERS", g, WIDTH/2, INNER_Y_START + 3*yOffset);
             g.setColor(new Color(80,80,180));
@@ -83,7 +83,7 @@ public class StartMatchSettingsMenu extends Menu{
             centreString("ARENA", g, WIDTH/2, INNER_Y_START + yOffset);            
             centreString("ITEMS", g, WIDTH/2, INNER_Y_START + 2*yOffset);
             centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + 4*yOffset);
-        } else if(cursor[1] == 3) {
+        } else if(cursor0[1] == 3) {
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));            
             centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + 4*yOffset);
             g.setColor(new Color(80,80,180));
@@ -113,13 +113,13 @@ public class StartMatchSettingsMenu extends Menu{
         if (accept) {
             GamePanel.soundManager.menu(6);
             applyLoad();
-        } else if (cursor[1] == 0) {
+        } else if (cursor0[1] == 0) {
             //GamePanel.menu = GamePanel.arenaMenu;
-        } else if (cursor[1] == 1) {
+        } else if (cursor0[1] == 1) {
             GamePanel.menu = GamePanel.powerUpMenu;
-        } else if (cursor[1] == 2) {
+        } else if (cursor0[1] == 2) {
             //GamePanel.menu = GamePanel.powerMenu;
-        } else if (cursor[1] == 3) {
+        } else if (cursor0[1] == 3) {
             GamePanel.menu = GamePanel.matchSettingsMenu;
         }
     }

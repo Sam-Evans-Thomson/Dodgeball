@@ -37,7 +37,7 @@ public class StartMenu extends Menu {
         
         g.setPaint(Color.white);
         
-        if (cursor[1] == 0) {
+        if (cursor0[1] == 0) {
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
             centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + yOffset);
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
@@ -45,7 +45,7 @@ public class StartMenu extends Menu {
             centreString("GENERAL SETTINGS", g, WIDTH/2, INNER_Y_START + yOffset*2);
             centreString("CHOOSE CHARACTERS", g, WIDTH/2, INNER_Y_START + yOffset*3);
             centreString("EXIT", g, WIDTH/2, INNER_Y_START + yOffset*4);
-        } else if(cursor[1] == 1) {
+        } else if(cursor0[1] == 1) {
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
             centreString("GENERAL SETTINGS", g, WIDTH/2, INNER_Y_START + 2*yOffset);
             g.setColor(new Color(80,80,180));
@@ -53,7 +53,7 @@ public class StartMenu extends Menu {
             centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + yOffset);            
             centreString("CHOOSE CHARACTERS", g, WIDTH/2, INNER_Y_START + 3*yOffset);
             centreString("EXIT", g, WIDTH/2, INNER_Y_START + 4*yOffset);
-        } else if(cursor[1] == 2) {
+        } else if(cursor0[1] == 2) {
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
             centreString("CHOOSE CHARACTERS", g, WIDTH/2, INNER_Y_START + 3*yOffset);
             g.setColor(new Color(80,80,180));
@@ -61,7 +61,7 @@ public class StartMenu extends Menu {
             centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + yOffset);            
             centreString("GENERAL SETTINGS", g, WIDTH/2, INNER_Y_START + 2*yOffset);
             centreString("EXIT", g, WIDTH/2, INNER_Y_START + 4*yOffset);
-        } else if(cursor[1] == 3) {
+        } else if(cursor0[1] == 3) {
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));            
             centreString("EXIT", g, WIDTH/2, INNER_Y_START + 4*yOffset);
             g.setColor(new Color(80,80,180));
@@ -80,13 +80,13 @@ public class StartMenu extends Menu {
     
     @Override
     public void select() {
-        if (cursor[1] == 0) {
+        if (cursor0[1] == 0) {
             GamePanel.menu = GamePanel.startMatchSettingsMenu;
-        } else if (cursor[1] == 1) {
+        } else if (cursor0[1] == 1) {
             GamePanel.menu = GamePanel.generalSettingsMenu;
-        } else if (cursor[1] == 2) {
+        } else if (cursor0[1] == 2) {
             GamePanel.menu = GamePanel.characterMenu;
-        } else if (cursor[1] == 3) {
+        } else if (cursor0[1] == 3) {
             Game.close();
         }
         

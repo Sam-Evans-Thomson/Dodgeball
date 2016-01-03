@@ -81,7 +81,7 @@ public class LoadMenu extends Menu {
         for (int i = 0; i < 9; i++) {
             float opacity = (float)(5f-Math.sqrt((i-4)*(i-4)))/5f;
             
-            int cursorPlace = (cursor[1] + i - 4)%numSaves;
+            int cursorPlace = (cursor0[1] + i - 4)%numSaves;
             if(cursorPlace < 0) cursorPlace += numSaves;      
             
             if(i == 4) {
@@ -128,7 +128,7 @@ public class LoadMenu extends Menu {
     }
     
     private void applySave() {
-        String filePath = SAVE_DIRECTORY + "/save" + cursor[1] + ".txt";
+        String filePath = SAVE_DIRECTORY + "/save" + cursor0[1] + ".txt";
         MatchSettings save = new MatchSettings(MatchSettingsMenu.settings);
         save.setPath(filePath);
         save.save();

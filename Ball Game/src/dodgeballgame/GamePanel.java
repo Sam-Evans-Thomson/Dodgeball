@@ -384,23 +384,26 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         
         ByteBuffer buttons;   
         FloatBuffer axes;
-        
+        int[] axisCount = new int[NUM_PLAYERS];
         //Scan button States
-        for (int i=0; i<NUM_PLAYERS; i++) {             
-            buttons = glfwGetJoystickButtons(playerControllers[i]);  
+        for (int i=0; i<NUM_PLAYERS; i++) {
+
+            buttons = glfwGetJoystickButtons(playerControllers[i]);
             axes = glfwGetJoystickAxes(playerControllers[i]);      
             int buttonID = 0;
             while (buttons.hasRemaining()) {
                 buttonStates[i][buttonID] = buttons.get();
                 buttonID++;
             }
+            
             int axisID = 0;
             while (axes.hasRemaining()) {
                 float state = axes.get();
                 axesStates[i][axisID] = state;
                 axisID++;
             }
-
+            axisCount[i] = axisID;
+            
             float a1 = axesStates[i][1];
             float a2 = axesStates[i][2];
             float a3 = axesStates[i][3];
@@ -443,14 +446,23 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             } else {
                 p.inputComponent.axesLJoy(axesS[0],axesS[1]);
             }
-            if(Math.sqrt(axesS[5]*axesS[5] + axesS[4]*axesS[4])> 0.5) {
-                p.inputComponent.axesRJoy(axesS[5],axesS[4]);
-            }
             
-            p.inputComponent.leftTrigger(axesS[2]);
-            p.inputComponent.rightTrigger(axesS[3]);
-            
-                       
+            // Xbone controller
+            if (axisCount[i] == 6) {        
+                if(Math.sqrt(axesS[5]*axesS[5] + axesS[4]*axesS[4])> 0.5) {
+                    p.inputComponent.axesRJoy(axesS[5],axesS[4]);
+                }
+                p.inputComponent.leftTrigger(axesS[2]);
+                p.inputComponent.rightTrigger(axesS[3]);
+                
+            // Xbox 360 Controller    
+            } else if (axisCount[i] == 5) {
+                if(Math.sqrt(axesS[4]*axesS[4] + axesS[3]*axesS[3])> 0.5) {
+                    p.inputComponent.axesRJoy(axesS[4],axesS[3]);
+                }
+                if (axesS[2] > 0) p.inputComponent.leftTrigger(axesS[2]);
+                else p.inputComponent.rightTrigger(-axesS[2]);
+            }    
         }
         
         for(int i = 0; i<NUM_PLAYERS; i++) {

@@ -22,7 +22,9 @@ public class InputComponent {
     }
     
     public void pressA() {
-
+        if(GamePanel.gameState == GamePanel.MENU && GamePanel.menu.equals(GamePanel.characterMenu)) {
+            GamePanel.characterMenu.select(p);
+        }
     }
 
     public void pressB() {
@@ -62,19 +64,29 @@ public class InputComponent {
     }
 
     public void pressU() {
-
+        if (GamePanel.gameState == GamePanel.MENU) {
+                GamePanel.menu.moveCursor(p.pNumber,0, -1);
+        }
     }
 
     public void pressR() {
-
+        if (GamePanel.gameState == GamePanel.MENU) {
+                GamePanel.menu.moveCursor(p.pNumber,1, 0);
+                GamePanel.menu.right();
+        }
     }
 
     public void pressD() {
-
+        if (GamePanel.gameState == GamePanel.MENU) {
+                GamePanel.menu.moveCursor(p.pNumber,0, 1);
+        }
     }
 
     public void pressL() {
-
+        if (GamePanel.gameState == GamePanel.MENU) {
+                GamePanel.menu.moveCursor(p.pNumber,-1, 0);
+                GamePanel.menu.left();
+        }
     }
 
     public void axesLJoy(float DX, float DY) {

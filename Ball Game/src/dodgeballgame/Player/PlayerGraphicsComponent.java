@@ -87,6 +87,12 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         hitTimeMax = Player.invincibleTime;
     }
     
+    public void changeImages(BufferedImage a, BufferedImage b) {
+        playerImageA = Tools.sizeImage(a, p.H);
+        playerImageB = Tools.sizeImage(b, p.H);
+        playerImage = playerImageA;
+    }
+    
     @Override
     public void update(float d) {
         

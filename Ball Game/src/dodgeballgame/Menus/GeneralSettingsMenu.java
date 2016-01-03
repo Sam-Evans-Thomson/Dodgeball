@@ -70,7 +70,7 @@ public class GeneralSettingsMenu extends Menu{
         for (int i = 0; i < 9; i++) {
             float opacity = (float)(5f-Math.sqrt((i-4)*(i-4)))/5f;
             
-            int cursorPlace = (cursor[1] + i - 4) % NUM_SETTINGS;
+            int cursorPlace = (cursor0[1] + i - 4) % NUM_SETTINGS;
             if(cursorPlace < 0) cursorPlace += NUM_SETTINGS;      
             
             if(i == 4) {
@@ -103,7 +103,7 @@ public class GeneralSettingsMenu extends Menu{
     }
     
     private void changeValue(int i) {
-        settings.changeValue(cursor[1],i);
+        settings.changeValue(cursor0[1],i);
     }
     
     public void apply() {
