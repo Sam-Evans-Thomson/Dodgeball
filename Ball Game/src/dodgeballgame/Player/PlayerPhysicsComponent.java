@@ -144,7 +144,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     public void resolvePlayerCollisions(Vec2 vec) {
 
         //check if in player
-        for(int i = 0; i < GamePanel.NUM_PLAYERS; i++) {
+        for(int i = 0; i < GamePanel.numPlayers; i++) {
             Player player = GamePanel.playerArray.get(i);
 
             if (!(p.equals(player)) && player.physicsComp.playerHitbox.collision(playerHitbox)) {

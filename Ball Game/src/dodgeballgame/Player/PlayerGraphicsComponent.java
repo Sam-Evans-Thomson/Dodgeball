@@ -64,7 +64,7 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         if (p.team == 0) {
             playerScoreOffsetX = p.pNumber*GamePanel.arenaWIDTH/4 + 20;
         } else {
-            playerScoreOffsetX = 11*GamePanel.arenaWIDTH/20 + ((p.pNumber-1)/2)*GamePanel.arenaWIDTH/6 + 20;
+            playerScoreOffsetX = 21*GamePanel.arenaWIDTH/40 + ((p.pNumber-1)/2)*GamePanel.arenaWIDTH/4 + 20;
         }
         
         playerScoreOffsetY = GamePanel.arenaHEIGHT + 60;

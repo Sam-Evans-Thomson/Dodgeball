@@ -46,7 +46,10 @@ public class PrimeInputComponent extends InputComponent{
 
     @Override
     public void pressSta() {
-        GamePanel.changeGameState();
+        if (GamePanel.menu.equals(GamePanel.winScreen)) {
+            GamePanel.menu.back();
+        } else GamePanel.changeGameState();
+        
     }
 
     @Override

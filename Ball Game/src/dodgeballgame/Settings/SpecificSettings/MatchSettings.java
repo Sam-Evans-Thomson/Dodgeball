@@ -66,7 +66,7 @@ public class MatchSettings extends SettingsList {
     // Number of players - [2 to numControllers]
     private void numberOfPlayers() {
         int val = (int)getDouble(0);
-        GamePanel.NUM_PLAYERS = val;
+        GamePanel.numPlayers = val;
     }
     
     // Starting Health - [1 to 99]

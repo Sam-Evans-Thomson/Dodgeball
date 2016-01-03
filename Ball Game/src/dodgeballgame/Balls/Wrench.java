@@ -36,7 +36,7 @@ public class Wrench extends Ball{
     public void init() {
         bounceFactor = GamePanel.arena.bounceFactor;
         softBounceFactor = GamePanel.arena.softBounceFactor;
-        inCatchArea = new boolean[GamePanel.NUM_PLAYERS];
+        inCatchArea = new boolean[GamePanel.numPlayers];
         bounceActive = true;
         r = 50;
         prevPos = new Vec2(pos.getX(),pos.getY());

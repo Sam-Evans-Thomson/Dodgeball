@@ -39,9 +39,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private GLFWKeyCallback   keyCallback;
     
     public static int numControllers;
-    public static int maxNumPlayers;
+    public static int maxNumPlayers = 8;
     public static int minNumPlayers = 2;
-    public static int NUM_PLAYERS;
+    public static int numPlayers;
     
     private static int[][] buttonStates;
     private static int[][] prevButtonStates;
@@ -232,9 +232,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         
         arena.init();
         
-        System.arraycopy(controllers, 0, playerControllers, 0, NUM_PLAYERS);
-        for (int p = 0; p<NUM_PLAYERS; p++) {
-            int team =2*p/NUM_PLAYERS;
+        System.arraycopy(controllers, 0, playerControllers, 0, numPlayers);
+        for (int p = 0; p<numPlayers; p++) {
+            int team =2*p/numPlayers;
             double x = arenaWIDTH/4 + arenaWIDTH*team/2;
             double y = (p%2+1)*arenaHEIGHT/3;
             playerArray.add(new Player(team,p,x,y));
@@ -384,9 +384,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         
         ByteBuffer buttons;   
         FloatBuffer axes;
-        int[] axisCount = new int[NUM_PLAYERS];
+        int[] axisCount = new int[maxNumPlayers];
         //Scan button States
-        for (int i=0; i<NUM_PLAYERS; i++) {
+        for (int i=0; i<numPlayers; i++) {
 
             buttons = glfwGetJoystickButtons(playerControllers[i]);
             axes = glfwGetJoystickAxes(playerControllers[i]);      
@@ -418,7 +418,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             }
         }
 
-        for(int i = 0; i<NUM_PLAYERS; i++) {
+        for(int i = 0; i<numPlayers; i++) {
             Player p = playerArray.get(i);
             int[] buttonS = buttonStates[i];
             int[] prevButtons = prevButtonStates[i];
@@ -465,7 +465,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             }    
         }
         
-        for(int i = 0; i<NUM_PLAYERS; i++) {
+        for(int i = 0; i<numPlayers; i++) {
             for(int j = 0; j<14; j++) {
                 prevButtonStates[i][j] = buttonStates[i][j];
             }

@@ -105,7 +105,7 @@ public class InputComponent {
 
     public void leftTrigger(float axesS) {
         if (GamePanel.gameState == GamePanel.PLAY) {
-            if(axesS > 0.7 && p.leftTrig < 0.7) {
+            if(axesS > 0.7 && p.leftTrig < 0.5) {
                 p.catchBall();
             } 
         }   
@@ -114,7 +114,7 @@ public class InputComponent {
 
     public void rightTrigger(float axesS) {
         if (GamePanel.gameState == GamePanel.PLAY) {
-            if(axesS > 0.7 && p.rightTrig<0.7) {
+            if(axesS > 0.7 && p.rightTrig<0.5) {
                 p.throwBall();
             } 
         }  

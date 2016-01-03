@@ -29,7 +29,7 @@ import javax.swing.GrayFilter;
 public class CharacterMenu extends Menu{
     
     ArrayList<PlayerImages> playerImages = new ArrayList();
-    private final int NUM_CHARACTERS = 5;
+    private final int NUM_CHARACTERS = 9;
     
     private int[] pos = {NUM_CHARACTERS,1}; 
     
@@ -42,21 +42,35 @@ public class CharacterMenu extends Menu{
     public int buttonW = INNER_MENU_WIDTH / 40;
     public int buttonXOffset = INNER_MENU_WIDTH/5;
     
+    private BufferedImage[] playerWords;
+    
     public CharacterMenu() {
         positions = pos;
         loadImages();
     }
     
     private void loadImages() {
+        playerWords = new BufferedImage[5];
         for(int i = 0; i<NUM_CHARACTERS; i++) {
             BufferedImage imageA, imageB;
             try{
                 imageA = ImageIO.read(new File("Images/Players/player" + i + "a.png"));
                 imageB = ImageIO.read(new File("Images/Players/player" + i + "b.png"));
-                
+                playerWords[0] = ImageIO.read(new File("Images/player1.png"));
+                playerWords[1] = ImageIO.read(new File("Images/player2.png"));
+                playerWords[2] = ImageIO.read(new File("Images/player3.png"));
+                playerWords[3] = ImageIO.read(new File("Images/player4.png"));
+                playerWords[4] = ImageIO.read(new File("Images/player2b.png"));
                 playerImages.add(new PlayerImages(imageA, imageB));
             } catch (IOException e) {}
         }
+        playerWords[0] = Tools.scaleImage(playerWords[0], 0.7);
+        playerWords[1] = Tools.scaleImage(playerWords[1], 0.7);
+        playerWords[2] = Tools.scaleImage(playerWords[2], 0.7);
+        playerWords[3] = Tools.scaleImage(playerWords[3], 0.7);
+        playerWords[4] = Tools.scaleImage(playerWords[4], 0.7);
+        
+        
     }
     
     @Override
@@ -64,10 +78,10 @@ public class CharacterMenu extends Menu{
         
         int xOffset = 140;
         
-        for (int ctrl = 0; ctrl < GamePanel.numControllers; ctrl++) {
+        for (int ctrl = 0; ctrl < GamePanel.numPlayers; ctrl++) {
             for(int chr = 0; chr < 5; chr++) {
                 
-                int xPos2 = width/4 + xPos;
+                int xPos2 = width/3 + xPos + 140;
                 int yPos2 = ctrl*height/3 + yPos;
 
                 int cursorPlace = (cursors[ctrl][0] + chr) % NUM_CHARACTERS;
@@ -82,8 +96,21 @@ public class CharacterMenu extends Menu{
                     g.drawImage(greyImage,xPos2 + chr*xOffset, yPos2, null);
                 } else {
                     g.drawImage(image,xPos2 + chr*xOffset, yPos2, null);
-                }         
+                }
+
             }
+        }
+        for (int i = 0; i < GamePanel.numPlayers; i++) {
+            BufferedImage img = GamePanel.playerArray.get(i).graphicsComp.playerImage;
+            
+            if (GamePanel.numPlayers == 2 && i == 1) {
+                g.drawImage(playerWords[4], xPos + 140, yPos + i*height/3, null);
+            } else {
+                g.drawImage(playerWords[i], xPos + 140, yPos + i*height/3, null);
+            }
+            
+            g.drawImage(img, xPos, yPos + i*height/3, null);
+            if (i != 0) g.fillRect(xPos, yPos + (i)*height/3 - 30, width, 3);
         }
     }
     
@@ -114,6 +141,12 @@ public class CharacterMenu extends Menu{
         public BufferedImage getB() {
             return imageB;
         }
+    }
+    
+    @Override
+    public void back() {
+        GamePanel.soundManager.menu(7);
+        GamePanel.menu = GamePanel.startMenu;
     }
     
 }

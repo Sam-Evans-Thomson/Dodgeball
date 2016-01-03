@@ -47,7 +47,7 @@ public class Item {
         r = 40;
         hb = new HitBox(pos);
         hb.makeCircle(r);
-        inCatchArea = new boolean[GamePanel.NUM_PLAYERS];
+        inCatchArea = new boolean[GamePanel.numPlayers];
     }
     
     public void applyEffect() {
