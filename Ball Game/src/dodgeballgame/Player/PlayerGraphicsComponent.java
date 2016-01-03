@@ -137,12 +137,15 @@ public class PlayerGraphicsComponent implements PlayerComponent{
                         (int)(p.pos.getY() + p.radius*0.9*Math.sin(p.angle+0.1)),
                         (int)(p.pos.getY() + p.radius*0.9*Math.sin(p.angle-0.1))};
         g.fillPolygon(xPoints, yPoints, 3);
-        g.setColor(colors[1]);        
-        g.fillArc((int)(p.pos.getX()-0.9*p.radius), (int)(p.pos.getY()-0.9*p.radius), (int)(2*0.9*p.radius), (int)(2*p.radius*0.9),
-                (int)(Math.toDegrees(-p.angle-p.catchAngle/2+0.1)), (int)Math.toDegrees(p.catchAngle-0.2));
-        g.setColor(colors[0]);  
-        g.fillArc((int)(p.pos.getX()-0.9*p.radius*percentage), (int)(p.pos.getY()-0.9*p.radius*percentage), (int)(2*0.9*p.radius*percentage), (int)(2*p.radius*0.9*percentage),
-                (int)(Math.toDegrees(-p.angle-p.catchAngle/2+0.1)), (int)Math.toDegrees(p.catchAngle-0.2));
+        
+        if (p.catchOn) {
+            g.setColor(colors[1]);        
+            g.fillArc((int)(p.pos.getX()-0.9*p.radius), (int)(p.pos.getY()-0.9*p.radius), (int)(2*0.9*p.radius), (int)(2*p.radius*0.9),
+                    (int)(Math.toDegrees(-p.angle-p.catchAngle/2+0.1)), (int)Math.toDegrees(p.catchAngle-0.2));
+            g.setColor(colors[0]);  
+            g.fillArc((int)(p.pos.getX()-0.9*p.radius*percentage), (int)(p.pos.getY()-0.9*p.radius*percentage), (int)(2*0.9*p.radius*percentage), (int)(2*p.radius*0.9*percentage),
+                    (int)(Math.toDegrees(-p.angle-p.catchAngle/2+0.1)), (int)Math.toDegrees(p.catchAngle-0.2));
+        }
     }
     
     private void renderScore(Graphics2D g) {
@@ -164,13 +167,17 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     }
     
     private void renderPower(Graphics2D g) {
-        if(p.activePower != p.noPower) {
-            BufferedImage img = p.activePower.image;
-            double[] times = p.stateComp.activeState.getTimes();
+        for (int i = 0; i < p.activePowers.size(); i++) {
+            /// Display all powers over head.
+            BufferedImage img = p.activePowers.get(i).image;
+            double[] times = p.stateComp.activeStates.get(i).getTimes();
             float opacity = (float)(1d - times[0]/times[1]);
             if(opacity < 0) opacity = 0f;
+            int w = (int)p.activePowers.get(i).r;
+            int x = (int)p.pos.getX() - w*p.activePowers.size()/2 + i*w;
+            int y = (int)p.pos.getY() - (int)(1.2*p.H);
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-            g.drawImage(img, (int)p.pos.getX() - (int)p.activePower.r/2, (int)p.pos.getY() - (int)(1.2*p.H), null);
+            g.drawImage(img, x, y, null);
         }
     }
     

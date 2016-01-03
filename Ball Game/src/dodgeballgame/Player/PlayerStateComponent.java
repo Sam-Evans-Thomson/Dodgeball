@@ -8,6 +8,7 @@ package dodgeballgame.Player;
 import dodgeballgame.Powers.*;
 import dodgeballgame.StateComponent;
 import dodgeballgame.Vec2;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,56 +18,89 @@ public class PlayerStateComponent implements PlayerComponent{
     
     Player p;
     public StateComponent largeCatchArea = new StateComponent(new double[]{200d,6.2d},5);
-    public StateComponent slowed = new StateComponent(new double[]{200d},5);
+    public LargeCatchPower largeCatchPower = new LargeCatchPower(new Vec2(0,0));
+    
+    public StateComponent slowed = new StateComponent(new double[]{200d},10);
+    public SlowPower slowPower = new SlowPower(new Vec2(0,0));
+    
+    public StateComponent noCatch = new StateComponent(new double[]{},10);
+    public NoCatchPower noCatchPower = new NoCatchPower(new Vec2(0,0));
+    
     public StateComponent noState = new StateComponent(new double[]{0},0);
     
-    public StateComponent activeState;
+    public ArrayList<StateComponent> activeStates = new ArrayList();
     
     public PlayerStateComponent(Player p) {
         this.p = p;
-        activeState = noState;
     }
 
     @Override
     public void update(float d) {
         if(slowed.hasExpired()) endSlowed(); 
         if(largeCatchArea.hasExpired()) endLargeCatchArea();
+        if(noCatch.hasExpired()) endNoCatch();
     }
     
     public void largeCatchArea() {
-        if(!largeCatchArea.active) largeCatchArea.setOrigValues(new double[]{p.radius, p.catchAngle});
-        p.activePower = new LargeCatchPower(new Vec2(0,0));
+        add(largeCatchPower, largeCatchArea);
         
+        if(!largeCatchArea.active) largeCatchArea.setOrigValues(new double[]{p.radius, p.catchAngle});
         largeCatchArea.apply();
-        activeState = largeCatchArea;
+        
         p.radius = largeCatchArea.getValue(0);
         p.catchAngle  = largeCatchArea.getValue(1);
     }
     
     public void endLargeCatchArea() {
+        remove(largeCatchPower, largeCatchArea);
+        
         p.radius = largeCatchArea.getOrigValue(0);
         p.catchAngle  = largeCatchArea.getOrigValue(1);
         
-        p.activePower = p.noPower;
-        activeState = noState;
     }
 
     public void slowed() {
-        if(!slowed.active) slowed.setOrigValues(new double[]{p.physicsComp.speed});
-        p.activePower = new SlowPower(new Vec2(0,0));
+        add(slowPower, slowed);
         
+        if(!slowed.active) slowed.setOrigValues(new double[]{p.physicsComp.speed});
         slowed.apply();
-        activeState = slowed;
+        
         p.physicsComp.speed = slowed.getValue(0);
     }
     
     public void endSlowed() {
-        p.physicsComp.speed = slowed.getOrigValue(0);
+        remove(slowPower, slowed);
         
-        p.activePower = p.noPower;
-        activeState = noState;
+        p.physicsComp.speed = slowed.getOrigValue(0);
     }
+    
+    public void noCatch() {
+        add(noCatchPower, noCatch);
+        
+        noCatch.apply();
+        p.catchOn = false;
+    }
+    
+    public void endNoCatch() {
+        remove(noCatchPower, noCatch);
+        
+        p.catchOn = true;
+    }
+    
+    // Helpers
 
+    private void add(Power pow, StateComponent s) {
+        p.activePowers.remove(pow);
+        p.activePowers.add(pow);
+        activeStates.remove(s);
+        activeStates.add(s);
+    }
+    
+    private void remove(Power pow, StateComponent s) {
+        p.activePowers.remove(pow);
+        activeStates.remove(s);
+    }
+    
     @Override
     public void init() {
     }

@@ -52,6 +52,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     @Override
     public void init() {
         p.solid = true;
+        p.catchOn = true;
         
         prevPos = new Vec2(p.pos.getX(),p.pos.getY());
         prevDelta = new Vec2(0,0);
@@ -213,30 +214,32 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         }
     }
     
-    public void catchBall() {
-        for (int i=0; i<GamePanel.ballArray.size(); i++) {
-            Ball b = GamePanel.ballArray.get(i);
-            if(b.inCatchArea[p.pNumber]) {
-                p.catches++;
-                p.numBalls++;
-                GamePanel.soundManager.catchBall();
-                p.graphicsComp.setCatchGlow();
-                GamePanel.ballArray.remove(b);
-                i--;
-                p.catchTimer.refresh();
+    public void catchObject() {
+        if (p.catchOn) {
+            for (int i=0; i<GamePanel.ballArray.size(); i++) {
+                Ball b = GamePanel.ballArray.get(i);
+                if(b.inCatchArea[p.pNumber]) {
+                    p.catches++;
+                    p.numBalls++;
+                    GamePanel.soundManager.catchBall();
+                    p.graphicsComp.setCatchGlow();
+                    GamePanel.ballArray.remove(b);
+                    i--;
+                    p.catchTimer.refresh();
+                }
             }
-        }
-        //Catch powerUp
-        for (int i=0; i<GamePanel.itemArray.size(); i++) {
-            Item pUp = GamePanel.itemArray.get(i);
-            if(pUp.inCatchArea[p.pNumber]) {
-                p.items++;
-                p.graphicsComp.setItemGlow(pUp.color);
-                pUp.applyEffect(p);
-                pUp.incPowerUpCount(p);
-                GamePanel.itemArray.remove(pUp);
-                i--;
-                p.catchTimer.refresh();
+            //Catch powerUp
+            for (int i=0; i<GamePanel.itemArray.size(); i++) {
+                Item pUp = GamePanel.itemArray.get(i);
+                if(pUp.inCatchArea[p.pNumber]) {
+                    p.items++;
+                    p.graphicsComp.setItemGlow(pUp.color);
+                    pUp.applyEffect(p);
+                    pUp.incPowerUpCount(p);
+                    GamePanel.itemArray.remove(pUp);
+                    i--;
+                    p.catchTimer.refresh();
+                }
             }
         }
     }

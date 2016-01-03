@@ -24,7 +24,7 @@ public class WinScreen extends Menu{
     public int fontSizeLarge, fontSizeSmall, fontSizeTiny;
     
     public WinScreen () {
-        fontSizeLarge = WIDTH/4;
+        fontSizeLarge = WIDTH/6;
         fontSizeSmall = fontSizeLarge*3/5;
         fontSizeTiny = fontSizeSmall/4;
     }

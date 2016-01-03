@@ -13,6 +13,7 @@ import dodgeballgame.Timer;
 import dodgeballgame.Vec2;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 /**
  *
@@ -37,6 +38,7 @@ public class Player {
     
     //States
     public boolean solid;       // Does the player collide with balls?
+    public boolean catchOn;
 
     // INPUTS
     public float leftTrig, rightTrig;
@@ -65,7 +67,7 @@ public class Player {
     public double catchAngle, radius;   //The radius and angle of the catch area
     public Power currentPower;
     public Power noPower = new NoPower(new Vec2(0,0));
-    public Power activePower;
+    public ArrayList<Power> activePowers = new ArrayList();
     
     // stats
     public int points;
@@ -136,7 +138,6 @@ public class Player {
     // These are stats that get set on death.
     public void initStats() {
         currentPower = noPower;
-        activePower = noPower;
         health = startHealth;
         numBalls = startBalls;
         
@@ -209,7 +210,7 @@ public class Player {
     }
     
     public void catchBall() {
-        physicsComp.catchBall();
+        physicsComp.catchObject();
     }
     
     ///// EVENTS //////

@@ -15,7 +15,7 @@ import java.util.Random;
  */
 public class PowerManager {
     
-    private final int NUM_POWERS = 3;
+    private final int NUM_POWERS = 4;
     public int[] powers = new int[NUM_POWERS];
     
     Random rand = new Random();
@@ -33,6 +33,7 @@ public class PowerManager {
         if (powers[0] == 1) activePowers.add(new SlowPower(vec));
         if (powers[1] == 1) activePowers.add(new LargeCatchPower(vec));
         if (powers[2] == 1) activePowers.add(new RandomPower(vec));
+        if (powers[3] == 1) activePowers.add(new NoCatchPower(vec));
     }
     
     private void add(Power power) {
