@@ -45,16 +45,22 @@ public class WinScreen extends Menu{
         g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
         
         if (winTeam == 0) {
-            centreString("" + GamePanel.team1Score, g, WIDTH/4+INNER_X_START,HEIGHT/2+INNER_Y_START);
+            centreString("" + GamePanel.winScore, g, WIDTH/4+INNER_X_START,HEIGHT/3+INNER_Y_START);
             g.setColor(new Color(200,0,0));
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
-            centreString("" + GamePanel.team2Score, g, 3*GamePanel.arenaWIDTH/4-50,GamePanel.arenaHEIGHT/2+100);
+            centreString("" + GamePanel.team2Score, 
+                    g, 
+                    3*GamePanel.arenaWIDTH/4-50,
+                    GamePanel.arenaHEIGHT/2+100);
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeTiny));
             g.setColor(Color.white);
             centreString("WINNERS", g, GamePanel.arenaWIDTH/4 +50,260);
             centreString("LOSERS", g, 3*GamePanel.arenaWIDTH/4 - 50,260);
         } else {
-            centreString("" + GamePanel.team2Score, g, 3*GamePanel.arenaWIDTH/4-50,GamePanel.arenaHEIGHT/2+190);
+            centreString("" + GamePanel.winScore, 
+                    g, 
+                    3*GamePanel.arenaWIDTH/4-50,
+                    GamePanel.arenaHEIGHT/2+190);
             g.setColor(new Color(200,0,0));
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
             centreString("" + GamePanel.team1Score, g, GamePanel.arenaWIDTH/4+50,GamePanel.arenaHEIGHT/2+100);

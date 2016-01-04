@@ -6,6 +6,7 @@
 package dodgeballgame;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -39,21 +40,20 @@ public class ImageEditor {
     }
     
     public BufferedImage scale(double xscale, double yscale) {
-        at.scale(xscale, yscale);
-        AffineTransformOp scaleOp = 
-           new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        Image im = image.getScaledInstance((int)(xscale*image.getWidth()),
+                (int)(yscale*image.getHeight()),
+                Image.SCALE_SMOOTH);
         
-        return scaleOp.filter(image, edittedImage);
+        return toBufferedImage(im);
     }
     
+    
     public BufferedImage scale(double scale) {
-        at.scale(scale, scale);
-        AffineTransformOp scaleOp = 
-           new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        Image im = image.getScaledInstance((int)(scale*image.getWidth()),
+                (int)(scale*image.getHeight()),
+                Image.SCALE_SMOOTH);
         
-        edittedImage = scaleOp.filter(image, edittedImage);
-        
-        return edittedImage;
+        return toBufferedImage(im);
     }
     
     public BufferedImage rotate(double angle) {
@@ -65,5 +65,18 @@ public class ImageEditor {
            new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
         
         return rotateOp.filter(image, edittedImage);
+    }
+    
+    public BufferedImage toBufferedImage(Image img) {
+        
+        if (img instanceof BufferedImage) return (BufferedImage) img;
+
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        return bimage;
     }
 }

@@ -54,8 +54,8 @@ public class PlayerGraphicsComponent implements PlayerComponent{
             ball = ImageIO.read(new File("Images/Balls/ball.png"));
         } catch (IOException e) {
         }
-        playerImageA = Tools.sizeImage(playerImageA, p.H);
-        playerImageB = Tools.sizeImage(playerImageB, p.H);
+        playerImageA = Tools.sizeImage(playerImageA, 2*p.r);
+        playerImageB = Tools.sizeImage(playerImageB, 2*p.r);
         heart = Tools.sizeImage(heart, 60);
         ball = Tools.sizeImage(ball, 60);
         
@@ -88,8 +88,8 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     }
     
     public void changeImages(BufferedImage a, BufferedImage b) {
-        playerImageA = Tools.sizeImage(a, p.H);
-        playerImageB = Tools.sizeImage(b, p.H);
+        playerImageA = Tools.sizeImage(a, 2*p.r);
+        playerImageB = Tools.sizeImage(b, 2*p.r);
         playerImage = playerImageA;
     }
     
@@ -115,7 +115,7 @@ public class PlayerGraphicsComponent implements PlayerComponent{
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
         }
         
-        g.drawImage(playerImage, (int)(p.pos.getX()-p.W/2), (int)(p.pos.getY()-p.H/2), null);
+        g.drawImage(playerImage, (int)(p.pos.getX()-p.r), (int)(p.pos.getY()-p.r), null);
         
         renderPower(g);
         renderScore(g);
@@ -157,13 +157,13 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         g.setColor(new Color(0,0,0));
         g.setFont(new Font("Sans Serif", Font.BOLD, 24));
         
-        Tools.centreString(("" + p.health), g, playerScoreOffsetX + 129, playerScoreOffsetY-14);
+        Tools.centreStringHor(("" + p.health), g, playerScoreOffsetX + 129, playerScoreOffsetY-14);
 
         g.drawImage(ball, playerScoreOffsetX + 200, playerScoreOffsetY-50, null);
 
-        g.drawImage(p.currentPower.image, playerScoreOffsetX + 300, playerScoreOffsetY-50, null);
+        g.drawImage(Tools.sizeImage(p.currentPower.image,60), playerScoreOffsetX + 300, playerScoreOffsetY-50, null);
 
-        Tools.centreString(("" + p.numBalls), g, playerScoreOffsetX + 229, playerScoreOffsetY-14);
+        Tools.centreStringHor(("" + p.numBalls), g, playerScoreOffsetX + 229, playerScoreOffsetY-14);
     }
     
     private void renderPower(Graphics2D g) {
@@ -173,11 +173,12 @@ public class PlayerGraphicsComponent implements PlayerComponent{
             double[] times = p.stateComp.activeStates.get(i).getTimes();
             float opacity = (float)(1d - times[0]/times[1]);
             if(opacity < 0) opacity = 0f;
-            int w = (int)p.activePowers.get(i).r;
+            BufferedImage im = Tools.sizeImage(img,60);
+            int w = (int)(im.getWidth());
             int x = (int)p.pos.getX() - w*p.activePowers.size()/2 + i*w;
-            int y = (int)p.pos.getY() - (int)(1.2*p.H);
+            int y = (int)p.pos.getY() - (int)(1.2*2*p.r);
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-            g.drawImage(img, x, y, null);
+            g.drawImage(im , x, y, null);
         }
     }
     

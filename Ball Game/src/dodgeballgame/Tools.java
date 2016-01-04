@@ -6,6 +6,7 @@
 package dodgeballgame;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 /**
@@ -30,7 +31,7 @@ public class Tools {
     }
     
     // prints a string centred on the specified spot.
-    public static void centreString(String s, Graphics2D g, int x, int y) {
+    public static void centreStringHor(String s, Graphics2D g, int x, int y) {
         int stringLen = (int)
             g.getFontMetrics().getStringBounds(s, g).getWidth();
         g.drawString(s, x - stringLen/2, y);

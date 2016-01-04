@@ -7,7 +7,7 @@ package dodgeballgame;
 
 
 import dodgeballgame.Player.Player;
-import dodgeballgame.Arenas.Arena;
+import dodgeballgame.Arenas.*;
 import dodgeballgame.Menus.WinScreen;
 import dodgeballgame.Balls.Ball;
 import dodgeballgame.Menus.*;
@@ -68,6 +68,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public static Arena arena;
     public static ItemManager itemManager;
     public static PowerManager powerManager;
+    public static ArenaManager arenaManager;
 
     public static final int screenWIDTH = 1920;
     public static final int screenHEIGHT = 980;
@@ -154,11 +155,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         gameTimer = new GameTimer();
         gameTimer.pause();
         running = true;
-        gameState = MENU;        
+        gameState = MENU;      
+        
+
 
         // Setup Timer
         timer = new Timer();
-        
+        arena = new BasicArena();
         matchSettings = new MatchSettings();
         
         // MENUS
@@ -167,7 +170,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         loadMenu = new LoadMenu();
         powerUpMenu = new ItemMenu();
         winScreen = new WinScreen();
-        arenaMenu = new ArenaMenu();
+        
         characterMenu = new CharacterMenu();
         powerMenu = new PowerMenu();
         
@@ -179,6 +182,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         itemManager = new ItemManager();
         powerManager = new PowerManager();
         soundManager = new SoundManager();
+        arenaManager = new ArenaManager();
         
        // Setup an error callback. The default implementation
         // will print the error message in System.err.
@@ -195,6 +199,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         g.setColor(Color.black);
         g.fillRect(0,0,screenWIDTH, screenHEIGHT);
         draw();
+        arenaManager.init();        
+        arenaMenu = new ArenaMenu();
     }
     
     public static void initControllers() {
@@ -226,7 +232,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         ballArray = new ArrayList<>();
         itemArray = new ArrayList<>();
         powerArray = new ArrayList<>();
-        arena = new Arena();
         
         matchSettings.apply();
         
@@ -235,10 +240,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         System.arraycopy(controllers, 0, playerControllers, 0, numPlayers);
         for (int p = 0; p<numPlayers; p++) {
             int team =2*p/numPlayers;
-            double x = arenaWIDTH/4 + arenaWIDTH*team/2;
-            double y = (p%2+1)*arenaHEIGHT/3;
-            playerArray.add(new Player(team,p,x,y));
+            //double x = arenaWIDTH/4 + arenaWIDTH*team/2;
+            //double y = (p%2+1)*arenaHEIGHT/3;
+            playerArray.add(new Player(team, p, arena.playerPos[p].getX(), arena.playerPos[p].getY()));
         }
+        
     }
     
     public void countIn() {

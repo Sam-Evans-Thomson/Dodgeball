@@ -19,7 +19,7 @@ public class Power extends Item{
     
     public Power(Vec2 pos) {
         super(pos);
-        r = 60;
+        r = 80;
     }
     
     public void setPos(Vec2 pos) {

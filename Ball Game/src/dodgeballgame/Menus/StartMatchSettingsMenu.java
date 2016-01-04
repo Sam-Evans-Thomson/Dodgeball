@@ -114,7 +114,7 @@ public class StartMatchSettingsMenu extends Menu{
             GamePanel.soundManager.menu(6);
             applyLoad();
         } else if (cursor0[1] == 0) {
-            //GamePanel.menu = GamePanel.arenaMenu;
+            GamePanel.menu = GamePanel.arenaMenu;
         } else if (cursor0[1] == 1) {
             GamePanel.menu = GamePanel.powerUpMenu;
         } else if (cursor0[1] == 2) {

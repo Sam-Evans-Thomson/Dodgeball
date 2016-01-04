@@ -59,9 +59,10 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         
         // Initialize hitboxes
         playerHitbox = new HitBox(p.pos.getX(),p.pos.getY());
-        playerHitbox.makeCircle(p.H/2);
+        playerHitbox.makeCircle(p.r);
         catchHitbox = new HitBox(p.pos.getX(),p.pos.getY());
         catchHitbox.makeArc(p.catchAngle, p.angle, p.radius);
+        catchHitbox = new HitBox(p.pos.getX(),p.pos.getY());
         
         baseSpeed = speed = 500.0;
         maxSpeed = 800;
@@ -126,9 +127,9 @@ public class PlayerPhysicsComponent implements PlayerComponent{
             if(hb.collision(playerHitbox)) {
 
                 HitBox test1 = new HitBox((int)p.pos.getX(), (int)prevPos.getY());
-                test1.makeCircle(p.H/2);
+                test1.makeCircle(p.r);
                 HitBox test2 = new HitBox((int)prevPos.getX(), (int)p.pos.getY());
-                test2.makeCircle(p.H/2);
+                test2.makeCircle(p.r);
                 
                 if (hb.collision(test1) && !hb.collision(test2)) {
                     d2 = new Vec2(-(vec.getX()),0);   
@@ -183,10 +184,15 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         p.throwAngle = Tools.refreshAngle(p.throwAngle);
     }
     
+    public Ball nextBall() {
+        return new Ball(relThrowSpeed, 0, 0, p.throwAngle, p.team, p);
+    }
+    
     public void throwBall() {
-        double x = p.pos.getX()+ 1.15*p.radius*Math.cos(p.angle);
-        double y = p.pos.getY()+ 1.15*p.radius*Math.sin(p.angle);
-        Ball b = new Ball(relThrowSpeed, x, y, p.throwAngle, p.team, p);
+        Ball b = nextBall();
+        double x = p.pos.getX()+ 1.02*(p.r + b.r)*Math.cos(p.angle);
+        double y = p.pos.getY()+ 1.02*(p.r + b.r)*Math.sin(p.angle);
+        
         b.setBall(relThrowSpeed, x, y, p.throwAngle, p.team, p);
         
         int count = 0;

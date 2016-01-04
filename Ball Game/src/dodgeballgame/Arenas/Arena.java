@@ -9,6 +9,8 @@ import dodgeballgame.GamePanel;
 import dodgeballgame.HitBox;
 import static dodgeballgame.GamePanel.arenaHEIGHT;
 import static dodgeballgame.GamePanel.arenaWIDTH;
+import dodgeballgame.Tools;
+import dodgeballgame.Vec2;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
@@ -27,6 +29,8 @@ import javax.imageio.ImageIO;
  */
 public class Arena {
     
+    public Vec2[][] teamAreas;
+    
     public ArrayList<HitBox> arenaBallHitbox;
     public ArrayList<HitBox> arenaSoftBallHitbox;
     public ArrayList<HitBox> arenaPlayerHitbox;
@@ -35,55 +39,96 @@ public class Arena {
     public ArrayList<HitBox> arenaTeam1Goal;
     public ArrayList<HitBox> arenaTeam2Goal;
     
+    public static int SIDE_GOALS = 0;
+    public static int CORNER_GOALS = 1;
+    
     public double softBounceFactor = 0.2;
     public double bounceFactor = 0.9;
     public int buffer = 1000;
     public static boolean goalsActive;
     
-    private static BufferedImage backgroundImage;
-    private static BufferedImage scaledBackgroundImage;
+    public int numPlayers;
+    
+    private BufferedImage backgroundImage;
+    private BufferedImage scaledBackgroundImage;
     
     int WIDTH = (int)GamePanel.arenaWIDTH;
     int HEIGHT = (int)GamePanel.arenaHEIGHT;
+    
+    public String imgPath;
+
+    public Vec2[] playerPos = new Vec2[GamePanel.maxNumPlayers];
         
     public Arena() {
     }
     
     public void render(Graphics2D g) {
         g.drawImage(scaledBackgroundImage,0,0,null);
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
-        g.setColor(new Color(250,250,250));
-        g.setFont(new Font("Sans Serif", Font.BOLD, 500));
-        centreString("" + GamePanel.team1Score, g, WIDTH/2 - WIDTH/4, HEIGHT/2+150);
-        centreString("" + GamePanel.team2Score, g, WIDTH/2 + WIDTH/4, HEIGHT/2+150);
-        g.setFont(new Font("Sans Serif", Font.BOLD, 200));
-        centreString("" + (int)GamePanel.matchSettings.getDouble(6), g,WIDTH/2 - 130,HEIGHT);
-        centreString("" + (int)GamePanel.matchSettings.getDouble(6), g,WIDTH/2 + 130,HEIGHT);
-        g.fillRect(WIDTH/2 - WIDTH/8, 16*HEIGHT/20,WIDTH/4, HEIGHT/40);
-        if (goalsActive){
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-            g.setColor(new Color(255,100,100));
-            for(HitBox hb: arenaTeam1Goal) { hb.render(g); }
-            g.setColor(new Color(100,100,255));
-            for(HitBox hb: arenaTeam2Goal) { hb.render(g); }
-        }
-        
-        
+        renderScore(g);
+        if (goalsActive) renderGoals(g);
+        renderHitboxes(g);
+        renderSpecific(g);
+    }
+    
+    protected void renderHitboxes(Graphics2D g) {
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        g.setColor(new Color(0,0,0));
+        for(HitBox hb: arenaBallHitbox) { hb.render(g); }
+        g.setColor(new Color(100,100,100));
+        for(HitBox hb: arenaSoftBallHitbox) { hb.render(g); }
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
     
-    private void centreString(String s, Graphics2D g, int x, int y) {
-        int stringLen = (int)
-            g.getFontMetrics().getStringBounds(s, g).getWidth();
-        g.drawString(s, x - stringLen/2, y);
+    protected void renderScore(Graphics2D g) {
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
+        g.setColor(new Color(250,250,250));
+        g.setFont(new Font("Sans Serif", Font.BOLD, 500));
+        Tools.centreStringHor("" + GamePanel.team1Score, g, WIDTH/2 - WIDTH/4, HEIGHT/2+150);
+        Tools.centreStringHor("" + GamePanel.team2Score, g, WIDTH/2 + WIDTH/4, HEIGHT/2+150);
+        g.setFont(new Font("Sans Serif", Font.BOLD, 200));
+        Tools.centreStringHor("" + (int)GamePanel.matchSettings.getDouble(6), g,WIDTH/2 - 130,HEIGHT);
+        Tools.centreStringHor("" + (int)GamePanel.matchSettings.getDouble(6), g,WIDTH/2 + 130,HEIGHT);
+        g.fillRect(WIDTH/2 - WIDTH/8, 16*HEIGHT/20,WIDTH/4, HEIGHT/40);
+    }
+    
+    protected void renderGoals(Graphics2D g) {
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+        g.setColor(new Color(255,100,100));
+        for(HitBox hb: arenaTeam1Goal) { hb.render(g); }
+        g.setColor(new Color(100,100,255));
+        for(HitBox hb: arenaTeam2Goal) { hb.render(g); }
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+    }
+    
+    public void renderSpecific(Graphics2D g) {
+        
+    }
+    
+    public void initPlayerPositions() {
+        numPlayers = GamePanel.numPlayers;
+        for (int p = 0; p < 4 ; p++) {
+            int team =2*p/numPlayers;
+            double x = WIDTH/4 + WIDTH*team/2;
+            double y = (p%2+1)*HEIGHT/3;
+            
+            playerPos[p] = new Vec2(x,y);
+        }
+    }
+    
+    public void initTeamAreas() {
+        teamAreas = new Vec2[2][2];
+        teamAreas[0] = new Vec2[]{new Vec2(0,0), new Vec2(WIDTH/2,HEIGHT)};
+        teamAreas[1] = new Vec2[]{new Vec2(WIDTH/2,0), new Vec2(WIDTH,HEIGHT)};
     }
     
     public void init() {
         try {
-            backgroundImage = ImageIO.read(new File("Images/Court1.png"));
+            backgroundImage = ImageIO.read(new File(imgPath));
         } catch (IOException e) {
         }  
-        scaledBackgroundImage = new BufferedImage(arenaWIDTH, arenaHEIGHT, BufferedImage.TYPE_INT_ARGB);
+        scaledBackgroundImage = new BufferedImage(arenaWIDTH, 
+                arenaHEIGHT, 
+                BufferedImage.TYPE_INT_ARGB);
         AffineTransform at = new AffineTransform();
         at.scale((double)arenaWIDTH/1400.0, (double)arenaHEIGHT/800.0);
         AffineTransformOp scaleOp = 
@@ -100,9 +145,11 @@ public class Arena {
         arenaTeam1Goal = new ArrayList<>();
         arenaTeam2Goal = new ArrayList<>();
         
+        initPlayerPositions();
         initBorders();
         if (goalsActive) {initGoals();}
         initHitBoxes();
+        initTeamAreas();
     }
     
     public void initBorders() {
@@ -137,18 +184,27 @@ public class Arena {
 
     public void initHitBoxes() {
         // Team 1 middle Edge
-        HitBox hbC1 = new HitBox (WIDTH/2 - 10,0);
+        HitBox hbC1 = new HitBox (WIDTH/2,0);
         hbC1.makeVLine(true);
         arenaTeam1Hitbox.add(hbC1);
         
         // Team 2 middle Edge
-        HitBox hbC2 = new HitBox (WIDTH/2 + 10,0);
+        HitBox hbC2 = new HitBox (WIDTH/2,0);
         hbC2.makeVLine(false);
         arenaTeam2Hitbox.add(hbC2);
     }
     
+    public void setGoals(int i) {
+        switch (i) {
+            case 0 : sideGoals();
+                break;
+            case 1 : cornerGoals();
+                break;
+        }
+    }
+    
     // GOALS
-    private void cornerGoals() {
+    protected void cornerGoals() {
         int goalSize = 50;
         HitBox goal1 = new HitBox(0,0);
         goal1.makeCircle(goalSize);
@@ -167,7 +223,7 @@ public class Arena {
         arenaTeam1Goal.add(goal4);
     }
     
-    private void sideGoals(){
+    protected void sideGoals(){
         HitBox goal1 = new HitBox(0,HEIGHT/2);
         goal1.makeRect(15, HEIGHT/12);
         arenaTeam2Goal.add(goal1);

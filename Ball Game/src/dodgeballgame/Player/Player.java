@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class Player {
     
     // Variables shared between Components
-    public int H, W;
+    public int r;
     public Vec2 pos;
     public final int pNumber,gPad,team;
     public Vec2 delta;                                      // Change in position
@@ -144,7 +144,7 @@ public class Player {
         numItems = 0;
         radius = 150;
         catchAngle = (1.2*Math.PI)/4.0;
-        W = H = 100; 
+        r = 50; 
 
     }
     

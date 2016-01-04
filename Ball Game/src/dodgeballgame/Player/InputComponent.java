@@ -40,7 +40,9 @@ public class InputComponent {
     }
 
     public void pressLB() {
-
+        if (GamePanel.gameState == GamePanel.PLAY) {
+            p.catchBall();
+        }
     }
 
     public void pressRB() {
