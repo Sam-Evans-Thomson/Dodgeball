@@ -6,7 +6,9 @@
 package dodgeballgame.Player;
 
 import dodgeballgame.GamePanel;
-import dodgeballgame.HitBox;
+import dodgeballgame.HitBoxes.ArcHitbox;
+import dodgeballgame.HitBoxes.CircleHitbox;
+import dodgeballgame.HitBoxes.Hitbox;
 import dodgeballgame.Powers.NoPower;
 import dodgeballgame.Powers.Power;
 import dodgeballgame.Timer;
@@ -185,11 +187,11 @@ public class Player {
         graphicsComp.setPowerGlow(color);
     }
     
-    public HitBox getCatchHitbox() {
+    public ArcHitbox getCatchHitbox() {
         return physicsComp.catchHitbox;
     }
     
-    public HitBox getPlayerHitbox() {
+    public CircleHitbox getPlayerHitbox() {
         return physicsComp.playerHitbox;
     }
     

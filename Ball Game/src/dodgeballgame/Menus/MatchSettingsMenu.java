@@ -133,6 +133,7 @@ public class MatchSettingsMenu extends Menu{
         if (accept) {
             GamePanel.soundManager.menu(6);
             applyLoad();
+            accept = false;
         }
     }
     

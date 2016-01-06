@@ -117,7 +117,6 @@ public class CharacterMenu extends Menu{
     public void chooseCharacter(Player p) {
         PlayerImages im = playerImages.get(cursors[p.pNumber][0]);
         p.graphicsComp.changeImages(im.getA(),im.getB());
-        System.out.println("is this happening");
     }
     
     public void select(Player p) {

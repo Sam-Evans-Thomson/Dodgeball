@@ -6,9 +6,10 @@
 package dodgeballgame.Arenas;
 
 import dodgeballgame.GamePanel;
-import dodgeballgame.HitBox;
+import dodgeballgame.HitBoxes.Hitbox;
 import static dodgeballgame.GamePanel.arenaHEIGHT;
 import static dodgeballgame.GamePanel.arenaWIDTH;
+import dodgeballgame.HitBoxes.*;
 import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
 import java.awt.AlphaComposite;
@@ -31,13 +32,13 @@ public class Arena {
     
     public Vec2[][] teamAreas;
     
-    public ArrayList<HitBox> arenaBallHitbox;
-    public ArrayList<HitBox> arenaSoftBallHitbox;
-    public ArrayList<HitBox> arenaPlayerHitbox;
-    public ArrayList<HitBox> arenaTeam1Hitbox;
-    public ArrayList<HitBox> arenaTeam2Hitbox;
-    public ArrayList<HitBox> arenaTeam1Goal;
-    public ArrayList<HitBox> arenaTeam2Goal;
+    public ArrayList<Hitbox> arenaBallHitbox;
+    public ArrayList<Hitbox> arenaSoftBallHitbox;
+    public ArrayList<Hitbox> arenaPlayerHitbox;
+    public ArrayList<Hitbox> arenaTeam1Hitbox;
+    public ArrayList<Hitbox> arenaTeam2Hitbox;
+    public ArrayList<Hitbox> arenaTeam1Goal;
+    public ArrayList<Hitbox> arenaTeam2Goal;
     
     public static int SIDE_GOALS = 0;
     public static int CORNER_GOALS = 1;
@@ -73,9 +74,9 @@ public class Arena {
     protected void renderHitboxes(Graphics2D g) {
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         g.setColor(new Color(0,0,0));
-        for(HitBox hb: arenaBallHitbox) { hb.render(g); }
+        for(Hitbox hb: arenaBallHitbox) { hb.render(g); }
         g.setColor(new Color(100,100,100));
-        for(HitBox hb: arenaSoftBallHitbox) { hb.render(g); }
+        for(Hitbox hb: arenaSoftBallHitbox) { hb.render(g); }
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
     
@@ -94,9 +95,9 @@ public class Arena {
     protected void renderGoals(Graphics2D g) {
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
         g.setColor(new Color(255,100,100));
-        for(HitBox hb: arenaTeam1Goal) { hb.render(g); }
+        for(Hitbox hb: arenaTeam1Goal) { hb.render(g); }
         g.setColor(new Color(100,100,255));
-        for(HitBox hb: arenaTeam2Goal) { hb.render(g); }
+        for(Hitbox hb: arenaTeam2Goal) { hb.render(g); }
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
     
@@ -154,26 +155,22 @@ public class Arena {
     
     public void initBorders() {
         // Top Edge
-        HitBox hbT = new HitBox (0,0);
-        hbT.makeHLine(false);
+        LineHitbox hbT = new LineHitbox (0,0,Hitbox.DEG_0);
         arenaBallHitbox.add(hbT);
         arenaPlayerHitbox.add(hbT);
         
         // Left Edge
-        HitBox hbL = new HitBox (0,0);
-        hbL.makeVLine(false);
+        LineHitbox hbL = new LineHitbox (0,0,Hitbox.DEG_270);
         arenaSoftBallHitbox.add(hbL);
         arenaPlayerHitbox.add(hbL);
         
         // Right Edge
-        HitBox hbR = new HitBox (WIDTH,0);
-        hbR.makeVLine(true);
+        LineHitbox hbR = new LineHitbox (WIDTH,0, Hitbox.DEG_90);
         arenaSoftBallHitbox.add(hbR);
         arenaPlayerHitbox.add(hbR);
         
         // Bottom Edge
-        HitBox hbB = new HitBox (0,HEIGHT);
-        hbB.makeHLine(true);
+        LineHitbox hbB = new LineHitbox (0,HEIGHT, Hitbox.DEG_180);
         arenaBallHitbox.add(hbB);
         arenaPlayerHitbox.add(hbB);
     }
@@ -184,13 +181,11 @@ public class Arena {
 
     public void initHitBoxes() {
         // Team 1 middle Edge
-        HitBox hbC1 = new HitBox (WIDTH/2,0);
-        hbC1.makeVLine(true);
+        LineHitbox hbC1 = new LineHitbox (WIDTH/2,0, Hitbox.DEG_90);
         arenaTeam1Hitbox.add(hbC1);
         
         // Team 2 middle Edge
-        HitBox hbC2 = new HitBox (WIDTH/2,0);
-        hbC2.makeVLine(false);
+        LineHitbox hbC2 = new LineHitbox (WIDTH/2,0, Hitbox.DEG_270);
         arenaTeam2Hitbox.add(hbC2);
     }
     
@@ -206,30 +201,24 @@ public class Arena {
     // GOALS
     protected void cornerGoals() {
         int goalSize = 50;
-        HitBox goal1 = new HitBox(0,0);
-        goal1.makeCircle(goalSize);
+        CircleHitbox goal1 = new CircleHitbox(0,0, goalSize);
         arenaTeam2Goal.add(goal1);
         
-        HitBox goal2 = new HitBox(0,HEIGHT);
-        goal2.makeCircle(goalSize);
+        CircleHitbox goal2 = new CircleHitbox(0,HEIGHT, goalSize);
         arenaTeam2Goal.add(goal2);
         
-        HitBox goal3 = new HitBox(WIDTH,0);
-        goal3.makeCircle(goalSize);
+        CircleHitbox goal3 = new CircleHitbox(WIDTH,0, goalSize);
         arenaTeam1Goal.add(goal3);
         
-        HitBox goal4 = new HitBox(WIDTH,HEIGHT);
-        goal4.makeCircle(goalSize);
+        CircleHitbox goal4 = new CircleHitbox(WIDTH,HEIGHT, goalSize);
         arenaTeam1Goal.add(goal4);
     }
     
     protected void sideGoals(){
-        HitBox goal1 = new HitBox(0,HEIGHT/2);
-        goal1.makeRect(15, HEIGHT/12);
+        RectHitbox goal1 = new RectHitbox(0,HEIGHT/2, 15, HEIGHT/12);
         arenaTeam2Goal.add(goal1);
         
-        HitBox goal2 = new HitBox(WIDTH,HEIGHT/2);
-        goal2.makeRect(15, HEIGHT/12);
+        RectHitbox goal2 = new RectHitbox(WIDTH,HEIGHT/2,15, HEIGHT/12);
         arenaTeam1Goal.add(goal2);
     }
 }

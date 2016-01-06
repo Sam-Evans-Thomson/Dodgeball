@@ -7,15 +7,13 @@ package dodgeballgame.Items;
 
 
 import dodgeballgame.GamePanel;
-import dodgeballgame.HitBox;
+import dodgeballgame.HitBoxes.*;
 import dodgeballgame.ImageEditor;
 import dodgeballgame.Player.Player;
-import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import sun.audio.AudioStream;
 
 /**
  *
@@ -27,7 +25,7 @@ public class Item {
     private boolean collected;
     double W, H;
     public double r;
-    public HitBox hb;
+    public CircleHitbox hb;
     public Color color;
     public BufferedImage image;
     
@@ -45,8 +43,7 @@ public class Item {
         collected = false;
         W = H = 30;
         r = 40;
-        hb = new HitBox(pos);
-        hb.makeCircle(r);
+        hb = new CircleHitbox(pos,r);
         inCatchArea = new boolean[GamePanel.numPlayers];
     }
     
@@ -71,7 +68,7 @@ public class Item {
                 GamePanel.itemArray.remove(this);
                 return;
             }
-            if(p.getCatchHitbox().collisionPoint(pos)) {
+            if(p.getCatchHitbox().collision(pos)) {
                 inCatchArea[p.pNumber] = true;
             } else inCatchArea[p.pNumber] = false;
         }

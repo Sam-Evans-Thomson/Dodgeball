@@ -6,7 +6,7 @@
 package dodgeballgame.Balls;
 
 import dodgeballgame.GamePanel;
-import dodgeballgame.HitBox;
+import dodgeballgame.HitBoxes.*;
 import dodgeballgame.ImageEditor;
 import dodgeballgame.Player.Player;
 import dodgeballgame.Items.Item;
@@ -44,8 +44,7 @@ public class Wrench extends Ball{
         prevDelta = new Vec2(0,0);
         speed += 100;
         
-        ballHitbox = new HitBox((int)pos.getX(),(int)pos.getY());
-        ballHitbox.makeCircle((int)r-3);
+        ballHitbox = new CircleHitbox((int)pos.getX(),(int)pos.getY(),r-3);
         
         try {
             ball = ImageIO.read(new File("Images/Balls/wrench.png"));
@@ -98,14 +97,14 @@ public class Wrench extends Ball{
             }
         }
         
-        for(HitBox hb : GamePanel.arena.arenaBallHitbox) {
+        for(Hitbox hb : GamePanel.arena.arenaBallHitbox) {
             if(hb.collision(ballHitbox)) {               
                 GamePanel.ballArray.remove(this);
                 break;
             }
         }
         
-        for(HitBox hb : GamePanel.arena.arenaSoftBallHitbox) {
+        for(Hitbox hb : GamePanel.arena.arenaSoftBallHitbox) {
             if(hb.collision(ballHitbox)) {
                 GamePanel.ballArray.remove(this);
                 break;

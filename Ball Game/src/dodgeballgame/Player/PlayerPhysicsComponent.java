@@ -6,9 +6,8 @@
 package dodgeballgame.Player;
 
 import dodgeballgame.Balls.Ball;
-import dodgeballgame.BounceCalculator;
 import dodgeballgame.GamePanel;
-import dodgeballgame.HitBox;
+import dodgeballgame.HitBoxes.*;
 import dodgeballgame.Items.Item;
 import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
@@ -34,9 +33,8 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     public float d;                     // Time delta
     
     // HITBOXES
-    public HitBox playerHitbox;
-    public HitBox catchHitbox;
-    private BounceCalculator bCalc;
+    public CircleHitbox playerHitbox;
+    public ArcHitbox catchHitbox;
     
     //THROWING & CATCHING
     public double throwSpeed;           //throw speed when standing still.
@@ -58,11 +56,8 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         prevDelta = new Vec2(0,0);
         
         // Initialize hitboxes
-        playerHitbox = new HitBox(p.pos.getX(),p.pos.getY());
-        playerHitbox.makeCircle(p.r);
-        catchHitbox = new HitBox(p.pos.getX(),p.pos.getY());
-        catchHitbox.makeArc(p.catchAngle, p.angle, p.radius);
-        catchHitbox = new HitBox(p.pos.getX(),p.pos.getY());
+        playerHitbox = new CircleHitbox(p.pos.getX(),p.pos.getY(), p.r);
+        catchHitbox = new ArcHitbox(p.pos.getX(),p.pos.getY(),p.catchAngle, p.angle, p.radius);
         
         baseSpeed = speed = 500.0;
         maxSpeed = 800;
@@ -120,25 +115,20 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         p.distanceTravelled += prevPos.getMagnitude(p.pos);
     }
     
-    public void resolveCollisions(Vec2 vec, ArrayList<HitBox> array) {
-        Vec2 d2;
-        
-        for(HitBox hb : array) {
+    public void resolveCollisions(Vec2 vec, ArrayList<Hitbox> array) {
+        for(Hitbox hb : array) {
             if(hb.collision(playerHitbox)) {
-
-                HitBox test1 = new HitBox((int)p.pos.getX(), (int)prevPos.getY());
-                test1.makeCircle(p.r);
-                HitBox test2 = new HitBox((int)prevPos.getX(), (int)p.pos.getY());
-                test2.makeCircle(p.r);
+                double angle = playerHitbox.bounceAngle(prevPos, vec.getAngle(), hb);
+                double magnitude = vec.getMagnitude();
+                Vec2 d2 = new Vec2(angle, magnitude,1);
                 
-                if (hb.collision(test1) && !hb.collision(test2)) {
-                    d2 = new Vec2(-(vec.getX()),0);   
-                } else if (hb.collision(test2) && !hb.collision(test1)) {
-                    d2 = new Vec2(0,-(vec.getY()));
-                } else {
-                    d2 = new Vec2(-(vec.getX()),-(vec.getY()));
-                }
-                updatePosition(d2);
+                Vec2 newPos = p.pos.add(d2);
+                double newAngle = prevPos.getAngle(newPos);
+                double newMag = magnitude*Math.cos(prevPos.getAngle(newPos) - prevPos.getAngle(p.pos));
+                
+                Vec2 newD = new Vec2(newAngle, newMag,1);
+                p.pos.set(prevPos);
+                updatePosition(newD);
             }
         }
     }
@@ -196,12 +186,12 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         b.setBall(relThrowSpeed, x, y, p.throwAngle, p.team, p);
         
         int count = 0;
-        for(HitBox hb : GamePanel.arena.arenaBallHitbox) {
+        for(Hitbox hb : GamePanel.arena.arenaBallHitbox) {
             if(hb.collision(b.ballHitbox)) {
                 count++;
             }
         }
-        for(HitBox hb : GamePanel.arena.arenaSoftBallHitbox) {
+        for(Hitbox hb : GamePanel.arena.arenaSoftBallHitbox) {
             if(hb.collision(b.ballHitbox)) {
                 count++;
             }

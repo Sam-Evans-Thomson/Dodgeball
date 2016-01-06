@@ -22,10 +22,10 @@ public class Tools {
     // make sure an angle is between 0 and 2*Pi.
     public static double refreshAngle(double a) {
         while (a < 0) {
-            a+=2.0*Math.PI;
+            a+=2d*Math.PI;
         }
         while (a > 2*Math.PI) {
-            a-=2.0*Math.PI;
+            a-=2d*Math.PI;
         }
         return a;
     }

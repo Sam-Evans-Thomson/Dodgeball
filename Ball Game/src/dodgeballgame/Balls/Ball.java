@@ -6,9 +6,9 @@
 package dodgeballgame.Balls;
 
 import dodgeballgame.Arenas.Arena;
-import dodgeballgame.BounceCalculator;
 import dodgeballgame.GamePanel;
-import dodgeballgame.HitBox;
+import dodgeballgame.HitBoxes.*;
+import dodgeballgame.HitBoxes.Hitbox;
 import dodgeballgame.ImageEditor;
 import dodgeballgame.Player.Player;
 import dodgeballgame.Items.Item;
@@ -42,7 +42,7 @@ public class Ball {
     
     public boolean[] inCatchArea;
     
-    public HitBox ballHitbox;
+    public CircleHitbox ballHitbox;
     public BufferedImage ball, ball0, ball1;
     
     double imageWidth;
@@ -87,8 +87,7 @@ public class Ball {
         delta = new Vec2(0,0);
         prevDelta = new Vec2(0,0);
         
-        ballHitbox = new HitBox((int)pos.getX(),(int)pos.getY());
-        ballHitbox.makeCircle((int)r);
+        ballHitbox = new CircleHitbox(pos.getX(),pos.getY(),r);
         
         try {
             ball = ImageIO.read(new File("Images/Balls/ball.png"));
@@ -112,6 +111,7 @@ public class Ball {
     }
     
     public void update(float d) {
+        pos.print();
         this.d = d;
         updatePosition();
         
@@ -130,7 +130,6 @@ public class Ball {
         
         updateHitbox();
         checkHitboxes();
-        
     }
     
     public void checkHitboxes() {
@@ -148,32 +147,31 @@ public class Ball {
                 }
                 
             }
-            if(p.getCatchHitbox().collisionPoint(pos)) {
+            if(p.getCatchHitbox().collision(pos)) {
                 inCatchArea[p.pNumber] = true;
             } else inCatchArea[p.pNumber] = false;
         }
             if (Arena.goalsActive) {
-                for(HitBox hb : GamePanel.arena.arenaTeam1Goal) {
+                for(Hitbox hb : GamePanel.arena.arenaTeam1Goal) {
                     if(hb.collision(ballHitbox)) {
                         hitGoal(player, 0);
                     }
                 }
-                for(HitBox hb : GamePanel.arena.arenaTeam2Goal) {
+                for(Hitbox hb : GamePanel.arena.arenaTeam2Goal) {
                     if(hb.collision(ballHitbox)) {
                         hitGoal(player, 1);
                     }
                 }
             }
         
-        for(HitBox hb : GamePanel.arena.arenaBallHitbox) {
+        for(Hitbox hb : GamePanel.arena.arenaBallHitbox) {
             if(hb.collision(ballHitbox)) {
-
                 hitWall(hb,GamePanel.arena.bounceFactor);
                 return;
             }
         }
         
-        for(HitBox hb : GamePanel.arena.arenaSoftBallHitbox) {
+        for(Hitbox hb : GamePanel.arena.arenaSoftBallHitbox) {
             if(hb.collision(ballHitbox)) {
                 hitWall(hb,GamePanel.arena.softBounceFactor);
                 return;
@@ -182,7 +180,6 @@ public class Ball {
         
         for(Item pu : GamePanel.itemArray) {
             if(pu.hb.collision(ballHitbox)) {
-
                 pu.hitBall();
                 return;
             }
@@ -203,13 +200,14 @@ public class Ball {
         delete();
     }
     
-    public void hitWall(HitBox hb, double bf) {
+    public void hitWall(Hitbox hb, double bf) {
         if (bounceActive) {
-            BounceCalculator bc = new BounceCalculator(ballHitbox, hb, angle, prevPos);
-            angle = refreshAngle(bc.calcBounceAngle());
+            angle = ballHitbox.bounceAngle(prevPos, angle, hb);
             speed = bf*speed;
             if(speed>maxSpeed) speed = maxSpeed;
             pos = prevPos;
+            delta.set(angle, d*speed, 1);
+            pos = pos.add(delta);
         } else {
             delete();
         }

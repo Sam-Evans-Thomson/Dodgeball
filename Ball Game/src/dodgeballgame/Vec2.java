@@ -66,8 +66,7 @@ public class Vec2 {
     
     public double getAngle() {        
         double angle = Math.atan2(y,x);
-        if (angle < 0.0) angle+= 2*Math.PI;
-        return angle;
+        return Tools.refreshAngle(angle);
     }
     
     // from - to.
@@ -84,8 +83,8 @@ public class Vec2 {
     public double getMagnitude(Vec2 vec) {
         double x2 = vec.getX();
         double y2 = vec.getY();
-        double dx = x2-x;
-        double dy = y2-y;
+        double dx = (x2-x);
+        double dy = (y2-y);
         
         return Math.sqrt(dx*dx + dy*dy);        
     }
@@ -97,20 +96,26 @@ public class Vec2 {
     public Vec2 take(Vec2 vec) {
         return new Vec2(this.x - vec.getX(),this.y - vec.getY());
     }
-    
-    public void scale(double s) {
-        x*=s;
-        y*=s;
-    }
-    
+
     public Vec2 multiply(double s) {
         x*=s;
         y*=s;
         return new Vec2(x,y);
     }
+     
+    public void scale(double s) {
+        x*=s;
+        y*=s;
+    }
     
     public double getX() {return x;}
     public double getY() {return y;}
+    
+    public Vec2 changeReference(double angle, Vec2 origin) {
+        double mag = this.getMagnitude(origin);
+        double ang = Tools.refreshAngle(origin.getAngle(this) - angle);
+        return new Vec2(ang, mag, 1);
+    }
     
     public void set(Vec2 vec) {
         this.x = vec.getX();
