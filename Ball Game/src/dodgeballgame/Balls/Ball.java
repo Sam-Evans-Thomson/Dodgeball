@@ -5,7 +5,6 @@
  */
 package dodgeballgame.Balls;
 
-import dodgeballgame.Arenas.Arena;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.*;
 import dodgeballgame.HitBoxes.Hitbox;
@@ -111,7 +110,6 @@ public class Ball {
     }
     
     public void update(float d) {
-        pos.print();
         this.d = d;
         updatePosition();
         
@@ -151,7 +149,7 @@ public class Ball {
                 inCatchArea[p.pNumber] = true;
             } else inCatchArea[p.pNumber] = false;
         }
-            if (Arena.goalsActive) {
+            if (GamePanel.arena.goalsActive) {
                 for(Hitbox hb : GamePanel.arena.arenaTeam1Goal) {
                     if(hb.collision(ballHitbox)) {
                         hitGoal(player, 0);
@@ -219,7 +217,7 @@ public class Ball {
             player.scoreGoal(team);
             GamePanel.soundManager.addHealth();
             delete();
-        } else if(GamePanel.matchSettings.getDouble(5) != 0) {         //If friendly fire is off
+        } else if(GamePanel.friendlyFire) {         //If friendly fire is off
             player.scoreGoal(team);
             GamePanel.soundManager.addHealth();
             delete();

@@ -8,7 +8,6 @@ package dodgeballgame.Player;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.ArcHitbox;
 import dodgeballgame.HitBoxes.CircleHitbox;
-import dodgeballgame.HitBoxes.Hitbox;
 import dodgeballgame.Powers.NoPower;
 import dodgeballgame.Powers.Power;
 import dodgeballgame.Timer;
@@ -55,6 +54,7 @@ public class Player {
     public static int pointsPerGoal;
     public static int startHealth;
     public static int startBalls;
+    public static int pointsPerHit;
     
     // Current Values
     public int health;
@@ -242,8 +242,8 @@ public class Player {
         if (p.team != team) {
             hits++;
             hitsCount++;
-            points+=i;
-            pointsCount+=i;
+            points+=pointsPerHit;
+            pointsCount+=pointsPerHit;
         }
         else ownHits++;
         spawnPowerCheck();

@@ -20,10 +20,10 @@ public class PlayerStateComponent implements PlayerComponent{
     public StateComponent largeCatchArea = new StateComponent(new double[]{200d,6.2d},5);
     public LargeCatchPower largeCatchPower = new LargeCatchPower(new Vec2(0,0));
     
-    public StateComponent slowed = new StateComponent(new double[]{200d},10);
+    public StateComponent slowed = new StateComponent(new double[]{200d},5);
     public SlowPower slowPower = new SlowPower(new Vec2(0,0));
     
-    public StateComponent noCatch = new StateComponent(new double[]{},10);
+    public StateComponent noCatch = new StateComponent(new double[]{},1);
     public NoCatchPower noCatchPower = new NoCatchPower(new Vec2(0,0));
     
     public StateComponent noState = new StateComponent(new double[]{0},0);

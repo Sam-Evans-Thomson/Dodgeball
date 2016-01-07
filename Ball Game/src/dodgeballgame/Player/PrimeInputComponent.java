@@ -22,40 +22,43 @@ public class PrimeInputComponent extends InputComponent{
     @Override
     public void pressA() {
         if (GamePanel.gameState == GamePanel.MENU) {
-            if (GamePanel.menu.equals(GamePanel.characterMenu))GamePanel.characterMenu.select(p);
-            else GamePanel.menu.select();
+            if (GamePanel.menuManager.menu.equals(GamePanel.menuManager.characterMenu))GamePanel.menuManager.characterMenu.select(p);
+            else GamePanel.menuManager.menu.select();
         }
     }
 
     @Override
     public void pressB() {
         if (GamePanel.gameState == GamePanel.MENU) {
-            GamePanel.menu.back();
+            GamePanel.menuManager.menu.back();
         }
     }
 
     @Override
     public void pressX() {
-        GamePanel.menu.xButton();
+        GamePanel.menuManager.menu.xButton();
     }
 
     @Override
     public void pressY() {
-        GamePanel.menu.yButton();
+        GamePanel.menuManager.menu.yButton();
     }
 
     @Override
     public void pressSta() {
-        if (GamePanel.menu.equals(GamePanel.winScreen)) {
-            GamePanel.menu.back();
-        } else GamePanel.changeGameState();
+        if (GamePanel.menuManager.menu.equals(GamePanel.menuManager.winScreen)) {
+            GamePanel.menuManager.menu.back();
+        } else {
+            GamePanel.changeGameState();
+            GamePanel.menuManager.changeMenu("START");
+        }
         
     }
 
     @Override
     public void pressSel() {
         if (GamePanel.gameState == GamePanel.MENU) {
-            GamePanel.menu.selectButton();
+            GamePanel.menuManager.menu.selectButton();
         }
     }
 
@@ -83,7 +86,7 @@ public class PrimeInputComponent extends InputComponent{
     public void leftTrigger(float axesS) {
         if (GamePanel.gameState == GamePanel.MENU) {
             if(axesS > 0.7 && p.leftTrig<0.7) {
-                GamePanel.menu.leftTrigger();
+                GamePanel.menuManager.menu.leftTrigger();
             }
         } else if (GamePanel.gameState == GamePanel.PLAY) {
             if(axesS > 0.7 && p.leftTrig < 0.7) {
@@ -97,7 +100,7 @@ public class PrimeInputComponent extends InputComponent{
     public void rightTrigger(float axesS) {
         if (GamePanel.gameState == GamePanel.MENU) {
             if(axesS > 0.7 && p.rightTrig<0.7) {
-                GamePanel.menu.rightTrigger();
+                GamePanel.menuManager.menu.rightTrigger();
             }
         } else if (GamePanel.gameState == GamePanel.PLAY) {
             if(axesS > 0.7 && p.rightTrig<0.7) {

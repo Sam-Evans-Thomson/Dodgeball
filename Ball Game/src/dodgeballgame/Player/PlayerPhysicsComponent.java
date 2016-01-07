@@ -111,7 +111,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         resolveCollisions(vec, GamePanel.arena.arenaPlayerHitbox);
         if(p.team == 0)         resolveCollisions(vec, GamePanel.arena.arenaTeam1Hitbox);
         else if(p.team == 1)    resolveCollisions(vec, GamePanel.arena.arenaTeam2Hitbox);
-        resolvePlayerCollisions(vec);
+        //resolvePlayerCollisions(vec);
         p.distanceTravelled += prevPos.getMagnitude(p.pos);
     }
     
@@ -124,11 +124,12 @@ public class PlayerPhysicsComponent implements PlayerComponent{
                 
                 Vec2 newPos = p.pos.add(d2);
                 double newAngle = prevPos.getAngle(newPos);
-                double newMag = magnitude*Math.cos(prevPos.getAngle(newPos) - prevPos.getAngle(p.pos));
+                double newMag = 0.5*prevPos.getMagnitude(newPos);
                 
                 Vec2 newD = new Vec2(newAngle, newMag,1);
                 p.pos.set(prevPos);
                 updatePosition(newD);
+                resolveMove(newD);
             }
         }
     }

@@ -5,10 +5,11 @@
  */
 package dodgeballgame.Menus;
 
+import dodgeballgame.Cursor;
 import dodgeballgame.FileManager.FileManager;
+import dodgeballgame.GameModes.GameMode;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
-import dodgeballgame.Settings.SpecificSettings.MatchSettings;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
@@ -33,7 +34,7 @@ public class LoadMenu extends Menu {
     
     private int numSaves;
     private String[] saveNames;
-    private ArrayList<MatchSettings> saves;
+    private ArrayList<GameMode> saves;
     
     int back;
     
@@ -45,6 +46,8 @@ public class LoadMenu extends Menu {
     
     BufferedImage popup;
     
+    public Cursor[] cursors = new Cursor[4];
+    
     public LoadMenu() {
         fontSizeLarge = WIDTH/40;
         fontSizeSmall = WIDTH/50;
@@ -53,9 +56,7 @@ public class LoadMenu extends Menu {
         numSaves = new File(SAVE_DIRECTORY).list().length - 1;
         fileManager = new FileManager(SAVE_INFO);
         loadSaves();
-        pos[0] = 1;
-        pos[1] = numSaves;
-        positions = pos;
+        for (int i = 0; i < 4; i++) cursors[i] = new Cursor(1,numSaves);
         savePopup = false;
         
         try {
@@ -67,6 +68,12 @@ public class LoadMenu extends Menu {
         
         ImageEditor im = new ImageEditor(popup);
         popup = im.scale((double)WIDTH/1920d);
+    }
+    
+        
+    @Override    
+    public void moveCursor(int playerNumber, int x, int y) {
+        cursors[playerNumber].moveCursor(x,y);
     }
     
     @Override
@@ -81,7 +88,7 @@ public class LoadMenu extends Menu {
         for (int i = 0; i < 9; i++) {
             float opacity = (float)(5f-Math.sqrt((i-4)*(i-4)))/5f;
             
-            int cursorPlace = (cursor0[1] + i - 4)%numSaves;
+            int cursorPlace = (cursors[0].y + i - 4)%numSaves;
             if(cursorPlace < 0) cursorPlace += numSaves;      
             
             if(i == 4) {
@@ -123,20 +130,20 @@ public class LoadMenu extends Menu {
     private void loadSaves() {
         for (int i = 0; i<numSaves; i++) {
             String filePath = new String(SAVE_DIRECTORY + "/save" + i + ".txt");
-            saves.add(new MatchSettings(filePath));  
+            saves.add(new GameMode(filePath));  
         }  
     }
     
     private void applySave() {
-        String filePath = SAVE_DIRECTORY + "/save" + cursor0[1] + ".txt";
-        MatchSettings save = new MatchSettings(MatchSettingsMenu.settings);
-        save.setPath(filePath);
-        save.save();
+        String filePath = SAVE_DIRECTORY + "/save" + cursors[0].y + ".txt";
+        GamePanel.gameModeManager.gameMode.setPath(filePath);
+        GamePanel.gameModeManager.gameMode.save();
     }
     
     private void applyLoad() {
         loadSaves();
-        StartMatchSettingsMenu.applyLoad();
+        GamePanel.gameModeManager.gameMode = saves.get(cursors[0].y);
+        GamePanel.menuManager.startMatchSettingsMenu.applyLoad();
     }
     
     @Override
@@ -145,7 +152,7 @@ public class LoadMenu extends Menu {
         if (savePopup) {
             applyLoad();
             savePopup = false;
-            GamePanel.menu = GamePanel.matchSettingsMenu;
+            GamePanel.menuManager.changeMenu("MATCH_SETTINGS");
         } else {
 
         }
@@ -157,7 +164,7 @@ public class LoadMenu extends Menu {
         if (savePopup) {
             applySave();
             savePopup = false;
-            GamePanel.menu = GamePanel.matchSettingsMenu;
+            GamePanel.menuManager.changeMenu("MATCH_SETTINGS");
         } else {
 
         }
@@ -179,7 +186,7 @@ public class LoadMenu extends Menu {
         if (savePopup) {
             savePopup = false;
         } else {
-            GamePanel.menu = GamePanel.matchSettingsMenu;
+            GamePanel.menuManager.changeMenu("MATCH_SETTINGS");
         }
     }
 }

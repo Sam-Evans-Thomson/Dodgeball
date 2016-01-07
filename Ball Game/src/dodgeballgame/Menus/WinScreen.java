@@ -99,6 +99,6 @@ public class WinScreen extends Menu{
     @Override
     public void back() {
         GamePanel.newGame();
-        GamePanel.menu = GamePanel.startMenu;
+        GamePanel.menuManager.changeMenu("START");
     }
 }

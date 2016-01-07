@@ -5,14 +5,15 @@
  */
 package dodgeballgame.Menus;
 
+import dodgeballgame.Cursor;
+import dodgeballgame.GameModes.GameMode;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
-import dodgeballgame.Settings.SpecificSettings.MatchSettings;
+import dodgeballgame.Tools;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -26,25 +27,25 @@ public class MatchSettingsMenu extends Menu{
     /**
      *
      */
+
+    public final String PATH = "D:/Users/Sam/Documents/Ideas/Dodgeball/Settings/DefaultSaves/DefaultPlayer.txt";
+    public static GameMode gameMode, gameMode2;
+    public int NUM_SETTINGS;
     
-    private final String PATH = "D:/Users/Sam/Documents/Ideas/Dodgeball/Settings/DefaultSaves/DefaultMatchSettings.txt";
-    public static MatchSettings settings;
-    public MatchSettings settings2;
     private int[] pos;
-    final int NUM_SETTINGS;
+    
     int fontSizeLarge, fontSizeSmall;
     
     public static boolean accept;
-    BufferedImage selectImage, acceptImage;
+    
+    public Cursor[] cursors = new Cursor[4];
     
     public MatchSettingsMenu() {
         
         accept = false;
-        settings = new MatchSettings(PATH);
-        NUM_SETTINGS = settings.size();
-        pos = new int[]{1,NUM_SETTINGS};
-        
-        positions = pos;
+        //gameMode = new GameMode(PATH);
+        NUM_SETTINGS = GamePanel.gameModeManager.gameMode.size();
+        for (int i = 0; i < 4; i++) cursors[i] = new Cursor(1,NUM_SETTINGS);
         fontSizeLarge = WIDTH/40;
         fontSizeSmall = WIDTH/50;
         
@@ -59,25 +60,30 @@ public class MatchSettingsMenu extends Menu{
         selectImage = im.scale((double)WIDTH/1920d);
         im.setImage(acceptImage);
         acceptImage = im.scale((double)WIDTH/1920d);
+    }
+    
         
-        applyLoad();
-        
+    @Override    
+    public void moveCursor(int playerNumber, int x, int y) {
+        cursors[playerNumber].moveCursor(x,y);
     }
 
     @Override
     public void renderMenu(Graphics2D g) {
 
+        GamePanel.menuManager.startMatchSettingsMenu.renderMenu(g);
+        
         g.setPaint(Color.white);
         
-        int x = (int)(INNER_X_START*2);
-        int x2 = (int)(INNER_X_END*0.9);
+        int x = (int)(INNER_X_START*3.15);
+        int x2 = (int)(INNER_X_END*1.1);
         int y = (int)(INNER_Y_START * 1.3);
         int yOffset = INNER_MENU_HEIGHT/10;
         
         for (int i = 0; i < 9; i++) {
             float opacity = (float)(5f-Math.sqrt((i-4)*(i-4)))/5f;
             
-            int cursorPlace = (cursor0[1] + i - 4) % NUM_SETTINGS;
+            int cursorPlace = (cursors[0].y + i - 4) % NUM_SETTINGS;
             if(cursorPlace < 0) cursorPlace += NUM_SETTINGS;      
             
             if(i == 4) {
@@ -93,38 +99,28 @@ public class MatchSettingsMenu extends Menu{
                 g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
                 g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
             }
-            g.drawString(settings.getName(cursorPlace), x, y + i*yOffset);
-            centreString(settings.getValueString(cursorPlace), g, x2, y + i*yOffset);
+            g.drawString(GamePanel.gameModeManager.gameMode.getName(cursorPlace), x, y + i*yOffset);
+            Tools.centreStringHor(GamePanel.gameModeManager.gameMode.getValueString(cursorPlace), g, x2, y + i*yOffset);
 
         }   
         
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-        g.drawImage(selectImage, WIDTH/2 - selectImage.getWidth()/3, INNER_Y_START + INNER_MENU_HEIGHT, null);
-        if (accept) g.drawImage(acceptImage, WIDTH/2 - acceptImage.getWidth()/3, INNER_Y_START, null);
-    }
-
-    private void centreString(String s, Graphics2D g, int x, int y) {
-        int stringLen = (int)
-        g.getFontMetrics().getStringBounds(s, g).getWidth();
-        g.drawString(s, x - stringLen/2, y);
+        renderLoad(g);
+        if (accept) g.drawImage(acceptImage, WIDTH/2 - acceptImage.getWidth()/2, INNER_Y_START, null);
     }
     
     private void changeValue(int i) {
         if (!accept) {
-            settings2 = new MatchSettings(settings);
+            gameMode2 = new GameMode(gameMode);
+            //settings2 = new MatchSettings(settings);
             accept = true;
         }
-        settings.changeValue(cursor0[1],i);
-    }
-    
-    public void applyLoad() {
-        GamePanel.matchSettings = settings;
-        GamePanel.newGame();
+        gameMode.changeValue(cursors[0].y,i);
     }
     
     // Saving these settings to the default file.
     public void save() {
-        settings.save();
+        gameMode.save();
     }
 
     
@@ -132,7 +128,7 @@ public class MatchSettingsMenu extends Menu{
     public void select() {
         if (accept) {
             GamePanel.soundManager.menu(6);
-            applyLoad();
+            GamePanel.menuManager.startMatchSettingsMenu.applyLoad();
             accept = false;
         }
     }
@@ -140,20 +136,40 @@ public class MatchSettingsMenu extends Menu{
     @Override
     public void selectButton() {
         GamePanel.soundManager.menu(6);
-        GamePanel.menu = GamePanel.loadMenu;
-        GamePanel.loadMenu.setBack(0);
+        GamePanel.menuManager.changeMenu("LOAD");
+        GamePanel.menuManager.loadMenu.setBack(0);
     }
     
     @Override
-    public void right() {
-        GamePanel.soundManager.menu(8);
-        changeValue(1);
+    public void right(int playerNumber) {
+        if(playerNumber == 0) {
+            GamePanel.soundManager.menu(8);
+            changeValue(1);
+        }
     }
     
     @Override
-    public void left() {
-        GamePanel.soundManager.menu(8);
-        changeValue(-1);
+    public void left(int playerNumber) {
+        if(playerNumber == 0) {
+            GamePanel.soundManager.menu(8);
+            changeValue(-1);
+        }
+    }
+       
+    @Override
+    public void up(int playerNumber) {
+        if(playerNumber == 0) {
+            GamePanel.soundManager.menu(8);
+            cursors[0].moveCursor(0,-1);
+        }
+    }
+    
+    @Override
+    public void down(int playerNumber) {
+        if(playerNumber == 0) {
+            GamePanel.soundManager.menu(8);
+            cursors[0].moveCursor(0,1);
+        }
     }
     
     @Override
@@ -173,9 +189,9 @@ public class MatchSettingsMenu extends Menu{
         GamePanel.soundManager.menu(7);
         if (accept) {
             accept = false;
-            settings = new MatchSettings(settings2);
+            gameMode = new GameMode(gameMode2);
         } else {
-        GamePanel.menu = GamePanel.startMatchSettingsMenu;
+        GamePanel.menuManager.changeMenu("START_MATCH_SETTINGS");
         }
     }
 }

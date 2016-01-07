@@ -5,6 +5,7 @@
  */
 package dodgeballgame.Menus;
 
+import dodgeballgame.Cursor;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
 import dodgeballgame.Settings.SpecificSettings.GeneralSettings;
@@ -32,14 +33,15 @@ public class GeneralSettingsMenu extends Menu{
     
     BufferedImage selectImage, acceptImage;
     
+    public Cursor[] cursors = new Cursor[4];
+    
     public GeneralSettingsMenu() {
         
         accept = false;
         settings = new GeneralSettings();
         NUM_SETTINGS = settings.size();
-        pos = new int[]{1,NUM_SETTINGS};
-        
-        positions = pos;
+        for (int i = 0; i < 4; i++) cursors[i] = new Cursor(1,NUM_SETTINGS);
+
         fontSizeLarge = WIDTH/40;
         fontSizeSmall = WIDTH/50;
         
@@ -56,6 +58,12 @@ public class GeneralSettingsMenu extends Menu{
         acceptImage = im.scale((double)WIDTH/1920d);
         
     }
+    
+        
+    @Override    
+    public void moveCursor(int playerNumber, int x, int y) {
+        cursors[playerNumber].moveCursor(x,y);
+    }
 
     @Override
     public void renderMenu(Graphics2D g) {
@@ -70,7 +78,7 @@ public class GeneralSettingsMenu extends Menu{
         for (int i = 0; i < 9; i++) {
             float opacity = (float)(5f-Math.sqrt((i-4)*(i-4)))/5f;
             
-            int cursorPlace = (cursor0[1] + i - 4) % NUM_SETTINGS;
+            int cursorPlace = (cursors[0].y + i - 4) % NUM_SETTINGS;
             if(cursorPlace < 0) cursorPlace += NUM_SETTINGS;      
             
             if(i == 4) {
@@ -92,7 +100,6 @@ public class GeneralSettingsMenu extends Menu{
         }   
         
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-        g.drawImage(selectImage, WIDTH/2 - selectImage.getWidth()/3, INNER_Y_START + INNER_MENU_HEIGHT, null);
         if (accept) g.drawImage(acceptImage, WIDTH/2 - acceptImage.getWidth()/3, INNER_Y_START, null);
     }
 
@@ -103,7 +110,7 @@ public class GeneralSettingsMenu extends Menu{
     }
     
     private void changeValue(int i) {
-        settings.changeValue(cursor0[1],i);
+        settings.changeValue(cursors[0].y,i);
     }
     
     public void apply() {
@@ -124,20 +131,24 @@ public class GeneralSettingsMenu extends Menu{
     @Override
     public void selectButton() {
         GamePanel.soundManager.menu(6);
-        GamePanel.menu = GamePanel.loadMenu;
-        GamePanel.loadMenu.setBack(0);
+        GamePanel.menuManager.changeMenu("LOAD");
+        GamePanel.menuManager.loadMenu.setBack(0);
     }
     
     @Override
-    public void right() {
-        GamePanel.soundManager.menu(8);
-        changeValue(1);
+    public void right(int playerNumber) {
+        if(playerNumber == 0) {
+            GamePanel.soundManager.menu(8);
+            changeValue(1);
+        }
     }
     
     @Override
-    public void left() {
-        GamePanel.soundManager.menu(8);
-        changeValue(-1);
+    public void left(int playerNumber) {
+        if(playerNumber == 0) {
+            GamePanel.soundManager.menu(8);
+            changeValue(-1);
+        }
     }
     
     @Override
@@ -156,7 +167,7 @@ public class GeneralSettingsMenu extends Menu{
     @Override
     public void back() {
         GamePanel.soundManager.menu(7);
-        GamePanel.menu = GamePanel.startMenu;
+        GamePanel.menuManager.changeMenu("START");
     }
 }
 

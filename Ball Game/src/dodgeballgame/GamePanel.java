@@ -8,12 +8,11 @@ package dodgeballgame;
 
 import dodgeballgame.Player.Player;
 import dodgeballgame.Arenas.*;
-import dodgeballgame.Menus.WinScreen;
+import dodgeballgame.Menus.MenuManager;
 import dodgeballgame.Balls.Ball;
-import dodgeballgame.Menus.*;
+import dodgeballgame.GameModes.GameModeManager;
 import dodgeballgame.Items.Item;
 import dodgeballgame.Powers.Power;
-import dodgeballgame.Settings.SpecificSettings.MatchSettings;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.image.*;
@@ -33,6 +32,7 @@ import static org.lwjgl.glfw.GLFW.*;
  * @author Sam
  */
 public class GamePanel extends JPanel implements Runnable, KeyListener {
+    
     
     
     private GLFWErrorCallback errorCallback;
@@ -66,10 +66,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public static ArrayList<Item> itemArray;
     public static ArrayList<Power> powerArray;
     public static Arena arena;
+    
     public static ItemManager itemManager;
     public static PowerManager powerManager;
     public static ArenaManager arenaManager;
-
+    public static MenuManager menuManager;
+    public static SoundManager soundManager;
+    public static GameModeManager gameModeManager;
+    
     public static final int screenWIDTH = 1920;
     public static final int screenHEIGHT = 980;
     
@@ -85,21 +89,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private BufferedImage image2;
     private Graphics2D g;
     private Graphics2D g2;
-    
-    public static MatchSettings matchSettings;
-    
-    public static dodgeballgame.Menus.Menu menu;
-    public static StartMenu startMenu;
-    public static LoadMenu loadMenu;
-    public static SoundManager soundManager;
-    public static ItemMenu powerUpMenu;
-    public static WinScreen winScreen;
-    public static ArenaMenu arenaMenu;
-    public static CharacterMenu characterMenu;
-    public static PowerMenu powerMenu;
-    public static MatchSettingsMenu matchSettingsMenu;
-    public static GeneralSettingsMenu generalSettingsMenu;
-    public static StartMatchSettingsMenu startMatchSettingsMenu;
     
     public static boolean friendlyFire;
     public static boolean musicOn;
@@ -147,42 +136,28 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         /****** draw Loading Screen ******/
         draw();
         try {
-            loading = ImageIO.read(new File("Images/Loading.png"));
+            loading = ImageIO.read(new File("Images/Loading2.png"));
         } catch(IOException e) {}
         renderLoading();
         draw();
         
         gameTimer = new GameTimer();
-        gameTimer.pause();
+        GameTimer.pause();
         running = true;
         gameState = MENU;      
-        
-
 
         // Setup Timer
         timer = new Timer();
         arena = new BasicArena();
-        matchSettings = new MatchSettings();
         
-        // MENUS
-        startMenu = new StartMenu();
-        menu = new StartMenu();
-        loadMenu = new LoadMenu();
-        powerUpMenu = new ItemMenu();
-        winScreen = new WinScreen();
-        
-        characterMenu = new CharacterMenu();
-        powerMenu = new PowerMenu();
-        
-        generalSettingsMenu = new GeneralSettingsMenu();
-        startMatchSettingsMenu = new StartMatchSettingsMenu();
-        
-
         //Managers
         itemManager = new ItemManager();
         powerManager = new PowerManager();
         soundManager = new SoundManager();
         arenaManager = new ArenaManager();
+        gameModeManager = new GameModeManager();
+        menuManager = new MenuManager();
+        
         
        // Setup an error callback. The default implementation
         // will print the error message in System.err.
@@ -193,14 +168,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             throw new IllegalStateException("Unable to initialize GLFW");
         
         initControllers();
-        matchSettingsMenu = new MatchSettingsMenu();
+
         newGame();
-        generalSettingsMenu.apply();
+        menuManager.generalSettingsMenu.apply();
+        
         g.setColor(Color.black);
         g.fillRect(0,0,screenWIDTH, screenHEIGHT);
         draw();
         arenaManager.init();        
-        arenaMenu = new ArenaMenu();
     }
     
     public static void initControllers() {
@@ -233,10 +208,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         itemArray = new ArrayList<>();
         powerArray = new ArrayList<>();
         
-        matchSettings.apply();
+        gameModeManager.gameMode.apply();
         
         arena.init();
-        
+
         System.arraycopy(controllers, 0, playerControllers, 0, numPlayers);
         for (int p = 0; p<numPlayers; p++) {
             int team =2*p/numPlayers;
@@ -286,7 +261,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     
     public static void win() {
         gameState = MENU;
-        menu = winScreen;
+        menuManager.changeMenu("WIN");
     }
     
     private void loop() {
@@ -379,7 +354,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     }  
     
     public void exit() {
-        generalSettingsMenu.save();
+        menuManager.generalSettingsMenu.save();
     }
     /*************************************************************************/
     // GAME UPDATE//
@@ -480,7 +455,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     }
     
     private void updateMenu(float delta) {
-        menu.update();
+        menuManager.update();
     }
 
     // Do necessary calculations
@@ -533,7 +508,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     private void renderMenu() {
         render();
-        menu.render(g);
+        menuManager.render(g);
     }
     
     private void renderLoading() {

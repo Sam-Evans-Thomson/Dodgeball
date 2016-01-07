@@ -5,10 +5,12 @@
  */
 package dodgeballgame.Menus;
 
+import dodgeballgame.Cursor;
 import dodgeballgame.GamePanel;
 import dodgeballgame.Player.Player;
 import dodgeballgame.Tools;
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -29,9 +31,8 @@ import javax.swing.GrayFilter;
 public class CharacterMenu extends Menu{
     
     ArrayList<PlayerImages> playerImages = new ArrayList();
-    private final int NUM_CHARACTERS = 9;
     
-    private int[] pos = {NUM_CHARACTERS,1}; 
+    private final int NUM_CHARACTERS = 9;
     
     public int xPos = INNER_X_START;
     public int yPos = INNER_Y_START;
@@ -43,14 +44,27 @@ public class CharacterMenu extends Menu{
     public int buttonXOffset = INNER_MENU_WIDTH/5;
     
     private BufferedImage[] playerWords;
+    private Image[] greyFaces;
+    private BufferedImage[] colourFaces;
+    
+    public Cursor[] cursors = new Cursor[4];
     
     public CharacterMenu() {
-        positions = pos;
+        for (int i = 0; i < 4; i++) cursors[i] = new Cursor(NUM_CHARACTERS, 1);
         loadImages();
+    }
+    
+        
+    @Override    
+    public void moveCursor(int playerNumber, int x, int y) {
+        cursors[playerNumber].moveCursor(x,y);
     }
     
     private void loadImages() {
         playerWords = new BufferedImage[5];
+        greyFaces = new Image[NUM_CHARACTERS];
+        colourFaces = new BufferedImage[NUM_CHARACTERS];
+        ImageFilter filter = new GrayFilter(true, 50); 
         for(int i = 0; i<NUM_CHARACTERS; i++) {
             BufferedImage imageA, imageB;
             try{
@@ -63,6 +77,11 @@ public class CharacterMenu extends Menu{
                 playerWords[4] = ImageIO.read(new File("Images/player2b.png"));
                 playerImages.add(new PlayerImages(imageA, imageB));
             } catch (IOException e) {}
+
+            BufferedImage image = Tools.sizeImage(playerImages.get(i).getA(),100);
+            colourFaces[i] = image;
+            ImageProducer producer = new FilteredImageSource(image.getSource(), filter); 
+            greyFaces[i] = Toolkit.getDefaultToolkit().createImage(producer);
         }
         playerWords[0] = Tools.scaleImage(playerWords[0], 0.7);
         playerWords[1] = Tools.scaleImage(playerWords[1], 0.7);
@@ -77,25 +96,20 @@ public class CharacterMenu extends Menu{
     public void renderMenu(Graphics2D g) {
         
         int xOffset = 140;
+        int xPos2 = width/3 + xPos + 140;
         
         for (int ctrl = 0; ctrl < GamePanel.numPlayers; ctrl++) {
             for(int chr = 0; chr < 5; chr++) {
-                
-                int xPos2 = width/3 + xPos + 140;
+
                 int yPos2 = ctrl*height/3 + yPos;
 
-                int cursorPlace = (cursors[ctrl][0] + chr) % NUM_CHARACTERS;
+                int cursorPlace = (cursors[ctrl].x + chr) % NUM_CHARACTERS;
                 if(cursorPlace < 0) cursorPlace += NUM_CHARACTERS; 
-                
-                BufferedImage image = Tools.sizeImage(playerImages.get(cursorPlace).getA(),100);
-                
+
                 if(chr != 0) {
-                    ImageFilter filter = new GrayFilter(true, 30);  
-                    ImageProducer producer = new FilteredImageSource(image.getSource(), filter);  
-                    Image greyImage = Toolkit.getDefaultToolkit().createImage(producer); 
-                    g.drawImage(greyImage,xPos2 + chr*xOffset, yPos2, null);
+                    g.drawImage(greyFaces[cursorPlace],xPos2 + chr*xOffset, yPos2, null);
                 } else {
-                    g.drawImage(image,xPos2 + chr*xOffset, yPos2, null);
+                    g.drawImage(colourFaces[cursorPlace],xPos2 + chr*xOffset, yPos2, null);
                 }
 
             }
@@ -108,14 +122,14 @@ public class CharacterMenu extends Menu{
             } else {
                 g.drawImage(playerWords[i], xPos + 140, yPos + i*height/3, null);
             }
-            
+            g.setColor(new Color(200,200,200));
             g.drawImage(img, xPos, yPos + i*height/3, null);
             if (i != 0) g.fillRect(xPos, yPos + (i)*height/3 - 30, width, 3);
         }
     }
     
     public void chooseCharacter(Player p) {
-        PlayerImages im = playerImages.get(cursors[p.pNumber][0]);
+        PlayerImages im = playerImages.get(cursors[p.pNumber].x);
         p.graphicsComp.changeImages(im.getA(),im.getB());
     }
     
@@ -145,7 +159,7 @@ public class CharacterMenu extends Menu{
     @Override
     public void back() {
         GamePanel.soundManager.menu(7);
-        GamePanel.menu = GamePanel.startMenu;
+        GamePanel.menuManager.changeMenu("START");
     }
     
 }

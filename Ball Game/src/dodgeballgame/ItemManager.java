@@ -36,12 +36,12 @@ public class ItemManager {
     public static double[][] powerUpSeeds = new double[4][4];
     
     public ItemManager() {
-        powerUpFreqs[0][0] = 3;
-        powerUpFreqs[0][1] = 1;
-        powerUpFreqs[0][2] = 1;
-        powerUpFreqs[0][3] = 2;
-        powerUpFreqs[1][0] = 0;
-        powerUpFreqs[1][1] = 0;
+        powerUpFreqs[0][0] = 5;
+        powerUpFreqs[0][1] = 5;
+        powerUpFreqs[0][2] = 5;
+        powerUpFreqs[0][3] = 5;
+        powerUpFreqs[1][0] = 5;
+        powerUpFreqs[1][1] = 5;
         powerUpFreqs[1][2] = 0;
         powerUpFreqs[1][3] = 0;
         powerUpFreqs[2][0] = 0;
@@ -131,8 +131,11 @@ public class ItemManager {
     }
     
     public void addBall(int team) {
-        double x = (GamePanel.arenaWIDTH/2-40)*rand.nextDouble() + 20 + team*GamePanel.arenaWIDTH/2;
-        double y = (GamePanel.arenaHEIGHT/2-40)*rand.nextDouble() + 20 + team*GamePanel.arenaHEIGHT/2;
+        double wBuffer = (GamePanel.arena.teamAreas[team][1].getX() - 50) - (GamePanel.arena.teamAreas[team][0].getX() + 50);
+        double hBuffer = (GamePanel.arena.teamAreas[team][1].getY() - 50) - (GamePanel.arena.teamAreas[team][0].getY() + 50);
+        
+        double x = (GamePanel.arena.teamAreas[team][0].getX() + 50 + rand.nextDouble()*wBuffer);
+        double y = (GamePanel.arena.teamAreas[team][0].getY() + 50 + rand.nextDouble()*hBuffer);
         Vec2 pos = new Vec2(x,y);
         GamePanel.itemArray.add(new AddBall(pos));
     }

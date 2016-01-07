@@ -5,6 +5,7 @@
  */
 package dodgeballgame.Menus;
 
+import dodgeballgame.Cursor;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
 import dodgeballgame.ItemManager;
@@ -22,24 +23,23 @@ import javax.imageio.ImageIO;
  */
 public class ItemMenu extends Menu {
 
-    BufferedImage[][] images;
+    BufferedImage[][] images;   
     
-    private int[] pos = {4,4};    
-    
-    public int xPos = INNER_X_START;
+    public int xPos = (int)(INNER_X_START*3.1);
     public int yPos = INNER_Y_START;
-    public int width = INNER_MENU_WIDTH;
-    public int height = INNER_MENU_HEIGHT - HEIGHT/10;
+    public int width = (int)((INNER_X_END - xPos)*1.35);
+    public int height = INNER_MENU_HEIGHT;
     
     public int buttonH = INNER_MENU_HEIGHT / 50;
     public int buttonW = INNER_MENU_WIDTH / 40;
-    public int buttonXOffset = INNER_MENU_WIDTH/5;
+    public int buttonXOffset = width/5;
     
+    public Cursor[] cursors = new Cursor[4];
     
     BufferedImage selectImage;
     
     public ItemMenu() {
-        positions = pos;
+        for (int i = 0; i < 4; i++) cursors[i] = new Cursor(4,4);
         images = new BufferedImage[4][4];
         
         try {
@@ -52,8 +52,16 @@ public class ItemMenu extends Menu {
         loadImages();
     }
     
+        
+    @Override    
+    public void moveCursor(int playerNumber, int x, int y) {
+        cursors[playerNumber].moveCursor(x,y);
+    }
+    
     @Override 
     public void renderMenu(Graphics2D g) {
+        
+        GamePanel.menuManager.startMatchSettingsMenu.renderMenu(g);
 
         for (int i = 0; i<4; i++) {
             for (int j = 0; j<4; j++) {
@@ -63,20 +71,22 @@ public class ItemMenu extends Menu {
                 int freq = ItemManager.powerUpFreqs[i][j];
                 int xPos2 = i*width/4 + xPos;
                 int yPos2 = j*height/4 + yPos;
-                g.drawImage(images[i][j],(int)xPos2 + 15,(int)yPos2 + 15,null);
+                g.drawImage(images[i][j],(int)xPos2 + 15,(int)yPos2 +  + images[i][j].getHeight()/2,null);
                 g.setColor(new Color(50,50,50));
                 g.drawRect(xPos2, yPos2, width/4,height/4);
                 g.drawRect(xPos2+1, yPos2+1, width/4-2,height/4-2);
+                // black out
                 if(GamePanel.itemManager.powerUpFreqs[i][j]==0) {
                     g.setColor(Color.black);
-                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
                     g.fillRect(xPos2, yPos2, width/4,height/4);
                 }
                 
                 g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
                 
+                //Frequency buttons
                 for (int d = 0; d<freq; d++) {
-                    g.setColor(new Color(50,50,50));
+                    g.setColor(Color.WHITE);
                     g.fillRect((int)(xPos2 + buttonXOffset-2), (int)yPos2 + height/5 - d*(2*buttonH) - 2, buttonW+4,buttonH+4);
                     g.setColor(new Color(60*d,0,255 - 60*d));
                     g.fillRect((int)(xPos2 + buttonXOffset), (int)yPos2 + height/5 - d*(2*buttonH), buttonW,buttonH);
@@ -84,23 +94,23 @@ public class ItemMenu extends Menu {
             }
         }  
         g.setColor(new Color(255,255,255));
-        g.drawRect(cursor0[0]*width/4 + xPos,
-                cursor0[1]*height/4 + yPos, 
+        g.drawRect(cursors[0].x*width/4 + xPos,
+                cursors[0].y*height/4 + yPos, 
                 width/4,
                 height/4);
         g.setColor(new Color(200,100,255));
-        g.drawRect(cursor0[0]*width/4 + xPos + 1,
-                cursor0[1]*height/4 + yPos + 1, 
+        g.drawRect(cursors[0].x*width/4 + xPos + 1,
+                cursors[0].y*height/4 + yPos + 1, 
                 width/4 - 2,
                 height/4 - 2);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
         g.setColor(Color.white);
-        g.fillRect(cursor0[0]*width/4 + xPos + 1,
-                cursor0[1]*height/4 + yPos + 1, 
+        g.fillRect(cursors[0].x*width/4 + xPos + 1,
+                cursors[0].y*height/4 + yPos + 1, 
                 width/4 - 2,
                 height/4 - 2);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-        g.drawImage(selectImage, WIDTH/2 - selectImage.getWidth()/3, INNER_Y_START + INNER_MENU_HEIGHT, null);
+        renderLoad(g);
     }
     
     private void loadImages() {
@@ -139,33 +149,33 @@ public class ItemMenu extends Menu {
     @Override
     public void select() {
         GamePanel.soundManager.menu(6);
-        ItemManager.incFreq(cursor0[0],cursor0[1],1);
+        ItemManager.incFreq(cursors[0].x,cursors[0].y,1);
     }
     
     @Override
     public void selectButton() {
         GamePanel.soundManager.menu(6);
-        GamePanel.menu = GamePanel.loadMenu;
-        GamePanel.loadMenu.setBack(1);
+        GamePanel.menuManager.changeMenu("LOAD");
+        GamePanel.menuManager.loadMenu.setBack(1);
     }
     
     @Override
     public void back() {
         GamePanel.soundManager.menu(7);
-        GamePanel.menu = GamePanel.matchSettingsMenu;
+        GamePanel.menuManager.changeMenu("START_MATCH_SETTINGS");
     }
     
     @Override
     public void rightTrigger() {
         
-        ItemManager.incFreq(cursor0[0],cursor0[1],1);
-        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursor0[0]][cursor0[1]]);
+        ItemManager.incFreq(cursors[0].x,cursors[0].y,1);
+        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursors[0].x][cursors[0].y]);
     }
     
     @Override
     public void leftTrigger() {
-        ItemManager.decFreq(cursor0[0],cursor0[1],1);
-        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursor0[0]][cursor0[1]]);
+        ItemManager.decFreq(cursors[0].x,cursors[0].y,1);
+        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursors[0].x][cursors[0].y]);
     }
 }
 

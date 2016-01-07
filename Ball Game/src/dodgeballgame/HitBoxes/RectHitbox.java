@@ -23,6 +23,12 @@ public class RectHitbox extends Hitbox{
         shape = RECT;
     }
     
+    public RectHitbox(double x, double y, double x2, double y2, int i){
+        super(x+(x2-x)/2d,y+(y2-y)/2d);
+        w = (x2-x)/2d;
+        h = (y2-y)/2d;
+    }
+    
     public RectHitbox(Vec2 pos, double w, double h) {
         super(pos);
         this.w = w;

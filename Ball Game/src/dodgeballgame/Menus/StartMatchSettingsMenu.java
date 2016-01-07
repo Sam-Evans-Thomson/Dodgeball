@@ -5,15 +5,12 @@
  */
 package dodgeballgame.Menus;
 
+import dodgeballgame.Cursor;
 import dodgeballgame.GamePanel;
-import dodgeballgame.ImageEditor;
+import dodgeballgame.Tools;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -21,7 +18,7 @@ import javax.imageio.ImageIO;
  */
 public class StartMatchSettingsMenu extends Menu{
     
-    private int[] pos = {1,4};
+    
     
     int fontSizeLarge, fontSizeSmall;
     
@@ -29,81 +26,70 @@ public class StartMatchSettingsMenu extends Menu{
     
     public static boolean accept;
     
-    BufferedImage selectImage;
-    BufferedImage acceptImage;
+    public Cursor[] cursors = new Cursor[4];
     
     public StartMatchSettingsMenu() {
-        
         accept = false;
-        positions = pos;
+        
+        for (int i = 0; i < 4; i++) cursors[i] = new Cursor(1,5);
         fontSizeLarge = WIDTH/40;
         fontSizeSmall = WIDTH/50;
         
-        yOffset = INNER_MENU_HEIGHT/5;
+        yOffset = INNER_MENU_HEIGHT/8;
+    }
+    
         
-        try {
-            selectImage = ImageIO.read(new File("Images/select.png"));
-            acceptImage = ImageIO.read(new File("Images/accept.png"));
-        } catch (IOException e) {
-            
-        }
-        
-        ImageEditor im = new ImageEditor(selectImage);
-        selectImage = im.scale((double)WIDTH/1920d);
-        im.setImage(acceptImage);
-        acceptImage = im.scale((double)WIDTH/1920d);
+    @Override    
+    public void moveCursor(int playerNumber, int x, int y) {
+        cursors[playerNumber].moveCursor(x,y);
     }
     
     @Override
     public void renderMenu(Graphics2D g) {
 
         g.setPaint(Color.white);
+        g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
+        Tools.centreStringHor("GAME MODE: " + GamePanel.gameModeManager.gameMode.type,
+                g, 
+                (int)(1.9*INNER_X_START), 
+                (int)(1.2*INNER_Y_START));
         
-        if (cursor0[1] == 0) {
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
-            centreString("ARENA", g, WIDTH/2, INNER_Y_START + yOffset);
+        String[] menuNames = {"ARENA","GAME MODE","ITEMS", "POWERS", "MATCH SETTINGS"};
+        
+        int yStart = (int)(1.4*INNER_Y_START);
+        int i = 0;
+        while( i < cursors[0].y) {
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
             g.setColor(new Color(80,80,180));
-            centreString("ITEMS", g, WIDTH/2, INNER_Y_START + yOffset*2);
-            centreString("POWERS", g, WIDTH/2, INNER_Y_START + yOffset*3);
-            centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + yOffset*4);
-        } else if(cursor0[1] == 1) {
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
-            centreString("ITEMS", g, WIDTH/2, INNER_Y_START + 2*yOffset);
-            g.setColor(new Color(80,80,180));
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
-            centreString("ARENA", g, WIDTH/2, INNER_Y_START + yOffset);            
-            centreString("POWERS", g, WIDTH/2, INNER_Y_START + 3*yOffset);
-            centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + 4*yOffset);
-        } else if(cursor0[1] == 2) {
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
-            centreString("POWERS", g, WIDTH/2, INNER_Y_START + 3*yOffset);
-            g.setColor(new Color(80,80,180));
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
-            centreString("ARENA", g, WIDTH/2, INNER_Y_START + yOffset);            
-            centreString("ITEMS", g, WIDTH/2, INNER_Y_START + 2*yOffset);
-            centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + 4*yOffset);
-        } else if(cursor0[1] == 3) {
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));            
-            centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + 4*yOffset);
-            g.setColor(new Color(80,80,180));
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
-            centreString("ARENA", g, WIDTH/2, INNER_Y_START + yOffset);            
-            centreString("ITEMS", g, WIDTH/2, INNER_Y_START + 2*yOffset);
-            centreString("POWERS", g, WIDTH/2, INNER_Y_START + 3*yOffset);
+            g.drawString(menuNames[i],INNER_X_START, yStart + (1+i)*yOffset);
+            i++;
         }
+            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
+            g.setPaint(Color.white);
+            g.drawString(menuNames[i],INNER_X_START, yStart + (1+i)*yOffset);
+            i++;
+        while( i < menuNames.length) {
+            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
+            g.setColor(new Color(80,80,180));
+            g.drawString(menuNames[i],INNER_X_START, yStart + (1+i)*yOffset);
+            i++;
+        }    
+
+        if (accept) g.drawImage(acceptImage, WIDTH/2 - acceptImage.getWidth()/2, INNER_Y_START, null);
+        g.setPaint(Color.WHITE);
+        g.fillRect((int)(INNER_X_START*3), 
+                INNER_Y_START, 
+                3, 
+                INNER_Y_END);
+        renderLoad(g);
+        renderSubMenu(g);
+    }
+
+    public void renderSubMenu(Graphics2D g) {
         
-        g.drawImage(selectImage, WIDTH/2 - selectImage.getWidth()/3, INNER_Y_START + INNER_MENU_HEIGHT, null);
-        if (accept) g.drawImage(acceptImage, WIDTH/2 - acceptImage.getWidth()/3, INNER_Y_START, null);
     }
     
-    private void centreString(String s, Graphics2D g, int x, int y) {
-        int stringLen = (int)
-            g.getFontMetrics().getStringBounds(s, g).getWidth();
-        g.drawString(s, x - stringLen/2, y);
-    }
-    
-    public static void applyLoad() {
+    public void applyLoad() {
         GamePanel.newGame();
         accept = false;
     }
@@ -113,27 +99,29 @@ public class StartMatchSettingsMenu extends Menu{
         if (accept) {
             GamePanel.soundManager.menu(6);
             applyLoad();
-        } else if (cursor0[1] == 0) {
-            GamePanel.menu = GamePanel.arenaMenu;
-        } else if (cursor0[1] == 1) {
-            GamePanel.menu = GamePanel.powerUpMenu;
-        } else if (cursor0[1] == 2) {
-            //GamePanel.menu = GamePanel.powerMenu;
-        } else if (cursor0[1] == 3) {
-            GamePanel.menu = GamePanel.matchSettingsMenu;
-        }
+        } else if (cursors[0].y == 0) {
+            GamePanel.menuManager.changeMenu("ARENA");
+        } else if (cursors[0].y == 1) {
+            GamePanel.menuManager.changeMenu("GAME_MODE");
+        } else if (cursors[0].y == 2) {
+            GamePanel.menuManager.changeMenu("ITEM");
+        } else if (cursors[0].y == 3) {
+            //GamePanel.changeMenu("POWER");
+        } else if (cursors[0].y == 4) {
+            GamePanel.menuManager.changeMenu("MATCH_SETTINGS");
+        } 
     }
     
     @Override
     public void selectButton() {
         GamePanel.soundManager.menu(6);
-        GamePanel.menu = GamePanel.loadMenu;
-        GamePanel.loadMenu.setBack(0);
+        GamePanel.menuManager.changeMenu("LOAD");
+        GamePanel.menuManager.loadMenu.setBack(0);
     }
     
     @Override
     public void back() {
-        GamePanel.menu = GamePanel.startMenu;
+        GamePanel.menuManager.changeMenu("START");
     }
 
 }

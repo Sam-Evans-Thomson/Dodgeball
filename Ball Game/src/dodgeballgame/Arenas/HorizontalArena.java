@@ -24,6 +24,7 @@ public class HorizontalArena extends Arena{
     public HorizontalArena() {
         super();
         imgPath = "Images/Arenas/landscape.png";
+        arenaName = "HORIZON";
     }
     
     @Override
@@ -71,7 +72,7 @@ public class HorizontalArena extends Arena{
     }
     
     @Override
-        protected void cornerGoals() {
+    protected void cornerGoals() {
         int goalSize = 50;
         CircleHitbox goal1 = new CircleHitbox(0,0, goalSize);
         arenaTeam2Goal.add(goal1);
@@ -94,5 +95,13 @@ public class HorizontalArena extends Arena{
         
         RectHitbox goal2 = new RectHitbox(WIDTH/2,HEIGHT,WIDTH/12, 15);
         arenaTeam1Goal.add(goal2);
+    }
+    
+        
+    @Override
+    public Arena copy() {
+        HorizontalArena temp = new HorizontalArena();
+                temp.init();
+        return temp;
     }
 }

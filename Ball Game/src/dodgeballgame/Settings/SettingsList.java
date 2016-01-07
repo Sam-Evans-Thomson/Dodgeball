@@ -18,6 +18,7 @@ public class SettingsList {
     public ArrayList<Setting> settingsList = new ArrayList<>();
     public int length;
     public String path;
+    public String type;
     
     public SettingsList() {
         length = 0;
@@ -49,6 +50,14 @@ public class SettingsList {
         length++;
     }
     
+    public boolean isActive(int i){
+        return settingsList.get(i).active;
+    }
+    
+    public void setActive(int i, boolean b) {
+        settingsList.get(i).active = b;
+    }
+    
     public Setting get(int i) {
         return settingsList.get(i);
     }
@@ -73,6 +82,14 @@ public class SettingsList {
         return settingsList.get(i).getName();
     }
     
+    public SettingsList getActiveList() {
+        SettingsList sl = new SettingsList();
+        for(int i = 0; i < length; i++) {
+            if (isActive(i)) sl.add(settingsList.get(i));
+        }
+        return sl;
+    }
+    
     public int size() {
         return settingsList.size();
     }
@@ -82,7 +99,9 @@ public class SettingsList {
             FileManager fm = new FileManager(path);
             try {
                 String[] strArray = fm.openFile();
-                for (String s : strArray) {
+                type = strArray[0];
+                for (int i = 1; i < strArray.length; i++) {
+                    String s = strArray[i];
                     String[] setting = s.split(" - ");
 
                     if (setting[0].equals("BOOL")) {
@@ -113,8 +132,9 @@ public class SettingsList {
         if (path!=null) {
             FileManager fm = new FileManager(path);
             try {
-                String[] settings = new String[settingsList.size()];
-                int cnt = 0;
+                String[] settings = new String[settingsList.size()+1];
+                settings[0] = type;
+                int cnt = 1;
                 for (Setting s : settingsList) {
                     settings[cnt] = s.toString();
                     cnt++;

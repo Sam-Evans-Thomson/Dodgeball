@@ -28,7 +28,7 @@ public class DoubleSetting extends Setting {
     
     @Override
     public String getValueString() {
-        return "" + value;
+        return "" + Math.round(value*1000000)/1000000.0;
     }
     
     @Override

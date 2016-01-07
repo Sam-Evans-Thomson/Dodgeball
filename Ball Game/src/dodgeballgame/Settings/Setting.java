@@ -11,15 +11,17 @@ package dodgeballgame.Settings;
  */
 public class Setting {
 
-        String name;
-        double start;
-        double end;
-        double inc;
+        public String name;
+        public double start;
+        public double end;
+        public double inc;
+        public boolean active;
         
         public void setLimits(double start, double end, double inc) {
             this.start = start;
             this.end = end;
             this.inc = inc;
+            active = true;
         }
         
         public void changeValue(int i) {

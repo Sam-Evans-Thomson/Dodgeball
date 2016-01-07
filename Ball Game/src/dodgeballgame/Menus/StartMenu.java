@@ -5,8 +5,10 @@
  */
 package dodgeballgame.Menus;
 
+import dodgeballgame.Cursor;
 import dodgeballgame.Game;
 import dodgeballgame.GamePanel;
+import dodgeballgame.Tools;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -17,14 +19,14 @@ import java.awt.Graphics2D;
  */
 public class StartMenu extends Menu {
     
-    private int[] pos = {1,4};
-    
     int fontSizeLarge, fontSizeSmall;
     
     int yOffset;
     
+    public Cursor[] cursors = new Cursor[4];
+    
     public StartMenu() {
-        positions = pos;
+        for (int i = 0; i < 4; i++) cursors[i] = new Cursor(1,4);
         fontSizeLarge = WIDTH/40;
         fontSizeSmall = WIDTH/50;
         
@@ -36,57 +38,45 @@ public class StartMenu extends Menu {
         
         
         g.setPaint(Color.white);
+        String[] menuNames = {"MATCH SETTINGS",
+            "GENERAL SETTINGS",
+            "CHOOSE CHARACTERS", 
+            "EXIT"};
         
-        if (cursor0[1] == 0) {
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
-            centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + yOffset);
+        int i = 0;
+        while( i < cursors[0].y) {
             g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
             g.setColor(new Color(80,80,180));
-            centreString("GENERAL SETTINGS", g, WIDTH/2, INNER_Y_START + yOffset*2);
-            centreString("CHOOSE CHARACTERS", g, WIDTH/2, INNER_Y_START + yOffset*3);
-            centreString("EXIT", g, WIDTH/2, INNER_Y_START + yOffset*4);
-        } else if(cursor0[1] == 1) {
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
-            centreString("GENERAL SETTINGS", g, WIDTH/2, INNER_Y_START + 2*yOffset);
-            g.setColor(new Color(80,80,180));
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
-            centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + yOffset);            
-            centreString("CHOOSE CHARACTERS", g, WIDTH/2, INNER_Y_START + 3*yOffset);
-            centreString("EXIT", g, WIDTH/2, INNER_Y_START + 4*yOffset);
-        } else if(cursor0[1] == 2) {
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
-            centreString("CHOOSE CHARACTERS", g, WIDTH/2, INNER_Y_START + 3*yOffset);
-            g.setColor(new Color(80,80,180));
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
-            centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + yOffset);            
-            centreString("GENERAL SETTINGS", g, WIDTH/2, INNER_Y_START + 2*yOffset);
-            centreString("EXIT", g, WIDTH/2, INNER_Y_START + 4*yOffset);
-        } else if(cursor0[1] == 3) {
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));            
-            centreString("EXIT", g, WIDTH/2, INNER_Y_START + 4*yOffset);
-            g.setColor(new Color(80,80,180));
-            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
-            centreString("MATCH SETTINGS", g, WIDTH/2, INNER_Y_START + yOffset);            
-            centreString("GENERAL SETTINGS", g, WIDTH/2, INNER_Y_START + 2*yOffset);
-            centreString("CHOOSE CHARACTERS", g, WIDTH/2, INNER_Y_START + 3*yOffset);
+            Tools.centreStringHor(menuNames[i],g,WIDTH/2, INNER_Y_START + yOffset*(i+1));
+            i++;
         }
+            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
+            g.setPaint(Color.white);
+            Tools.centreStringHor(menuNames[i],g,WIDTH/2, INNER_Y_START + yOffset*(i+1));
+            i++;
+        while( i < menuNames.length) {
+            g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
+            g.setColor(new Color(80,80,180));
+            Tools.centreStringHor(menuNames[i],g,WIDTH/2, INNER_Y_START + yOffset*(i+1));
+            i++;
+        } 
     }
     
-    private void centreString(String s, Graphics2D g, int x, int y) {
-        int stringLen = (int)
-            g.getFontMetrics().getStringBounds(s, g).getWidth();
-        g.drawString(s, x - stringLen/2, y);
+        
+    @Override    
+    public void moveCursor(int playerNumber, int x, int y) {
+        cursors[playerNumber].moveCursor(x,y);
     }
     
     @Override
     public void select() {
-        if (cursor0[1] == 0) {
-            GamePanel.menu = GamePanel.startMatchSettingsMenu;
-        } else if (cursor0[1] == 1) {
-            GamePanel.menu = GamePanel.generalSettingsMenu;
-        } else if (cursor0[1] == 2) {
-            GamePanel.menu = GamePanel.characterMenu;
-        } else if (cursor0[1] == 3) {
+        if (cursors[0].y == 0) {
+            GamePanel.menuManager.changeMenu("START_MATCH_SETTINGS");
+        } else if (cursors[0].y == 1) {
+            GamePanel.menuManager.changeMenu("GENERAL_SETTINGS");
+        } else if (cursors[0].y == 2) {
+            GamePanel.menuManager.changeMenu("CHARACTER");
+        } else if (cursors[0].y == 3) {
             Game.close();
         }
         

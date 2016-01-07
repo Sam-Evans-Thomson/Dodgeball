@@ -20,6 +20,10 @@ public class ArenaManager extends JPanel{
     public BasicArena basicArena; 
     public HorizontalArena horArena;
     public TunnelArena tunnelArena;
+    public BarracksArena barracksArena;
+    
+    public static final int NUM_GOAL_POS = 3;
+    public static final int NUM_ARENAS = 4;
     
     public static ArrayList<Arena> arenas;
     
@@ -32,23 +36,39 @@ public class ArenaManager extends JPanel{
         basicArena = new BasicArena();
         horArena = new HorizontalArena();
         tunnelArena = new TunnelArena();
+        barracksArena = new BarracksArena();
         
         basicArena.init();
         horArena.init();
         tunnelArena.init();
+        barracksArena.init();
         
         arenas.add(basicArena);
         arenas.add(horArena);
         arenas.add(tunnelArena);
+        arenas.add(barracksArena);
     }
     
-    public BufferedImage getArenaDisplay(int i) {
+    public BufferedImage getArenaDisplay(int i, int goals) {
         BufferedImage image = new BufferedImage(GamePanel.arenaWIDTH, 
                 GamePanel.arenaHEIGHT, 
                 BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();
-        arenas.get(i).render(g);
+        
+        Arena temp = arenas.get(i).copy();
+        temp.setGoals(goals);
+        temp.render(g);
+        
         return image;
+    }
+    
+    public String getName(int i) {
+        return arenas.get(i).arenaName;
+    }
+    
+        
+    public void setGoals(int i) {
+        for (Arena ar : arenas) ar.setGoals(i);
     }
     
     public void setArena(int i) {

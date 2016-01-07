@@ -5,8 +5,10 @@
  */
 package dodgeballgame.Menus;
 
+import dodgeballgame.Cursor;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
+import dodgeballgame.Tools;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -32,10 +34,6 @@ public class Menu {
     public int INNER_Y_START;
     public int INNER_Y_END;
     
-    public int[] positions;
-    public int[] cursor0, cursor2, cursor3, cursor1;
-    public int[][] cursors;
-    
     public int[][] menuArray;
     public int[] currentMenu;
     
@@ -44,61 +42,47 @@ public class Menu {
     public final int POWERUPS = 1;
        
     public BufferedImage menu;
+        
+    public BufferedImage selectImage;
+    public BufferedImage acceptImage;
+    
+    
     
     public Menu(){
-        init();
-    }   
-    
-    public void init() {
-        menuArray = new int[2][];
         
-        cursor0 = new int[]{0,0};
-        cursor1 = new int[]{0,0};
-        cursor2 = new int[]{0,0};
-        cursor3 = new int[]{0,0};
-        cursors = new int[][]{cursor0, cursor1, cursor2, cursor3};
-
+        menuArray = new int[2][];
         HEIGHT = GamePanel.screenHEIGHT;
         WIDTH = GamePanel.screenWIDTH;
         
         MENU_WIDTH = (int)(0.83*WIDTH);
-        MENU_HEIGHT = (int)(0.80*HEIGHT);
+        MENU_HEIGHT = (int)(0.81*HEIGHT);
         
         INNER_MENU_WIDTH = (int)(0.75*WIDTH);
-        INNER_MENU_HEIGHT = (int)(0.55*HEIGHT);
+        INNER_MENU_HEIGHT = (int)(0.6*HEIGHT);
         
         INNER_X_START = (WIDTH - INNER_MENU_WIDTH)/2;
-        INNER_Y_START = (HEIGHT - INNER_MENU_HEIGHT)/2;
+        INNER_Y_START = (int)((HEIGHT - INNER_MENU_HEIGHT)*0.48);
         INNER_X_END += INNER_MENU_WIDTH;
         INNER_Y_END += INNER_MENU_HEIGHT;                
         try {
             menu = ImageIO.read(new File("Images/menu.png"));
-        } catch (IOException e) {
-        }
+            selectImage = ImageIO.read(new File("Images/select.png"));
+            acceptImage = ImageIO.read(new File("Images/accept.png"));
+        } catch (IOException e) {}
         
-        ImageEditor im = new ImageEditor(menu);
-        double size = menu.getWidth();
-        menu = im.scale(MENU_WIDTH/size);
-    }
+        selectImage = Tools.scaleImage(selectImage,(double)WIDTH/1920d);
+        acceptImage = Tools.scaleImage(acceptImage,(double)WIDTH/1920d);
+        menu = Tools.sizeImage(menu,MENU_WIDTH);
+    }   
     
     public void update() {
         
     }
     
-    public void moveCursor(int player, int x, int y) {
-        GamePanel.soundManager.menu(8);
-        if (x>1) x = 1;
-        else if (x<-1) x = -1;
-        if (y>1) y = 1;
-        else if (y<-1) y = -1;
-        
-        cursors[player][0] += x;
-        cursors[player][1] += y;
-        if (cursors[player][0] < 0) cursors[player][0] = positions[0] - 1;
-        if (cursors[player][1] < 0) cursors[player][1] = positions[1] - 1;
-        cursors[player][0]%=positions[0];
-        cursors[player][1]%=positions[1];
+    public void moveCursor(int playerNumber, int x, int y) {
+
     }
+
     
     public void render(Graphics2D g) {
         g.setPaint(Color.black);
@@ -106,21 +90,25 @@ public class Menu {
         g.fillRect(0,0,WIDTH, HEIGHT);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         g.drawImage(menu,(WIDTH - MENU_WIDTH)/2 , (HEIGHT - MENU_HEIGHT)/2 - MENU_HEIGHT/16, null);
+        
         renderMenu(g);
+    }
+    
+    public void renderLoad(Graphics2D g) {
+        g.drawImage(selectImage, INNER_X_START, INNER_Y_START + INNER_Y_END - selectImage.getHeight(), null);
     }
     
     public void renderMenu(Graphics2D g) {
         
     }
     
-    public void changeMenu(Menu menu) {
-        GamePanel.menu = menu;
-    }
-    
     public void select() {
         
     }
     
+    public void back() {
+        
+    }    
     public void selectButton() {
 
     }
@@ -133,16 +121,20 @@ public class Menu {
         
     }
     
-    public void right() {
-        
+    public void right(int playerNumber) {
+        moveCursor(playerNumber, 1, 0); 
     }
     
-    public void left() {
-        
+    public void left(int playerNumber) {
+        moveCursor(playerNumber, -1, 0); 
     } 
     
-    public void back() {
-        
+    public void up(int playerNumber) {
+        moveCursor(playerNumber, 0, -1); 
+    }
+    
+    public void down(int playerNumber) {
+        moveCursor(playerNumber, 0, 1); 
     }
     
     public void rightTrigger() {
