@@ -24,6 +24,7 @@ public class PowerMenu extends Menu{
     @Override
     public void renderMenu(Graphics2D g) {
         GamePanel.menuManager.startMatchSettingsMenu.renderMenu(g);
+        glowRight(g);
     }
     
     @Override    

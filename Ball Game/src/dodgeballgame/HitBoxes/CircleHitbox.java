@@ -96,8 +96,6 @@ public class CircleHitbox extends Hitbox{
         } else if (rect.collision(test2) && !rect.collision(test1)) {
             return Tools.refreshAngle(-angle);
         } else {
-            System.out.println(pos.getX() + " " + prevPos.getY());
-            System.out.println(prevPos.getX() + " " + pos.getY());
             return Tools.refreshAngle(Math.PI + angle);
             
         } 

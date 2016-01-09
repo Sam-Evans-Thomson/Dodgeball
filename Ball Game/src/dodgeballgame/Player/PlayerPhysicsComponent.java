@@ -70,7 +70,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     // d is the time Delta
     @Override
     public void update(float d) {
-       if (!p.solid) {
+       if (!p.solid && !p.isGhost) {
             double timeDelta = p.hbTimer.getDifference();
             if (timeDelta > p.invincibleTime) {
                 p.solid = true;
@@ -109,8 +109,8 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     
     private void resolveMove(Vec2 vec) {
         resolveCollisions(vec, GamePanel.arena.arenaPlayerHitbox);
-        if(p.team == 0)         resolveCollisions(vec, GamePanel.arena.arenaTeam1Hitbox);
-        else if(p.team == 1)    resolveCollisions(vec, GamePanel.arena.arenaTeam2Hitbox);
+        if(!p.isGhost && p.team == 0)         resolveCollisions(vec, GamePanel.arena.arenaTeam1Hitbox);
+        else if(!p.isGhost && p.team == 1)    resolveCollisions(vec, GamePanel.arena.arenaTeam2Hitbox);
         //resolvePlayerCollisions(vec);
         p.distanceTravelled += prevPos.getMagnitude(p.pos);
     }
@@ -225,7 +225,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
                     p.catchTimer.refresh();
                 }
             }
-            //Catch powerUp
+            //Catch Item
             for (int i=0; i<GamePanel.itemArray.size(); i++) {
                 Item pUp = GamePanel.itemArray.get(i);
                 if(pUp.inCatchArea[p.pNumber]) {
@@ -237,6 +237,21 @@ public class PlayerPhysicsComponent implements PlayerComponent{
                     i--;
                     p.catchTimer.refresh();
                 }
+            }
+        }
+    }
+    
+    public void eatObject() {
+
+        for (int i=0; i<GamePanel.itemArray.size(); i++) {
+            Item item = GamePanel.itemArray.get(i);
+            Item newItem = GamePanel.itemManager.getOpposite(item,p.team);
+            if(item.inCatchArea[p.pNumber]) {
+                p.graphicsComp.setItemGlow(item.color);
+                GamePanel.itemArray.remove(item);
+                GamePanel.itemArray.add(newItem);
+                i--;
+                p.catchTimer.refresh();
             }
         }
     }

@@ -16,12 +16,10 @@ import java.util.ArrayList;
 public class SettingsList {
     
     public ArrayList<Setting> settingsList = new ArrayList<>();
-    public int length;
     public String path;
     public String type;
     
     public SettingsList() {
-        length = 0;
     }
     
     public SettingsList(String path) {
@@ -30,15 +28,18 @@ public class SettingsList {
     }
     
     public SettingsList(SettingsList sList) {
-        settingsList = sList.settingsList;
+        for (Setting set : sList.settingsList) settingsList.add(set.copy());
         if (path!= null) path = sList.path;
-        length = sList.length;
+        this.type = sList.type;
+    }
+    
+    public SettingsList copy() {
+        return new SettingsList(this);
     }
     
     public void set(SettingsList list) {
-        settingsList = list.settingsList;
+        for (Setting set : list.settingsList) settingsList.add(set.copy());
         if (path!= null) path = list.path;
-        length = list.length;
     }
     
     public void setPath(String path) {
@@ -47,7 +48,6 @@ public class SettingsList {
     
     public void add(Setting setting) {
         settingsList.add(setting);
-        length++;
     }
     
     public boolean isActive(int i){
@@ -84,7 +84,7 @@ public class SettingsList {
     
     public SettingsList getActiveList() {
         SettingsList sl = new SettingsList();
-        for(int i = 0; i < length; i++) {
+        for(int i = 0; i < settingsList.size(); i++) {
             if (isActive(i)) sl.add(settingsList.get(i));
         }
         return sl;
@@ -147,5 +147,4 @@ public class SettingsList {
         }
         
     }
-    
 }

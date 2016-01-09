@@ -26,7 +26,7 @@ public class AddHealth extends Item {
         super(pos);
         color = new Color(100,255,100);
         try {
-            image = ImageIO.read(new File("Images/addHealth.png"));
+            image = ImageIO.read(new File("Images/Items/healthUp.png"));
         } catch (IOException e) {
         }
         image = Tools.sizeImage(image, r);

@@ -42,6 +42,8 @@ public class Menu {
     public final int POWERUPS = 1;
        
     public BufferedImage menu;
+    
+    public boolean accept;
         
     public BufferedImage selectImage;
     public BufferedImage acceptImage;
@@ -62,8 +64,8 @@ public class Menu {
         
         INNER_X_START = (WIDTH - INNER_MENU_WIDTH)/2;
         INNER_Y_START = (int)((HEIGHT - INNER_MENU_HEIGHT)*0.48);
-        INNER_X_END += INNER_MENU_WIDTH;
-        INNER_Y_END += INNER_MENU_HEIGHT;                
+        INNER_X_END = INNER_X_START + INNER_MENU_WIDTH;
+        INNER_Y_END = INNER_Y_START + INNER_MENU_HEIGHT;                
         try {
             menu = ImageIO.read(new File("Images/menu.png"));
             selectImage = ImageIO.read(new File("Images/select.png"));
@@ -71,7 +73,7 @@ public class Menu {
         } catch (IOException e) {}
         
         selectImage = Tools.scaleImage(selectImage,(double)WIDTH/1920d);
-        acceptImage = Tools.scaleImage(acceptImage,(double)WIDTH/1920d);
+        acceptImage = Tools.scaleImage(acceptImage,(double)0.8*WIDTH/1920d);
         menu = Tools.sizeImage(menu,MENU_WIDTH);
     }   
     
@@ -90,13 +92,40 @@ public class Menu {
         g.fillRect(0,0,WIDTH, HEIGHT);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         g.drawImage(menu,(WIDTH - MENU_WIDTH)/2 , (HEIGHT - MENU_HEIGHT)/2 - MENU_HEIGHT/16, null);
-        
+        renderGlow(g);
         renderMenu(g);
+        
     }
     
     public void renderLoad(Graphics2D g) {
-        g.drawImage(selectImage, INNER_X_START, INNER_Y_START + INNER_Y_END - selectImage.getHeight(), null);
+        g.drawImage(selectImage, INNER_X_START, INNER_Y_END - selectImage.getHeight(), null);
+        if (accept) g.drawImage(acceptImage, INNER_X_END - acceptImage.getWidth(), (int)((HEIGHT - MENU_HEIGHT)/2 - 0.35*acceptImage.getHeight()), null);
     }
+    
+    public void glowLeft(Graphics2D g) {
+        g.setColor(Color.white);
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.03f));
+        g.fillRect((int)(0.80*INNER_X_START), 
+                (int)(0.80*INNER_Y_START), 
+                (int)(2.2*INNER_X_START), 
+                (int)(INNER_MENU_HEIGHT + 0.39*INNER_Y_START));
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+    }
+     
+    public void glowRight(Graphics2D g) {
+        g.setColor(Color.white);
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.03f));
+        g.fillRect((int)(3*INNER_X_START), 
+                (int)(0.80*INNER_Y_START),
+                (int)(INNER_X_END - 2.8*INNER_X_START), 
+                (int)(INNER_MENU_HEIGHT + 0.39*INNER_Y_START));
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+    }
+    
+    public void renderGlow(Graphics2D g) {
+        
+    }
+
     
     public void renderMenu(Graphics2D g) {
         
@@ -122,18 +151,22 @@ public class Menu {
     }
     
     public void right(int playerNumber) {
+        GamePanel.soundManager.menu(8);
         moveCursor(playerNumber, 1, 0); 
     }
     
     public void left(int playerNumber) {
+        GamePanel.soundManager.menu(8);
         moveCursor(playerNumber, -1, 0); 
     } 
     
     public void up(int playerNumber) {
+        GamePanel.soundManager.menu(8);
         moveCursor(playerNumber, 0, -1); 
     }
     
     public void down(int playerNumber) {
+        GamePanel.soundManager.menu(8);
         moveCursor(playerNumber, 0, 1); 
     }
     

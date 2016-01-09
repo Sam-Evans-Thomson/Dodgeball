@@ -12,7 +12,6 @@ import dodgeballgame.Tools;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -60,12 +59,14 @@ public class ArenaMenu extends Menu {
         
     @Override    
     public void moveCursor(int playerNumber, int x, int y) {
+        if (playerNumber == 0) GamePanel.soundManager.menu(8);
         cursors[playerNumber].moveCursor(x,y);
     }
     
     @Override
     public void renderMenu(Graphics2D g) {
         GamePanel.menuManager.startMatchSettingsMenu.renderMenu(g);
+        glowRight(g);
         
         BufferedImage preview = manager.getArenaDisplay(cursors[0].x, cursors[0].y);
         preview = Tools.sizeImage(preview, 700);
@@ -109,7 +110,8 @@ public class ArenaMenu extends Menu {
     
     @Override
     public void select() {
+        GamePanel.soundManager.menu(6);
         manager.setArena(cursors[0].x);
-        manager.setGoals(cursors[0].y);
+        if(GamePanel.arenaManager.goalsActive) manager.setGoals(cursors[0].y);
     }
 }

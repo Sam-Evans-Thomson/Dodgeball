@@ -26,7 +26,7 @@ public class TakeHealth extends Item {
         super(pos);
         color = new Color(100,255,100);
         try {
-            image = ImageIO.read(new File("Images/takeHealth.png"));
+            image = ImageIO.read(new File("Images/Items/healthDown.png"));
         } catch (IOException e) {
         }
         image = Tools.sizeImage(image, r);

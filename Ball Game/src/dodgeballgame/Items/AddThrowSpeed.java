@@ -24,7 +24,7 @@ public class AddThrowSpeed extends Item {
         super(pos);
         color = new Color(140,220,255);
         try {
-            image = ImageIO.read(new File("Images/addThrowSpeed.png"));
+            image = ImageIO.read(new File("Images/Items/throwSpeedUp.png"));
         } catch (IOException e) {
         }
         image = Tools.sizeImage(image, r);

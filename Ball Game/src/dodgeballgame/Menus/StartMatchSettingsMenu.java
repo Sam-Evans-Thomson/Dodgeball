@@ -49,7 +49,7 @@ public class StartMatchSettingsMenu extends Menu{
 
         g.setPaint(Color.white);
         g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
-        Tools.centreStringHor("GAME MODE: " + GamePanel.gameModeManager.gameMode.type,
+        Tools.centreStringHor("GAME MODE: " + GamePanel.gameModeManager.gameMode.settings.type,
                 g, 
                 (int)(1.9*INNER_X_START), 
                 (int)(1.2*INNER_Y_START));
@@ -80,13 +80,13 @@ public class StartMatchSettingsMenu extends Menu{
         g.fillRect((int)(INNER_X_START*3), 
                 INNER_Y_START, 
                 3, 
-                INNER_Y_END);
+                INNER_MENU_HEIGHT);
         renderLoad(g);
-        renderSubMenu(g);
     }
 
-    public void renderSubMenu(Graphics2D g) {
-        
+    @Override
+    public void renderGlow(Graphics2D g) {
+        glowLeft(g);
     }
     
     public void applyLoad() {
@@ -96,8 +96,8 @@ public class StartMatchSettingsMenu extends Menu{
     
     @Override
     public void select() {
+        GamePanel.soundManager.menu(6);
         if (accept) {
-            GamePanel.soundManager.menu(6);
             applyLoad();
         } else if (cursors[0].y == 0) {
             GamePanel.menuManager.changeMenu("ARENA");
@@ -121,6 +121,7 @@ public class StartMatchSettingsMenu extends Menu{
     
     @Override
     public void back() {
+        GamePanel.soundManager.menu(7);
         GamePanel.menuManager.changeMenu("START");
     }
 

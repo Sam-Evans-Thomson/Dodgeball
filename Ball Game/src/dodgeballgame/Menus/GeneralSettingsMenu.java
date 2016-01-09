@@ -24,7 +24,6 @@ import javax.imageio.ImageIO;
  */
 public class GeneralSettingsMenu extends Menu{
     
-    public GeneralSettings settings;
     private int[] pos;
     final int NUM_SETTINGS;
     int fontSizeLarge, fontSizeSmall;
@@ -38,8 +37,8 @@ public class GeneralSettingsMenu extends Menu{
     public GeneralSettingsMenu() {
         
         accept = false;
-        settings = new GeneralSettings();
-        NUM_SETTINGS = settings.size();
+
+        NUM_SETTINGS = GamePanel.generalSettings.size();
         for (int i = 0; i < 4; i++) cursors[i] = new Cursor(1,NUM_SETTINGS);
 
         fontSizeLarge = WIDTH/40;
@@ -70,8 +69,8 @@ public class GeneralSettingsMenu extends Menu{
 
         g.setPaint(Color.white);
         
-        int x = (int)(INNER_X_START*2);
-        int x2 = (int)(INNER_X_END*0.9);
+        int x = (int)(INNER_X_START*2.8);
+        int x2 = (int)(INNER_X_END - 1.8*INNER_X_START);
         int y = (int)(INNER_Y_START * 1.3);
         int yOffset = INNER_MENU_HEIGHT/10;
         
@@ -94,8 +93,8 @@ public class GeneralSettingsMenu extends Menu{
                 g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeSmall));
                 g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
             }
-            g.drawString(settings.getName(cursorPlace), x, y + i*yOffset);
-            centreString(settings.getValueString(cursorPlace), g, x2, y + i*yOffset);
+            g.drawString(GamePanel.generalSettings.getName(cursorPlace), x, y + i*yOffset);
+            centreString(GamePanel.generalSettings.getValueString(cursorPlace), g, x2, y + i*yOffset);
 
         }   
         
@@ -110,15 +109,15 @@ public class GeneralSettingsMenu extends Menu{
     }
     
     private void changeValue(int i) {
-        settings.changeValue(cursors[0].y,i);
+        GamePanel.generalSettings.changeValue(cursors[0].y,i);
     }
     
     public void apply() {
-        settings.apply();
+        GamePanel.generalSettings.apply();
     }
     
     public void save() {
-        settings.save();
+        GamePanel.generalSettings.save();
     }
 
     @Override

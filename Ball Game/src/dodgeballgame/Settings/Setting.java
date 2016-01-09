@@ -24,6 +24,10 @@ public class Setting {
             active = true;
         }
         
+        public Setting copy() {
+            return new Setting();
+        }
+        
         public void changeValue(int i) {
             
         }

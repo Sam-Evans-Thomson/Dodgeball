@@ -115,7 +115,8 @@ public class InputComponent {
     public void rightTrigger(float axesS) {
         if (GamePanel.gameState == GamePanel.PLAY) {
             if(axesS > 0.7 && p.rightTrig<0.5) {
-                p.throwBall();
+                if(p.isGhost) p.eatItem();
+                else p.throwBall();
             } 
         }  
         p.rightTrig = axesS;

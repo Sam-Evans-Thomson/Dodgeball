@@ -61,16 +61,19 @@ public class Item {
     
     public void update() {
         for(Player p : GamePanel.playerArray) {
-            if(p.getPlayerHitbox().collision(hb)) {
+            if(!p.isGhost && p.getPlayerHitbox().collision(hb)) {
                 applyEffect(p);
                 incPowerUpCount(p);
                 p.setItemGlow(color);
                 GamePanel.itemArray.remove(this);
                 return;
             }
-            if(p.getCatchHitbox().collision(pos)) {
+            if(!p.isGhost && p.getCatchHitbox().collision(pos)) {
                 inCatchArea[p.pNumber] = true;
-            } else inCatchArea[p.pNumber] = false;
+            } else if(p.isGhost && p.getPlayerHitbox().collision(pos)) {
+                inCatchArea[p.pNumber] = true;
+            } else
+                inCatchArea[p.pNumber] = false;
         }
     }
     

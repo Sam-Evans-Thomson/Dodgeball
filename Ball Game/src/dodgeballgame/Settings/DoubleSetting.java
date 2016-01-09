@@ -26,6 +26,19 @@ public class DoubleSetting extends Setting {
         this.name = name;
     }
     
+    public DoubleSetting(DoubleSetting set) {
+        this.start = set.start;
+        this.end = set.end;
+        this.inc = set.inc;
+        value = set.value;
+        this.name = set.name;
+    }
+    
+    @Override
+    public DoubleSetting copy() {
+        return new DoubleSetting(this);
+    }
+    
     @Override
     public String getValueString() {
         return "" + Math.round(value*1000000)/1000000.0;

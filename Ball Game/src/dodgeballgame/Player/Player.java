@@ -40,6 +40,7 @@ public class Player {
     //States
     public boolean solid;       // Does the player collide with balls?
     public boolean catchOn;
+    public boolean isGhost;
 
     // INPUTS
     public float leftTrig, rightTrig;
@@ -48,16 +49,21 @@ public class Player {
     // Settings
     public static int killsPerPower;
     public static int goalsPerPower;
-    public static int hitsPerPower;
+    public static int hitsPerPower = 999;
     public static int pointsPerPower;
     public static double invincibleTime;    //The time length of invincibility
     public static int pointsPerGoal;
     public static int startHealth;
     public static int startBalls;
     public static int pointsPerHit;
+    public static boolean knockoutOn;
+    public static int pointsPerKill;
+    public static int pointsPerDeath;
+    public static int startingLives;
     
     // Current Values
     public int health;
+    public int lives;
     public int numBalls;
     public int numItems;
     
@@ -110,7 +116,11 @@ public class Player {
     
     private void init() {
         initStats();
-        
+        lives = startingLives;
+        knockoutOn = false;
+        isGhost = false;
+        pointsPerKill = 0;
+        pointsPerDeath = 0;
         physicsComp = new PlayerPhysicsComponent(this);
         graphicsComp = new PlayerGraphicsComponent(this);
         soundComp = new PlayerSoundComponent(this);
@@ -207,6 +217,18 @@ public class Player {
     // PLAYER ACTIONS
     //
     
+    public void becomeGhost() {
+        isGhost = true;
+        solid = false;
+        physicsComp.speed = 150;
+        health = 0;
+    }
+    
+    public void eatItem() {
+        System.out.println("eat object");
+        physicsComp.eatObject();
+    }
+    
     public void throwBall() {
         physicsComp.throwBall();
     }
@@ -226,7 +248,7 @@ public class Player {
         if (p.team != team) gotHits++;
         else ownGotHits++;
         
-        GamePanel.changeScore(1-team,1);
+        GamePanel.changeScore(1-team,pointsPerHit);
         GamePanel.itemManager.addItem(1-team);
         GamePanel.itemManager.addBall(1-team); 
         hbTimer.refresh();
@@ -251,25 +273,28 @@ public class Player {
     
     public void death() {
         deaths++;
+        lives--;
+        if (knockoutOn && lives == 0) becomeGhost();
+        else initStats();
+        
+        GamePanel.changeScore(team, pointsPerDeath);
+
         for (int i = 0; i < numBalls; i++) {
             GamePanel.itemManager.addBall(1-team);
         }
         for (int i = 0; i < numItems/2; i++) {
             GamePanel.itemManager.addItem(1-team);
         }
-         
-        initStats();
-
         DELTA = new Vec2(0,0);
         aimAngle = new Vec2(0,0);
         numBalls = 0;
-
     }
     
     public void killedPlayer(Player p) {
         if (p.team != team) {
             kills++;
             killsCount++;
+            GamePanel.changeScore(team, pointsPerKill);
         }
         else ownKills++;
         spawnPowerCheck();

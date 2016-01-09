@@ -18,13 +18,13 @@ import javax.imageio.ImageIO;
  *
  * @author Sam
  */
-public class AddCatchReach extends Item {
+public class TakeCatchRadius extends Item {
     
-    public AddCatchReach(Vec2 pos) {    
+    public TakeCatchRadius(Vec2 pos) {    
         super(pos);
         color = new Color(200,200,0);
         try {
-            image = ImageIO.read(new File("Images/addCatchReach.png"));
+            image = ImageIO.read(new File("Images/Items/catchRadiusDown.png"));
         } catch (IOException e) {
         }
         image = Tools.sizeImage(image, r);
@@ -33,7 +33,8 @@ public class AddCatchReach extends Item {
     @Override
     public void applyEffect(Player p) {
         GamePanel.soundManager.addCatchReach();
-        p.radius += 10;
+        p.radius -= 10;
+        if (p.radius < 0) p.radius = 0;
     }
 
 }

@@ -30,6 +30,9 @@ public class WinScreen extends Menu{
     }
     
     public void findWinner() {
+        if (GamePanel.gameModeManager.gameMode.settings.type.equals("KNOCKOUT")){
+            
+        }
         if(GamePanel.team1Score > GamePanel.team2Score ) {
             winTeam = 0;
         } else {

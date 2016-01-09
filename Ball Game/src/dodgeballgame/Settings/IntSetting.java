@@ -26,6 +26,19 @@ public class IntSetting extends Setting {
         this.name = name;
     }
     
+    public IntSetting(IntSetting set) {
+        this.start = set.start;
+        this.end = set.end;
+        this.inc = set.inc;
+        value = set.value;
+        this.name = set.name;
+    }
+  
+    @Override
+    public IntSetting copy() {
+        return new IntSetting(this);
+    }
+    
     @Override
     public String getValueString() {
         return "" + value;

@@ -50,7 +50,6 @@ public class Arena {
     public double softBounceFactor = 0.2;
     public double bounceFactor = 0.9;
     public int buffer = 1000;
-    public boolean goalsActive;
     
     public int numPlayers;
     
@@ -93,7 +92,7 @@ public class Arena {
         
         initPlayerPositions();
         initBorders();
-        if (goalsActive) {initGoals();}
+        if (GamePanel.arenaManager.goalsActive) {initGoals();}
         initHitBoxes();
         initTeamAreas();
     }
@@ -159,7 +158,7 @@ public class Arena {
     public void render(Graphics2D g) {
         g.drawImage(scaledBackgroundImage,0,0,null);
         renderScore(g);
-        if (goalsActive) renderGoals(g);
+        if (GamePanel.arenaManager.goalsActive) renderGoals(g);
         renderHitboxes(g);
         renderSpecific(g);
     }
@@ -207,13 +206,11 @@ public class Arena {
     public void setGoals(int i) {
         arenaTeam1Goal = new ArrayList<>();
         arenaTeam2Goal = new ArrayList<>();
-        goalsActive = true;
+        GamePanel.arenaManager.goalsActive = true;
         switch (i) {
-            case 0 : goalsActive = false;
+            case 0 : cornerGoals();
                 break;
-            case 1 : cornerGoals();
-                break;
-            case 2 : sideGoals();
+            case 1 : sideGoals();
                 break;
         }
     }

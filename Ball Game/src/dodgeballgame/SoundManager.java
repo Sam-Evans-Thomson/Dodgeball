@@ -36,22 +36,22 @@ public class SoundManager {
         sounds = new ArrayList<>();
         music = new ArrayList<>();
         
-        sounds.add(new AudioPlayer("Sounds/ding0.wav"));
-        sounds.add(new AudioPlayer("Sounds/addCatchAngle.wav"));
+        sounds.add(new AudioPlayer("Sounds/ding0.wav"));    // vibrant ding
+        sounds.add(new AudioPlayer("Sounds/addCatchAngle.wav"));    // techy sound
         sounds.add(new AudioPlayer("Sounds/addBall.wav"));
         sounds.add(new AudioPlayer("Sounds/catchBall.wav"));
         sounds.add(new AudioPlayer("Sounds/addCatchAngle.wav"));
         sounds.add(new AudioPlayer("Sounds/addRunSpeed.wav"));
         sounds.add(new AudioPlayer("Sounds/takehealth.wav"));
-        sounds.add(new AudioPlayer("Sounds/menu0.wav"));
-        sounds.add(new AudioPlayer("Sounds/menu1.wav"));
-        sounds.add(new AudioPlayer("Sounds/menu2.wav"));
-        sounds.add(new AudioPlayer("Sounds/menu3.wav"));
-        sounds.add(new AudioPlayer("Sounds/menu4.wav"));
-        sounds.add(new AudioPlayer("Sounds/menu5.wav"));
-        sounds.add(new AudioPlayer("Sounds/menu6.wav"));
-        sounds.add(new AudioPlayer("Sounds/menu7.wav"));
-        sounds.add(new AudioPlayer("Sounds/menu8.wav"));
+        sounds.add(new AudioPlayer("Sounds/menu0.wav"));    // note 1 - LOWEST
+        sounds.add(new AudioPlayer("Sounds/menu1.wav"));    // note 2
+        sounds.add(new AudioPlayer("Sounds/menu2.wav"));    // note 3
+        sounds.add(new AudioPlayer("Sounds/menu3.wav"));    // note 4
+        sounds.add(new AudioPlayer("Sounds/menu4.wav"));    // note 5
+        sounds.add(new AudioPlayer("Sounds/menu5.wav"));    // note 6 - highest
+        sounds.add(new AudioPlayer("Sounds/menu6.wav"));    // echo click
+        sounds.add(new AudioPlayer("Sounds/menu7.wav"));    // back/undo sound
+        sounds.add(new AudioPlayer("Sounds/menu8.wav"));    // short Click
         
         music.add(new AudioPlayer("Sounds/fracture.wav"));
 

@@ -57,6 +57,7 @@ public class CharacterMenu extends Menu{
         
     @Override    
     public void moveCursor(int playerNumber, int x, int y) {
+        GamePanel.soundManager.menu(8);
         cursors[playerNumber].moveCursor(x,y);
     }
     
@@ -64,7 +65,7 @@ public class CharacterMenu extends Menu{
         playerWords = new BufferedImage[5];
         greyFaces = new Image[NUM_CHARACTERS];
         colourFaces = new BufferedImage[NUM_CHARACTERS];
-        ImageFilter filter = new GrayFilter(true, 50); 
+        ImageFilter filter = new GrayFilter(true, 20); 
         for(int i = 0; i<NUM_CHARACTERS; i++) {
             BufferedImage imageA, imageB;
             try{
@@ -98,8 +99,24 @@ public class CharacterMenu extends Menu{
         int xOffset = 140;
         int xPos2 = width/3 + xPos + 140;
         
+        g.setColor(Color.WHITE);
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
+        g.fillRect((int)(xPos2 - 0.15*xOffset),
+                (int)(0.80*INNER_Y_START), 
+                xOffset, 
+                (int)(INNER_MENU_HEIGHT + 0.39*INNER_Y_START));
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        g.fillRect((int)(xPos2 - 0.15*xOffset),
+                (int)(0.80*INNER_Y_START), 
+                2, 
+                (int)(INNER_MENU_HEIGHT + 0.39*INNER_Y_START));
+        g.fillRect((int)(xPos2 + 0.85*xOffset),
+                (int)(0.80*INNER_Y_START), 
+                2, 
+                (int)(INNER_MENU_HEIGHT + 0.39*INNER_Y_START));
+        
         for (int ctrl = 0; ctrl < GamePanel.numPlayers; ctrl++) {
-            for(int chr = 0; chr < 5; chr++) {
+            for(int chr = 0; chr < 6; chr++) {
 
                 int yPos2 = ctrl*height/3 + yPos;
 
@@ -134,6 +151,7 @@ public class CharacterMenu extends Menu{
     }
     
     public void select(Player p) {
+        GamePanel.soundManager.addCatchAngle();
         chooseCharacter(p);
     }
     

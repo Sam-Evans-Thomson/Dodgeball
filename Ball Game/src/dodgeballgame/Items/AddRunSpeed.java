@@ -24,7 +24,7 @@ public class AddRunSpeed extends Item {
         super(pos);
         color = new Color(140,220,255);
         try {
-            image = ImageIO.read(new File("Images/addRunSpeed.png"));
+            image = ImageIO.read(new File("Images/Items/runSpeedUp.png"));
         } catch (IOException e) {
         }
         image = Tools.sizeImage(image, r);
@@ -33,7 +33,7 @@ public class AddRunSpeed extends Item {
     @Override
     public void applyEffect(Player p) {
         GamePanel.soundManager.addRunSpeed();
-        p.physicsComp.maxSpeed += 40;
+        p.physicsComp.speed += 40;
     }
 
 }

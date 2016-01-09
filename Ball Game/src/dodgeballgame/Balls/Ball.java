@@ -149,7 +149,7 @@ public class Ball {
                 inCatchArea[p.pNumber] = true;
             } else inCatchArea[p.pNumber] = false;
         }
-            if (GamePanel.arena.goalsActive) {
+            if (GamePanel.arenaManager.goalsActive) {
                 for(Hitbox hb : GamePanel.arena.arenaTeam1Goal) {
                     if(hb.collision(ballHitbox)) {
                         hitGoal(player, 0);

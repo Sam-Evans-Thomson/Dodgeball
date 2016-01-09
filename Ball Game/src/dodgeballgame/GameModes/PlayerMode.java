@@ -16,20 +16,33 @@ public class PlayerMode extends GameMode{
     
     public PlayerMode() {
         super();
+        initDescription();
     }
     
     public PlayerMode(String path) {
         super(path);
     }
+    
+    public PlayerMode(PlayerMode pm) {
+        settings = pm.settings.copy();
+    }
+    
+    @Override
+    public void initDescription() {
+        text = new String[4];
+        text[0] = "- Win by earning the set amount of points before the other team.";
+        text[1] = "- Earn points by hitting the other team.";
+        text[2] = "- Getting hit will make you intangible for a short time.";
+        text[3] = "- Dying will give your balls and powerups to the other team.";
+    }
+    
+    @Override
+    public PlayerMode copy(){
+        return new PlayerMode(this);
+    }
 
     @Override
     public void apply() {
-        
-        Player.pointsPerHit = 1;
-        Player.pointsPerGoal = 0;
-        GamePanel.arena.goalsActive = false;
-
-        numberOfPlayers();
         startingHealth();
         startingBalls();
         wallBounceFactor();
@@ -38,57 +51,56 @@ public class PlayerMode extends GameMode{
         winningScore();
         killsPerPower();
         pointsPerPower();
-    }
-    
-    // Number of players - [2 to numControllers]
-    public void numberOfPlayers() {
-        int val = (int)getDouble(0);
-        GamePanel.numPlayers = val;
+        
+        refreshValues();
+        
+        Player.pointsPerHit = 1;
+        GamePanel.arenaManager.goalsActive = false;
     }
     
     // Starting Health - [1 to 99]
     public void startingHealth() {
-        int val = (int)getDouble(1);
+        int val = (int)settings.getDouble(0);
         Player.startHealth = val;
     }
     
     // Starting Balls - [1 to 99]
     public void startingBalls() {
-        int val = (int)getDouble(2);
+        int val = (int)settings.getDouble(1);
         Player.startBalls = val;
     }
     
     // Wall Bounce Factor - [0.1 to 3.0]
     public void wallBounceFactor() {
-        double val = getDouble(3);
+        double val = settings.getDouble(2);
         GamePanel.arena.bounceFactor = val;
     }
     
     // Soft Back Wall - [0 or 1]
     public void softBackWall() {
-        double val = getDouble(4);
+        double val = settings.getDouble(3);
         GamePanel.arena.softBounceFactor = (1-0.5*val)*GamePanel.arena.bounceFactor;
     }
     
     // Friendly Fire - [0 or 1]
     public void friendlyFire() {
-        boolean val = ((int)getDouble(5)==1);
+        boolean val = ((int)settings.getDouble(4)==1);
         GamePanel.friendlyFire = val;
     }
     
     // Winning Score - [0 to 99]
     public void winningScore() {
-        int val = (int)getDouble(6);
+        int val = (int)settings.getDouble(5);
         GamePanel.winScore = val;
     }
 
     public void killsPerPower() {
-        int val = (int)getDouble(7);
+        int val = (int)settings.getDouble(6);
         Player.killsPerPower = val;
     }
 
     public void pointsPerPower() {
-        int val = (int)getDouble(8);
+        int val = (int)settings.getDouble(7);
         Player.pointsPerPower = val;
     }
 }

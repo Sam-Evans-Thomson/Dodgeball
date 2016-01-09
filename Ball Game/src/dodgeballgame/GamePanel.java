@@ -13,6 +13,7 @@ import dodgeballgame.Balls.Ball;
 import dodgeballgame.GameModes.GameModeManager;
 import dodgeballgame.Items.Item;
 import dodgeballgame.Powers.Power;
+import dodgeballgame.Settings.SpecificSettings.GeneralSettings;
 import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.image.*;
@@ -73,6 +74,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public static MenuManager menuManager;
     public static SoundManager soundManager;
     public static GameModeManager gameModeManager;
+    
+    public static GeneralSettings generalSettings;
     
     public static final int screenWIDTH = 1920;
     public static final int screenHEIGHT = 980;
@@ -154,6 +157,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         itemManager = new ItemManager();
         powerManager = new PowerManager();
         soundManager = new SoundManager();
+        
+        generalSettings = new GeneralSettings();
+        generalSettings.apply();
+        
         arenaManager = new ArenaManager();
         gameModeManager = new GameModeManager();
         menuManager = new MenuManager();
@@ -168,9 +175,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             throw new IllegalStateException("Unable to initialize GLFW");
         
         initControllers();
-
+        generalSettings.numberOfPlayers();
+        gameModeManager.setMode(0);
         newGame();
-        menuManager.generalSettingsMenu.apply();
         
         g.setColor(Color.black);
         g.fillRect(0,0,screenWIDTH, screenHEIGHT);
@@ -197,6 +204,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         
         if (numControllers < minNumPlayers) System.out.println("Please Connect at least 2 Controllers"); 
         else System.out.println(numControllers + " controllers connected.");
+        
     }
     
     public static void newGame() {
@@ -208,18 +216,17 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         itemArray = new ArrayList<>();
         powerArray = new ArrayList<>();
         
+        arena.init();
+        
         gameModeManager.gameMode.apply();
         
-        arena.init();
-
         System.arraycopy(controllers, 0, playerControllers, 0, numPlayers);
         for (int p = 0; p<numPlayers; p++) {
             int team =2*p/numPlayers;
-            //double x = arenaWIDTH/4 + arenaWIDTH*team/2;
-            //double y = (p%2+1)*arenaHEIGHT/3;
             playerArray.add(new Player(team, p, arena.playerPos[p].getX(), arena.playerPos[p].getY()));
         }
         
+        gameModeManager.gameMode.apply();
     }
     
     public void countIn() {
@@ -255,8 +262,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         } else {
             team2Score+=amount;
         }
-        
-        if (team1Score >= winScore || team2Score >= winScore) win();
+
+        if (gameModeManager.gameMode.settings.type.equals("KNOCKOUT")) {
+            if (team1Score == 0 || team2Score == 0) win();
+        }
+        else if (team1Score >= winScore || team2Score >= winScore) win();
     }
     
     public static void win() {

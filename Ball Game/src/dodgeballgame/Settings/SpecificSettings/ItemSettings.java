@@ -32,7 +32,6 @@ public class ItemSettings extends SettingsList{
     public void set(ItemSettings mSet) {
         settingsList = mSet.settingsList;
         if (path!= null) path = mSet.path;
-        length = mSet.length;
     }
 
     public void apply() {

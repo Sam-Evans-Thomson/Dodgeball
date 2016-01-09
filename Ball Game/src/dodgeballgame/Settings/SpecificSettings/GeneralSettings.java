@@ -47,8 +47,15 @@ public class GeneralSettings {
     }
     
     public void changeValue(int setting, int amount) {
-        settings.get(setting).changeValue(amount);
-        apply();
+        if(setting == 4) {
+            settings.get(4).changeValue(amount);
+            numberOfPlayers();
+            GamePanel.newGame();
+        } else {
+            settings.get(setting).changeValue(amount);
+            apply();
+        }
+        
     }
     
     public void apply() {
@@ -56,6 +63,11 @@ public class GeneralSettings {
         musicVolume();
         soundOn();
         soundVolume();
+    }
+        
+    public void numberOfPlayers() {
+        int val = (int)settings.getDouble(4);
+        GamePanel.numPlayers = val;
     }
     
     // Music On - [0 or 1]

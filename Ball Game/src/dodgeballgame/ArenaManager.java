@@ -6,7 +6,6 @@
 package dodgeballgame;
 
 import dodgeballgame.Arenas.*;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -22,7 +21,9 @@ public class ArenaManager extends JPanel{
     public TunnelArena tunnelArena;
     public BarracksArena barracksArena;
     
-    public static final int NUM_GOAL_POS = 3;
+    public boolean goalsActive;
+    
+    public static final int NUM_GOAL_POS = 2;
     public static final int NUM_ARENAS = 4;
     
     public static ArrayList<Arena> arenas;
@@ -56,7 +57,7 @@ public class ArenaManager extends JPanel{
         Graphics2D g = image.createGraphics();
         
         Arena temp = arenas.get(i).copy();
-        temp.setGoals(goals);
+        if(goalsActive) temp.setGoals(goals);
         temp.render(g);
         
         return image;
@@ -65,7 +66,6 @@ public class ArenaManager extends JPanel{
     public String getName(int i) {
         return arenas.get(i).arenaName;
     }
-    
         
     public void setGoals(int i) {
         for (Arena ar : arenas) ar.setGoals(i);

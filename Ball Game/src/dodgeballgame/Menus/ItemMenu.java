@@ -27,8 +27,8 @@ public class ItemMenu extends Menu {
     
     public int xPos = (int)(INNER_X_START*3.1);
     public int yPos = INNER_Y_START;
-    public int width = (int)((INNER_X_END - xPos)*1.35);
-    public int height = INNER_MENU_HEIGHT;
+    public int width = (int)((INNER_X_END - xPos)*1.0);
+    public int height = 5*INNER_MENU_HEIGHT/6;
     
     public int buttonH = INNER_MENU_HEIGHT / 50;
     public int buttonW = INNER_MENU_WIDTH / 40;
@@ -36,19 +36,19 @@ public class ItemMenu extends Menu {
     
     public Cursor[] cursors = new Cursor[4];
     
-    BufferedImage selectImage;
+    BufferedImage itemButtons;
     
     public ItemMenu() {
         for (int i = 0; i < 4; i++) cursors[i] = new Cursor(4,4);
         images = new BufferedImage[4][4];
         
         try {
-            selectImage = ImageIO.read(new File("Images/select.png"));
+            itemButtons = ImageIO.read(new File("Images/ItemButtons.png"));
         } catch (IOException e) {
             
         }
-        ImageEditor im = new ImageEditor(selectImage);
-        selectImage = im.scale((double)WIDTH/1920d);
+        ImageEditor im = new ImageEditor(itemButtons);
+        itemButtons = im.scale((double)WIDTH/1920d);
         loadImages();
     }
     
@@ -60,7 +60,7 @@ public class ItemMenu extends Menu {
     
     @Override 
     public void renderMenu(Graphics2D g) {
-        
+        glowRight(g);
         GamePanel.menuManager.startMatchSettingsMenu.renderMenu(g);
 
         for (int i = 0; i<4; i++) {
@@ -72,15 +72,18 @@ public class ItemMenu extends Menu {
                 int xPos2 = i*width/4 + xPos;
                 int yPos2 = j*height/4 + yPos;
                 g.drawImage(images[i][j],(int)xPos2 + 15,(int)yPos2 +  + images[i][j].getHeight()/2,null);
-                g.setColor(new Color(50,50,50));
-                g.drawRect(xPos2, yPos2, width/4,height/4);
-                g.drawRect(xPos2+1, yPos2+1, width/4-2,height/4-2);
+                
+                
                 // black out
                 if(GamePanel.itemManager.powerUpFreqs[i][j]==0) {
                     g.setColor(Color.black);
                     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
                     g.fillRect(xPos2, yPos2, width/4,height/4);
                 }
+                
+                g.setColor(new Color(100,100,100));
+                g.drawRect(xPos2, yPos2, width/4,height/4);
+                g.drawRect(xPos2+1, yPos2+1, width/4-1,height/4-1);
                 
                 g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
                 
@@ -92,13 +95,14 @@ public class ItemMenu extends Menu {
                     g.fillRect((int)(xPos2 + buttonXOffset), (int)yPos2 + height/5 - d*(2*buttonH), buttonW,buttonH);
                 }               
             }
-        }  
-        g.setColor(new Color(255,255,255));
+        } 
+        
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        g.setColor(Color.white);
         g.drawRect(cursors[0].x*width/4 + xPos,
                 cursors[0].y*height/4 + yPos, 
                 width/4,
                 height/4);
-        g.setColor(new Color(200,100,255));
         g.drawRect(cursors[0].x*width/4 + xPos + 1,
                 cursors[0].y*height/4 + yPos + 1, 
                 width/4 - 2,
@@ -110,28 +114,30 @@ public class ItemMenu extends Menu {
                 width/4 - 2,
                 height/4 - 2);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        g.drawImage(itemButtons, (int)(1.133*xPos), (int)(INNER_Y_END - 1.5*itemButtons.getHeight()), null);
         renderLoad(g);
+        
     }
     
     private void loadImages() {
         
         try {
-            images[0][0] = ImageIO.read(new File("Images/addHealth.png"));  
-            images[0][1] = ImageIO.read(new File("Images/addRunSpeed.png"));  
-            images[0][2] = ImageIO.read(new File("Images/addCatchAngle.png"));
-            images[0][3] = ImageIO.read(new File("Images/addCatchReach.png"));
-            images[1][0] = ImageIO.read(new File("Images/addThrowSpeed.png"));
-            images[1][1] = ImageIO.read(new File("Images/takeHealth.png"));
-            images[1][2] = ImageIO.read(new File("Images/ph.png"));
-            images[1][3] = ImageIO.read(new File("Images/ph.png"));
-            images[2][0] = ImageIO.read(new File("Images/ph.png"));
-            images[2][1] = ImageIO.read(new File("Images/ph.png"));
-            images[2][2] = ImageIO.read(new File("Images/ph.png"));
-            images[2][3] = ImageIO.read(new File("Images/ph.png"));
-            images[3][0] = ImageIO.read(new File("Images/ph.png"));
-            images[3][1] = ImageIO.read(new File("Images/ph.png"));
-            images[3][2] = ImageIO.read(new File("Images/ph.png"));
-            images[3][3] = ImageIO.read(new File("Images/ph.png"));
+            images[0][0] = ImageIO.read(new File("Images/Items/healthUp.png"));  
+            images[0][1] = ImageIO.read(new File("Images/Items/runSpeedUp.png"));  
+            images[0][2] = ImageIO.read(new File("Images/Items/catchAngleUp.png"));
+            images[0][3] = ImageIO.read(new File("Images/Items/catchradiusUp.png"));
+            images[1][0] = ImageIO.read(new File("Images/Items/healthDown.png"));
+            images[1][1] = ImageIO.read(new File("Images/Items/runSpeedDown.png"));
+            images[1][2] = ImageIO.read(new File("Images/Items/catchAngleDown.png"));
+            images[1][3] = ImageIO.read(new File("Images/Items/catchRadiusDown.png"));
+            images[2][0] = ImageIO.read(new File("Images/Items/throwSpeedUp.png"));
+            images[2][1] = ImageIO.read(new File("Images/Items/pointUp.png"));
+            images[2][2] = ImageIO.read(new File("Images/Items/ballsUp.png"));
+            images[2][3] = ImageIO.read(new File("Images/Items/Random.png"));
+            images[3][0] = ImageIO.read(new File("Images/Items/throwSpeedDown.png"));
+            images[3][1] = ImageIO.read(new File("Images/Items/pointDown.png"));
+            images[3][2] = ImageIO.read(new File("Images/Items/ballsDown.png"));
+            images[3][3] = ImageIO.read(new File("Images/Items/Death.png"));
      
         } catch (IOException e) {
         }
@@ -148,8 +154,20 @@ public class ItemMenu extends Menu {
 
     @Override
     public void select() {
-        GamePanel.soundManager.menu(6);
-        ItemManager.incFreq(cursors[0].x,cursors[0].y,1);
+        GamePanel.soundManager.menu(5);
+        GamePanel.itemManager.all();
+    }
+    
+    @Override
+    public void xButton() {
+        GamePanel.soundManager.addCatchAngle();
+        GamePanel.itemManager.randomize();
+    }
+      
+    @Override
+    public void yButton() {
+        GamePanel.soundManager.menu(7);
+        GamePanel.itemManager.none();
     }
     
     @Override

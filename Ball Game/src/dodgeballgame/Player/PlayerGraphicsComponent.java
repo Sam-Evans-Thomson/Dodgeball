@@ -103,17 +103,14 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         catchGlow(colors[0],g,p.pos);
         powerUpGlow(colors[0],g,p.pos);
         
-        if (checkHit()){
-            playerImage = playerImageA;
-        }
+        if (checkHit() && !playerImage.equals(playerImageA))playerImage = playerImageA;
+        if (p.isGhost && !playerImage.equals(playerImageB)) playerImage = playerImageB;
         
-        renderAim(g);
+        if (!p.isGhost)renderAim(g);
         
-        if (!p.solid) {
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-        } else {
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-        }
+        if(p.isGhost) g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+        else if (!p.solid) g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+        else g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
         
         g.drawImage(playerImage, (int)(p.pos.getX()-p.r), (int)(p.pos.getY()-p.r), null);
         

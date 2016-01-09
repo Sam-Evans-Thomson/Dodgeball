@@ -70,6 +70,7 @@ public class StartMenu extends Menu {
     
     @Override
     public void select() {
+        GamePanel.soundManager.menu(6);
         if (cursors[0].y == 0) {
             GamePanel.menuManager.changeMenu("START_MATCH_SETTINGS");
         } else if (cursors[0].y == 1) {

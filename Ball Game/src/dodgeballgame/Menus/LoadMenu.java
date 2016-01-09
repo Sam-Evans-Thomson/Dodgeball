@@ -137,7 +137,7 @@ public class LoadMenu extends Menu {
     private void applySave() {
         String filePath = SAVE_DIRECTORY + "/save" + cursors[0].y + ".txt";
         GamePanel.gameModeManager.gameMode.setPath(filePath);
-        GamePanel.gameModeManager.gameMode.save();
+        GamePanel.gameModeManager.gameMode.settings.save();
     }
     
     private void applyLoad() {

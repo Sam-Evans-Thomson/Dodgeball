@@ -19,6 +19,17 @@ public class BoolSetting extends Setting{
         setLimits(0d,1d,1d);
     }
     
+    public BoolSetting(BoolSetting set) {
+        this.value = set.value;
+        this.name = set.name;
+        setLimits(0d,1d,1d);
+    }
+      
+    @Override
+    public BoolSetting copy() {
+        return new BoolSetting(this);
+    }
+    
     @Override
     public String getValueString() {
         return (value) ? "On" : "Off";

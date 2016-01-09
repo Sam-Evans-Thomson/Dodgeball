@@ -25,7 +25,7 @@ public class AddCatchAngle extends Item {
         super(pos);
         color = new Color(200,200,0);
         try {
-            image = ImageIO.read(new File("Images/addCatchAngle.png"));
+            image = ImageIO.read(new File("Images/Items/catchAngleUp.png"));
         } catch (IOException e) {
         }
         image = Tools.sizeImage(image, r);
