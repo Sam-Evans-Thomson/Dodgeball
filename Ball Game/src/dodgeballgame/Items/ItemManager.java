@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dodgeballgame;
+package dodgeballgame.Items;
 
+import dodgeballgame.GamePanel;
 import dodgeballgame.Items.*;
+import dodgeballgame.Vec2;
 import java.util.Random;
 
 /**
@@ -21,26 +23,26 @@ public class ItemManager {
     Random rand = new Random();
     static double totalFreq;
 
-    public static int[][] powerUpFreqs = new int[4][4];
+    public static int[][] itemFreqs = new int[4][4];
     public static double[][] powerUpSeeds = new double[4][4];
     
     public ItemManager() {
-        powerUpFreqs[0][0] = 5;
-        powerUpFreqs[0][1] = 5;
-        powerUpFreqs[0][2] = 5;
-        powerUpFreqs[0][3] = 5;
-        powerUpFreqs[1][0] = 0;
-        powerUpFreqs[1][1] = 0;
-        powerUpFreqs[1][2] = 0;
-        powerUpFreqs[1][3] = 0;
-        powerUpFreqs[2][0] = 5;
-        powerUpFreqs[2][1] = 5;
-        powerUpFreqs[2][2] = 5;
-        powerUpFreqs[2][3] = 5;
-        powerUpFreqs[3][0] = 0;
-        powerUpFreqs[3][1] = 0;
-        powerUpFreqs[3][2] = 0;
-        powerUpFreqs[3][3] = 0;
+        itemFreqs[0][0] = 5;
+        itemFreqs[0][1] = 5;
+        itemFreqs[0][2] = 5;
+        itemFreqs[0][3] = 5;
+        itemFreqs[1][0] = 0;
+        itemFreqs[1][1] = 0;
+        itemFreqs[1][2] = 0;
+        itemFreqs[1][3] = 0;
+        itemFreqs[2][0] = 5;
+        itemFreqs[2][1] = 5;
+        itemFreqs[2][2] = 5;
+        itemFreqs[2][3] = 5;
+        itemFreqs[3][0] = 0;
+        itemFreqs[3][1] = 0;
+        itemFreqs[3][2] = 0;
+        itemFreqs[3][3] = 0;
 
         refreshSpawner();
     }
@@ -49,16 +51,24 @@ public class ItemManager {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 Random rand = new Random();
-                powerUpFreqs[i][j] = rand.nextInt(5);
+                itemFreqs[i][j] = rand.nextInt(5);
             }
         }
         refreshSpawner();
     }
     
+    public static void checkValues() {
+        if (GamePanel.gameModeManager.gameMode.settings.type.equals("KNOCKOUT")) {
+            itemFreqs[2][1] = 0;
+            itemFreqs[3][1] = 0;
+            itemFreqs[3][3] = 0;
+        }
+    }
+    
     public static void none() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                powerUpFreqs[i][j] = 0;
+                itemFreqs[i][j] = 0;
             }
         }
         refreshSpawner();
@@ -67,19 +77,20 @@ public class ItemManager {
     public static void all() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                powerUpFreqs[i][j] = 5;
+                itemFreqs[i][j] = 5;
             }
         }
         refreshSpawner();
     }
     
     private static void refreshSpawner() {
+        checkValues();
         spawner = new int[totalFreq()];
         
         int cnt = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                for (int k = 0; k < powerUpFreqs[i][j]; k ++) {
+                for (int k = 0; k < itemFreqs[i][j]; k ++) {
                     spawner[cnt] = j + 4*i;
                     cnt++;
                 }
@@ -91,7 +102,7 @@ public class ItemManager {
         int count = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                count += powerUpFreqs[i][j];
+                count += itemFreqs[i][j];
             }
         }
         return count;
@@ -103,7 +114,7 @@ public class ItemManager {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 while ( cnt < max) {
-                    count += powerUpFreqs[i][j];
+                    count += itemFreqs[i][j];
                     cnt++;
                 }
             }
@@ -113,8 +124,8 @@ public class ItemManager {
     
     public static void incFreq(int x, int y, int val) {
         if ( x>-1 && x < 4 && y>-1 && y < 4 ) {
-            powerUpFreqs[x][y] +=  val;
-            powerUpFreqs[x][y] %= 6;
+            itemFreqs[x][y] +=  val;
+            itemFreqs[x][y] %= 6;
             totalFreq = totalFreq();
         }
         refreshSpawner();
@@ -122,10 +133,10 @@ public class ItemManager {
     
     public static void decFreq(int x, int y, int val) {
         if ( x>-1 && x < 4 && y>-1 && y < 4 ) {
-            powerUpFreqs[x][y] -=  val;
-            powerUpFreqs[x][y] %= 6;
-            if(powerUpFreqs[x][y] < 0) {
-                powerUpFreqs[x][y] = 5;
+            itemFreqs[x][y] -=  val;
+            itemFreqs[x][y] %= 6;
+            if(itemFreqs[x][y] < 0) {
+                itemFreqs[x][y] = 5;
             }
             totalFreq = totalFreq();
         }
@@ -134,7 +145,7 @@ public class ItemManager {
         
     public void setFreq(int x, int y, int val) {
         if ( x>-1 && x < 4 && y>-1 && y < 4 ) {
-            powerUpFreqs[x][y]=  val;
+            itemFreqs[x][y]=  val;
             totalFreq = totalFreq();
         }
         refreshSpawner();

@@ -82,7 +82,7 @@ public class CircleHitbox extends Hitbox{
     
     @Override
     public double bounceAngle(Vec2 prevPos, CircleHitbox circle) {
-        return pos.getAngle(circle.pos);
+        return circle.pos.getAngle(pos);
     }
     
     @Override

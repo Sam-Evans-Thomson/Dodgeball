@@ -98,6 +98,7 @@ public class GameModeMenu extends Menu{
         GamePanel.soundManager.menu(6);
         GamePanel.gameModeManager.setMode(cursors[0].x);
         GamePanel.newGame();
+        GamePanel.menuManager.changeMenu("START_MATCH_SETTINGS");
     }
        
     @Override

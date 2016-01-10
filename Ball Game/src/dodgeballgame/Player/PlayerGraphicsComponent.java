@@ -32,6 +32,7 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     public BufferedImage playerImageA;
     public BufferedImage playerImageB;
     public BufferedImage playerImage;
+    public BufferedImage ghostImage;
     
     private BufferedImage heart;
     private BufferedImage ball;
@@ -50,12 +51,14 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         try {
             playerImageA = ImageIO.read(new File("Images/Players/player" + p.pNumber + "a.png"));
             playerImageB = ImageIO.read(new File("Images/Players/player" + p.pNumber + "b.png"));
+            ghostImage = ImageIO.read(new File("Images/Players/player" + p.pNumber + "b.png"));
             heart = ImageIO.read(new File("Images/heart.png"));
             ball = ImageIO.read(new File("Images/Balls/ball.png"));
         } catch (IOException e) {
         }
         playerImageA = Tools.sizeImage(playerImageA, 2*p.r);
         playerImageB = Tools.sizeImage(playerImageB, 2*p.r);
+        ghostImage = Tools.sizeImage(ghostImage, 2*p.r);
         heart = Tools.sizeImage(heart, 60);
         ball = Tools.sizeImage(ball, 60);
         
@@ -101,10 +104,9 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     public void render(Graphics2D g) {
         //Render Animation graphics
         catchGlow(colors[0],g,p.pos);
-        powerUpGlow(colors[0],g,p.pos);
+        grabItemGLow(colors[0],g,p.pos);
         
         if (checkHit() && !playerImage.equals(playerImageA))playerImage = playerImageA;
-        if (p.isGhost && !playerImage.equals(playerImageB)) playerImage = playerImageB;
         
         if (!p.isGhost)renderAim(g);
         
@@ -112,7 +114,14 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         else if (!p.solid) g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
         else g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
         
-        g.drawImage(playerImage, (int)(p.pos.getX()-p.r), (int)(p.pos.getY()-p.r), null);
+        if(p.isGhost) {
+            ImageEditor im = new ImageEditor(ghostImage);
+            BufferedImage ghostImage2 = im.rotate(p.aimAngle.getAngle());
+            
+            g.drawImage(ghostImage2, (int)(p.pos.getX()-p.r), (int)(p.pos.getY()-p.r), null);
+        } else g.drawImage(playerImage, (int)(p.pos.getX()-p.r), (int)(p.pos.getY()-p.r), null);
+        
+        
         
         renderPower(g);
         renderScore(g);
@@ -233,7 +242,7 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     public double powerUpGlowRadius = 200.0;
     private Color itemGlowColor;
     
-    public Graphics2D powerUpGlow(Color c, Graphics2D g, Vec2 pos) {
+    public Graphics2D grabItemGLow(Color c, Graphics2D g, Vec2 pos) {
         
         if (itemGlowTime < powerUpTimeMax) {
             float opacity = (float)(powerUpTimeMax - itemGlowTime)*0.8f/(float)powerUpTimeMax;

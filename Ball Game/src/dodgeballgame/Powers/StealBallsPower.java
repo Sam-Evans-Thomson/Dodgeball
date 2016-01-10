@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dodgeballgame.Items;
+package dodgeballgame.Powers;
 
 import dodgeballgame.GamePanel;
 import dodgeballgame.Player.Player;
@@ -18,13 +18,13 @@ import javax.imageio.ImageIO;
  *
  * @author Sam
  */
-public class TakeThrowSpeed extends Item {
-    
-    public TakeThrowSpeed(Vec2 pos) {    
+public class StealBallsPower extends Power{
+
+    public StealBallsPower(Vec2 pos) {
         super(pos);
-        color = new Color(255,0,0);
+        color = new Color(100,255,100);
         try {
-            image = ImageIO.read(new File("Images/Items/throwSpeedDown.png"));
+            image = ImageIO.read(new File("Images/Powers/stealBalls.png"));
         } catch (IOException e) {
         }
         image = Tools.sizeImage(image, r);
@@ -32,9 +32,17 @@ public class TakeThrowSpeed extends Item {
     
     @Override
     public void applyEffect(Player p) {
-        GamePanel.soundManager.addThrowSpeed();
-        p.physicsComp.throwSpeed -= 60;
-        if(p.physicsComp.throwSpeed<150) p.physicsComp.throwSpeed = 150;
+        Player victim = new Player(0,0,0,0);
+        victim.numBalls = 0;
+        for (Player plyr : GamePanel.playerArray) {
+            if (plyr.team != p.team && plyr.numBalls >= victim.numBalls) victim = plyr;
+        }
+        p.numBalls += victim.numBalls;
+        victim.numBalls = 0;
     }
-
+    
+    @Override
+    public Power copy() {
+        return new StealBallsPower(pos);
+    }
 }

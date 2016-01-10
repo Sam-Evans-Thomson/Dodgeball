@@ -22,7 +22,7 @@ public class TakePoint extends Item {
     
     public TakePoint(Vec2 pos) {    
         super(pos);
-        color = new Color(140,220,255);
+        color = new Color(255,0,0);
         try {
             image = ImageIO.read(new File("Images/Items/pointDown.png"));
         } catch (IOException e) {

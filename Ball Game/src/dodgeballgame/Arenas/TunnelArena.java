@@ -33,6 +33,7 @@ public class TunnelArena extends HorizontalArena{
         
     @Override
     public void renderSpecific(Graphics2D g) {
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         g.setColor(Color.WHITE);
         int[] xPoints = new int[]{0,0,HEIGHT/3};
         int[] yPoints = new int[]{0,HEIGHT/3,0};

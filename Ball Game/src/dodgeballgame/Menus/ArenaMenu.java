@@ -5,7 +5,7 @@
  */
 package dodgeballgame.Menus;
 
-import dodgeballgame.ArenaManager;
+import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.Cursor;
 import dodgeballgame.GamePanel;
 import dodgeballgame.Tools;
@@ -113,5 +113,6 @@ public class ArenaMenu extends Menu {
         GamePanel.soundManager.menu(6);
         manager.setArena(cursors[0].x);
         if(GamePanel.arenaManager.goalsActive) manager.setGoals(cursors[0].y);
+        GamePanel.menuManager.changeMenu("START_MATCH_SETTINGS");
     }
 }

@@ -22,7 +22,7 @@ public class TakeRunSpeed extends Item {
     
     public TakeRunSpeed(Vec2 pos) {    
         super(pos);
-        color = new Color(140,220,255);
+        color = new Color(255,0,0);
         try {
             image = ImageIO.read(new File("Images/Items/runSpeedDown.png"));
         } catch (IOException e) {

@@ -6,6 +6,9 @@
 package dodgeballgame;
 
 
+import dodgeballgame.Arenas.ArenaManager;
+import dodgeballgame.Items.ItemManager;
+import dodgeballgame.Powers.PowerManager;
 import dodgeballgame.Player.Player;
 import dodgeballgame.Arenas.*;
 import dodgeballgame.Menus.MenuManager;
@@ -68,6 +71,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public static ArrayList<Power> powerArray;
     public static Arena arena;
     
+    public static Loading loading;
+    
     public static ItemManager itemManager;
     public static PowerManager powerManager;
     public static ArenaManager arenaManager;
@@ -101,7 +106,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public static int winScore;
     public static GameTimer gameTimer;
     
-    private BufferedImage loading;
+    private BufferedImage loadingImage;
     
     public GamePanel() {
         super();
@@ -139,10 +144,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         /****** draw Loading Screen ******/
         draw();
         try {
-            loading = ImageIO.read(new File("Images/Loading2.png"));
+            loadingImage = ImageIO.read(new File("Images/Loading2.png"));
         } catch(IOException e) {}
         renderLoading();
         draw();
+        
+        loading = new Loading();
         
         gameTimer = new GameTimer();
         GameTimer.pause();
@@ -154,7 +161,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         arena = new BasicArena();
         
         //Managers
-        itemManager = new ItemManager();
+        
         powerManager = new PowerManager();
         soundManager = new SoundManager();
         
@@ -164,7 +171,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         arenaManager = new ArenaManager();
         gameModeManager = new GameModeManager();
         menuManager = new MenuManager();
-        
+        itemManager = new ItemManager();
         
        // Setup an error callback. The default implementation
         // will print the error message in System.err.
@@ -522,7 +529,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     }
     
     private void renderLoading() {
-        g.drawImage(loading, 0,0, null);
+        g.drawImage(loadingImage, 0,0, null);
     }
     
     private void draw() {

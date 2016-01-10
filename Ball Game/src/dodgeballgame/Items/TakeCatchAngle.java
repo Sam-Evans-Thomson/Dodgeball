@@ -23,7 +23,7 @@ public class TakeCatchAngle extends Item {
     public TakeCatchAngle(Vec2 pos) {
         
         super(pos);
-        color = new Color(200,200,0);
+        color = new Color(255,0,0);
         try {
             image = ImageIO.read(new File("Images/Items/catchAngleDown.png"));
         } catch (IOException e) {

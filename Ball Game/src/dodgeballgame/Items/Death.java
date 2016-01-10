@@ -24,7 +24,7 @@ public class Death extends Item {
     
     public Death(Vec2 pos) {
         super(pos);
-        color = new Color(100,255,100);
+        color = new Color(0,0,0);
         try {
             image = ImageIO.read(new File("Images/Items/death.png"));
         } catch (IOException e) {

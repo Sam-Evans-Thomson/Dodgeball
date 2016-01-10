@@ -106,7 +106,7 @@ public class StartMatchSettingsMenu extends Menu{
         } else if (cursors[0].y == 2) {
             GamePanel.menuManager.changeMenu("ITEM");
         } else if (cursors[0].y == 3) {
-            //GamePanel.changeMenu("POWER");
+            GamePanel.menuManager.changeMenu("POWER");
         } else if (cursors[0].y == 4) {
             GamePanel.menuManager.changeMenu("MATCH_SETTINGS");
         } 

@@ -6,6 +6,7 @@
 package dodgeballgame.Player;
 
 import dodgeballgame.Balls.Ball;
+import dodgeballgame.Balls.HomingBall;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.*;
 import dodgeballgame.Items.Item;
@@ -70,7 +71,8 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     // d is the time Delta
     @Override
     public void update(float d) {
-       if (!p.solid && !p.isGhost) {
+        
+        if (!p.solid && !p.isGhost) {
             double timeDelta = p.hbTimer.getDifference();
             if (timeDelta > p.invincibleTime) {
                 p.solid = true;
@@ -176,13 +178,24 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     }
     
     public Ball nextBall() {
+        switch (p.nextBall) {
+            case "NORMAL" : return new Ball(relThrowSpeed, 0, 0, p.throwAngle, p.team, p);
+            case "HOMING" : return new HomingBall(relThrowSpeed, 0, 0, p.throwAngle, p.team, p);
+        }
         return new Ball(relThrowSpeed, 0, 0, p.throwAngle, p.team, p);
     }
     
     public void throwBall() {
         Ball b = nextBall();
-        double x = p.pos.getX()+ 1.02*(p.r + b.r)*Math.cos(p.angle);
-        double y = p.pos.getY()+ 1.02*(p.r + b.r)*Math.sin(p.angle);
+        double x,y;
+        if (p.autoCatchOn) {
+            x = p.pos.getX()+ 1.02*(catchHitbox.r + b.r)*Math.cos(p.angle);
+            y = p.pos.getY()+ 1.02*(catchHitbox.r + b.r)*Math.sin(p.angle);
+        } else {
+            x = p.pos.getX()+ 1.02*(p.r + b.r)*Math.cos(p.angle);
+            y = p.pos.getY()+ 1.02*(p.r + b.r)*Math.sin(p.angle);
+        }
+        
         
         b.setBall(relThrowSpeed, x, y, p.throwAngle, p.team, p);
         

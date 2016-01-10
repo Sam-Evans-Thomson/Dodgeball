@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dodgeballgame.Items;
+package dodgeballgame.Powers;
 
-import dodgeballgame.GamePanel;
 import dodgeballgame.Player.Player;
 import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
@@ -18,13 +17,13 @@ import javax.imageio.ImageIO;
  *
  * @author Sam
  */
-public class TakeThrowSpeed extends Item {
-    
-    public TakeThrowSpeed(Vec2 pos) {    
+public class AimBotPower extends Power{
+
+    public AimBotPower(Vec2 pos) {
         super(pos);
-        color = new Color(255,0,0);
+        color = new Color(100,255,100);
         try {
-            image = ImageIO.read(new File("Images/Items/throwSpeedDown.png"));
+            image = ImageIO.read(new File("Images/Powers/aimBot.png"));
         } catch (IOException e) {
         }
         image = Tools.sizeImage(image, r);
@@ -32,9 +31,11 @@ public class TakeThrowSpeed extends Item {
     
     @Override
     public void applyEffect(Player p) {
-        GamePanel.soundManager.addThrowSpeed();
-        p.physicsComp.throwSpeed -= 60;
-        if(p.physicsComp.throwSpeed<150) p.physicsComp.throwSpeed = 150;
+        p.stateComp.aimBot();
     }
-
+    
+    @Override
+    public Power copy() {
+        return new AimBotPower(pos);
+    }
 }

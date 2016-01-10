@@ -10,6 +10,7 @@ import dodgeballgame.HitBoxes.ArcHitbox;
 import dodgeballgame.HitBoxes.CircleHitbox;
 import dodgeballgame.Powers.NoPower;
 import dodgeballgame.Powers.Power;
+import dodgeballgame.Powers.StealPowerPower;
 import dodgeballgame.Timer;
 import dodgeballgame.Vec2;
 import java.awt.Color;
@@ -41,6 +42,10 @@ public class Player {
     public boolean solid;       // Does the player collide with balls?
     public boolean catchOn;
     public boolean isGhost;
+    public boolean autoCatchOn;
+    public boolean invincible;
+    
+    public String nextBall;
 
     // INPUTS
     public float leftTrig, rightTrig;
@@ -119,8 +124,11 @@ public class Player {
         lives = startingLives;
         knockoutOn = false;
         isGhost = false;
+        invincible = false;
+        autoCatchOn = false;
         pointsPerKill = 0;
         pointsPerDeath = 0;
+        nextBall = "NORMAL";
         physicsComp = new PlayerPhysicsComponent(this);
         graphicsComp = new PlayerGraphicsComponent(this);
         soundComp = new PlayerSoundComponent(this);
@@ -218,6 +226,7 @@ public class Player {
     //
     
     public void becomeGhost() {
+        catchOn = false;
         isGhost = true;
         solid = false;
         physicsComp.speed = 150;
@@ -225,7 +234,6 @@ public class Player {
     }
     
     public void eatItem() {
-        System.out.println("eat object");
         physicsComp.eatObject();
     }
     
@@ -240,11 +248,17 @@ public class Player {
     ///// EVENTS //////
     public void usePower() {
         powers++;
-        currentPower.applyEffect(this);
-        currentPower = noPower;
+        
+        if (currentPower instanceof StealPowerPower) {
+            currentPower.applyEffect(this);
+        } else {
+            currentPower.applyEffect(this);
+            currentPower = noPower;
+        }
     }
     
     public void hitPlayer(Player p, int i) {
+        
         if (p.team != team) gotHits++;
         else ownGotHits++;
         
@@ -308,7 +322,7 @@ public class Player {
         }
         else ownGoals++;
         GamePanel.changeScore(team, pointsPerGoal);
-        numBalls++;
+        GamePanel.itemManager.addBall(1-team);
         catchTimer.refresh();
         spawnPowerCheck();
     }

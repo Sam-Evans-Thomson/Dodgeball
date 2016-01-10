@@ -22,7 +22,7 @@ public class MoreBalls extends Item {
     
     public MoreBalls(Vec2 pos) {    
         super(pos);
-        color = new Color(140,220,255);
+        color = new Color(0,255,0);
         try {
             image = ImageIO.read(new File("Images/Items/ballsUp.png"));
         } catch (IOException e) {

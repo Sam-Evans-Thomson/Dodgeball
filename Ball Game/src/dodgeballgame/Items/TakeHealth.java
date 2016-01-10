@@ -24,7 +24,7 @@ public class TakeHealth extends Item {
     
     public TakeHealth(Vec2 pos) {
         super(pos);
-        color = new Color(100,255,100);
+        color = new Color(255,0,0);
         try {
             image = ImageIO.read(new File("Images/Items/healthDown.png"));
         } catch (IOException e) {

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class PlayerStateComponent implements PlayerComponent{
     
     Player p;
-    public StateComponent largeCatchArea = new StateComponent(new double[]{200d,6.2d},5);
+    public StateComponent largeCatch = new StateComponent(new double[]{200d,6.2d},5);
     public LargeCatchPower largeCatchPower = new LargeCatchPower(new Vec2(0,0));
     
     public StateComponent slowed = new StateComponent(new double[]{200d},5);
@@ -25,6 +25,15 @@ public class PlayerStateComponent implements PlayerComponent{
     
     public StateComponent noCatch = new StateComponent(new double[]{},1);
     public NoCatchPower noCatchPower = new NoCatchPower(new Vec2(0,0));
+    
+    public StateComponent autoCatch = new StateComponent(new double[]{},10);
+    public AutoCatchPower autoCatchPower = new AutoCatchPower(new Vec2(0,0));
+    
+    public StateComponent invincible = new StateComponent(new double[]{},10);
+    public InvinciblePower invinciblePower = new InvinciblePower(new Vec2(0,0));
+    
+    public StateComponent aimBot = new StateComponent(new double[]{},5);
+    public AimBotPower aimBotPower = new AimBotPower(new Vec2(0,0));
     
     public StateComponent noState = new StateComponent(new double[]{0},0);
     
@@ -37,25 +46,28 @@ public class PlayerStateComponent implements PlayerComponent{
     @Override
     public void update(float d) {
         if(slowed.hasExpired()) endSlowed(); 
-        if(largeCatchArea.hasExpired()) endLargeCatchArea();
+        if(largeCatch.hasExpired()) endLargeCatchArea();
         if(noCatch.hasExpired()) endNoCatch();
+        if(autoCatch.hasExpired()) endAutoCatch();
+        if(invincible.hasExpired()) endInvincible();
+        if(aimBot.hasExpired()) endAimBot();
     }
     
     public void largeCatchArea() {
-        add(largeCatchPower, largeCatchArea);
+        add(largeCatchPower, largeCatch);
         
-        if(!largeCatchArea.active) largeCatchArea.setOrigValues(new double[]{p.radius, p.catchAngle});
-        largeCatchArea.apply();
+        if(!largeCatch.active) largeCatch.setOrigValues(new double[]{p.radius, p.catchAngle});
+        largeCatch.apply();
         
-        p.radius = largeCatchArea.getValue(0);
-        p.catchAngle  = largeCatchArea.getValue(1);
+        p.radius = largeCatch.getValue(0);
+        p.catchAngle  = largeCatch.getValue(1);
     }
     
     public void endLargeCatchArea() {
-        remove(largeCatchPower, largeCatchArea);
+        remove(largeCatchPower, largeCatch);
         
-        p.radius = largeCatchArea.getOrigValue(0);
-        p.catchAngle  = largeCatchArea.getOrigValue(1);
+        p.radius = largeCatch.getOrigValue(0);
+        p.catchAngle  = largeCatch.getOrigValue(1);
         
     }
 
@@ -85,6 +97,46 @@ public class PlayerStateComponent implements PlayerComponent{
         remove(noCatchPower, noCatch);
         
         p.catchOn = true;
+    }
+      
+    public void autoCatch() {
+        add(autoCatchPower, autoCatch);
+        
+        autoCatch.apply();
+        p.autoCatchOn = true;
+    }
+    
+    public void endAutoCatch() {
+        remove(autoCatchPower, autoCatch);
+        
+        p.autoCatchOn = false;
+    }
+    
+    public void invincible() {
+        add(invinciblePower, invincible);
+        
+        invincible.apply();
+        p.invincible = true;
+    }
+    
+    public void endInvincible() {
+        remove(invinciblePower, invincible);
+        
+        p.invincible = false;
+    }
+    
+        
+    public void aimBot() {
+        add(aimBotPower, aimBot);
+        
+        aimBot.apply();
+        p.nextBall = "HOMING";
+    }
+    
+    public void endAimBot() {
+        remove(aimBotPower, aimBot);
+        
+        p.nextBall = "NORMAL";
     }
     
     // Helpers

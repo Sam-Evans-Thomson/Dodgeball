@@ -24,7 +24,7 @@ public class RandomItem extends Item {
     
     public RandomItem(Vec2 pos) {
         super(pos);
-        color = new Color(100,255,100);
+        color = new Color(255,255,100);
         try {
             image = ImageIO.read(new File("Images/Items/random.png"));
         } catch (IOException e) {

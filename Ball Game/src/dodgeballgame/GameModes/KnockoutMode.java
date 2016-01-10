@@ -64,6 +64,8 @@ public class KnockoutMode extends GameMode{
             if (p.team == 0) GamePanel.team1Score+=Player.startingLives;
             else GamePanel.team2Score+=Player.startingLives;
         }
+        
+        GamePanel.itemManager.checkValues();
     }
     
     // Starting Health - [1 to 99]

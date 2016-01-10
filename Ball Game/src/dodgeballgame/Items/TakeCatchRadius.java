@@ -22,7 +22,7 @@ public class TakeCatchRadius extends Item {
     
     public TakeCatchRadius(Vec2 pos) {    
         super(pos);
-        color = new Color(200,200,0);
+        color = new Color(255,0,0);
         try {
             image = ImageIO.read(new File("Images/Items/catchRadiusDown.png"));
         } catch (IOException e) {

@@ -8,26 +8,23 @@ package dodgeballgame.Balls;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.*;
 import dodgeballgame.HitBoxes.Hitbox;
-import dodgeballgame.ImageEditor;
 import dodgeballgame.Player.Player;
 import dodgeballgame.Items.Item;
+import dodgeballgame.Loading;
 import dodgeballgame.Vec2;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 /**
  *
  * @author Sam
  */
 public class Ball {
-    public ImageEditor imageEditor;
+    
     public Vec2 pos, prevPos;
     public Vec2 delta, prevDelta;
     public double speed, angle;
-    public double r;
+    public double r = Loading.r;
     
     public int team;
     public Player player;
@@ -42,9 +39,12 @@ public class Ball {
     public boolean[] inCatchArea;
     
     public CircleHitbox ballHitbox;
-    public BufferedImage ball, ball0, ball1;
     
-    double imageWidth;
+    public BufferedImage ball = Loading.ball;
+    public BufferedImage ball0 = Loading.ball0;
+    public BufferedImage ball1 = Loading.ball1;
+    
+    
     
     public Ball(double speed, double x, double y, double angle, int team, Player player) {
         this.team = team;
@@ -81,28 +81,12 @@ public class Ball {
         softBounceFactor = GamePanel.arena.softBounceFactor;
         inCatchArea = new boolean[GamePanel.numPlayers];
         bounceActive = true;
-        r = 15;
         prevPos = new Vec2(pos.getX(),pos.getY());
         delta = new Vec2(0,0);
         prevDelta = new Vec2(0,0);
         
         ballHitbox = new CircleHitbox(pos.getX(),pos.getY(),r);
-        
-        try {
-            ball = ImageIO.read(new File("Images/Balls/ball.png"));
-            ball0 = ImageIO.read(new File("Images/Balls/ball0.png"));
-            ball1 = ImageIO.read(new File("Images/Balls/ball1.png"));
-        } catch (IOException e) {
-        }
-        
-        imageWidth = ball.getWidth();
-        imageEditor = new ImageEditor(ball);
-        ImageEditor imageEditor0 = new ImageEditor(ball0);
-        ImageEditor imageEditor1 = new ImageEditor(ball1);
-        ball = imageEditor.scale(2*r/imageWidth);
-        ball0 = imageEditor0.scale(2*r/imageWidth);
-        ball1 = imageEditor1.scale(2*r/imageWidth);
-        
+
         if (!GamePanel.friendlyFire) {
             if(team == 0) ball = ball0;
             else ball = ball1;
@@ -139,6 +123,8 @@ public class Ball {
                     GamePanel.soundManager.catchBall();
                     p.setCatchGlow();
                     GamePanel.ballArray.remove(this);
+                } else if (p.invincible) {
+                    bouncePlayer(p);
                 } else if (p.solid){
                     hitPlayer(p);
                     return; 
@@ -147,6 +133,7 @@ public class Ball {
             }
             if(p.getCatchHitbox().collision(pos)) {
                 inCatchArea[p.pNumber] = true;
+                if(p.autoCatchOn) p.physicsComp.catchObject();
             } else inCatchArea[p.pNumber] = false;
         }
             if (GamePanel.arenaManager.goalsActive) {
@@ -190,6 +177,26 @@ public class Ball {
     
     public void render(Graphics2D g) {
         g.drawImage(ball, (int)(pos.getX()-r), (int)(pos.getY()-r), null);
+    }
+    
+    public void bouncePlayer(Player p) {
+        angle = ballHitbox.bounceAngle(prevPos, angle, p.getPlayerHitbox());
+        
+        double playerAngle = p.physicsComp.prevPos.getAngle(p.pos);
+        double xFactor = Math.cos(angle)*p.delta.getX();
+        double yFactor = Math.sin(angle)*p.delta.getY();
+        
+        double moveFactor;
+        if(p.delta.getMagnitude() != 0d) {
+            moveFactor = (xFactor+yFactor)/p.delta.getMagnitude();
+        } else moveFactor = 0d;
+        System.out.println(moveFactor);
+        
+        speed += 0.3*moveFactor*p.physicsComp.speed;
+        if(speed>maxSpeed) speed = maxSpeed;
+        pos = prevPos;
+        delta.set(angle, d*speed, 1);
+        pos = pos.add(delta); 
     }
     
     public void hitPlayer(Player p) {

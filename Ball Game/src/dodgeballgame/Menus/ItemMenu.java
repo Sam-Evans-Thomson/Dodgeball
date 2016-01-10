@@ -8,7 +8,7 @@ package dodgeballgame.Menus;
 import dodgeballgame.Cursor;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
-import dodgeballgame.ItemManager;
+import dodgeballgame.Items.ItemManager;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -68,14 +68,14 @@ public class ItemMenu extends Menu {
                 
                 // RE_DO ALL THIS;
                 
-                int freq = ItemManager.powerUpFreqs[i][j];
+                int freq = ItemManager.itemFreqs[i][j];
                 int xPos2 = i*width/4 + xPos;
                 int yPos2 = j*height/4 + yPos;
                 g.drawImage(images[i][j],(int)xPos2 + 15,(int)yPos2 +  + images[i][j].getHeight()/2,null);
                 
                 
                 // black out
-                if(GamePanel.itemManager.powerUpFreqs[i][j]==0) {
+                if(GamePanel.itemManager.itemFreqs[i][j]==0) {
                     g.setColor(Color.black);
                     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
                     g.fillRect(xPos2, yPos2, width/4,height/4);
@@ -187,13 +187,13 @@ public class ItemMenu extends Menu {
     public void rightTrigger() {
         
         ItemManager.incFreq(cursors[0].x,cursors[0].y,1);
-        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursors[0].x][cursors[0].y]);
+        GamePanel.soundManager.menu((int)ItemManager.itemFreqs[cursors[0].x][cursors[0].y]);
     }
     
     @Override
     public void leftTrigger() {
         ItemManager.decFreq(cursors[0].x,cursors[0].y,1);
-        GamePanel.soundManager.menu((int)ItemManager.powerUpFreqs[cursors[0].x][cursors[0].y]);
+        GamePanel.soundManager.menu((int)ItemManager.itemFreqs[cursors[0].x][cursors[0].y]);
     }
 }
 
