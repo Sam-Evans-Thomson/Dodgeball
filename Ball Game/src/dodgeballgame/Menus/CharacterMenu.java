@@ -32,7 +32,7 @@ public class CharacterMenu extends Menu{
     
     ArrayList<PlayerImages> playerImages = new ArrayList();
     
-    private final int NUM_CHARACTERS = 9;
+    private final int NUM_CHARACTERS = 10;
     
     public int xPos = INNER_X_START;
     public int yPos = INNER_Y_START;
@@ -51,6 +51,7 @@ public class CharacterMenu extends Menu{
     
     public CharacterMenu() {
         for (int i = 0; i < 4; i++) cursors[i] = new Cursor(NUM_CHARACTERS, 1);
+        for (int i = 0; i < 4; i++) cursors[i].x = i;
         loadImages();
     }
     

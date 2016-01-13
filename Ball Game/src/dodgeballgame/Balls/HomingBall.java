@@ -6,9 +6,9 @@
 package dodgeballgame.Balls;
 
 import dodgeballgame.GamePanel;
+import dodgeballgame.Loading;
 import dodgeballgame.Player.Player;
 import dodgeballgame.Tools;
-import dodgeballgame.Vec2;
 
 /**
  *
@@ -17,8 +17,7 @@ import dodgeballgame.Vec2;
 public class HomingBall extends Ball {
     
     double turningAngle = 2*Math.PI/3;
-    Vec2 far = new Vec2(100000,100000);
-    Player closestPlayer = new Player(0,0,10000,10000);
+    static Player closestPlayer = Loading.closestPlayer;
     
     public HomingBall(double speed, double x, double y, double angle, int team, Player player) {
         super(speed,x,y,angle,team, player);

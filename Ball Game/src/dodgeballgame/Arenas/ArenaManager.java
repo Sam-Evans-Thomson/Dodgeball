@@ -5,7 +5,6 @@
  */
 package dodgeballgame.Arenas;
 
-import dodgeballgame.Arenas.*;
 import dodgeballgame.GamePanel;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -28,6 +27,7 @@ public class ArenaManager extends JPanel{
     public static final int NUM_ARENAS = 4;
     
     public static ArrayList<Arena> arenas;
+    public static Arena arena;
     
     public ArenaManager() {
 
@@ -73,7 +73,7 @@ public class ArenaManager extends JPanel{
     }
     
     public void setArena(int i) {
-        GamePanel.arena = arenas.get(i);
+        arena = arenas.get(i);
         GamePanel.newGame();
     }
 }

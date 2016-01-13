@@ -33,7 +33,7 @@ public class TakeCatchRadius extends Item {
     @Override
     public void applyEffect(Player p) {
         GamePanel.soundManager.addCatchReach();
-        p.radius -= 10;
+        p.radius -= 15;
         if (p.radius < 0) p.radius = 0;
     }
 

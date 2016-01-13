@@ -51,8 +51,6 @@ public class Arena {
     public double bounceFactor = 0.9;
     public int buffer = 1000;
     
-    public int numPlayers;
-    
     public BufferedImage backgroundImage;
     public BufferedImage scaledBackgroundImage;
     
@@ -60,8 +58,6 @@ public class Arena {
     int HEIGHT = (int)GamePanel.arenaHEIGHT;
     
     public String imgPath;
-
-    public Vec2[] playerPos = new Vec2[GamePanel.maxNumPlayers];
         
     public Arena() {
         
@@ -89,27 +85,30 @@ public class Arena {
         arenaTeam1Goal = new ArrayList<>();
         arenaTeam2Goal = new ArrayList<>();
         renderHitboxes = new ArrayList();
-        
-        initPlayerPositions();
+
         initBorders();
         if (GamePanel.arenaManager.goalsActive) {initGoals();}
         initHitBoxes();
         initTeamAreas();
     }
     
-    public void initPlayerPositions() {
-        numPlayers = GamePanel.numPlayers;
-        for (int p = 0; p < 4 ; p++) {
-            int team =2*p/numPlayers;
-            int posi = (p%2+1);
-            double x,y;
-            if (team==0) x = WIDTH/20;
-            else x = 19*WIDTH/20;
-            if (posi == 1) y = HEIGHT/8;
-            else y = 7*HEIGHT/8;
-            
-            playerPos[p] = new Vec2(x,y);
+    public Vec2[] getPlayerPositions(int numPlayers) {
+        Vec2[] positions = new Vec2[numPlayers];
+        
+        if(numPlayers == 2) {
+            positions[0] = new Vec2(WIDTH/20,HEIGHT/2);
+            positions[1] = new Vec2(19*WIDTH/20, HEIGHT/2);
+        } else if (numPlayers == 3) {
+            positions[0] = new Vec2(WIDTH/20,HEIGHT/8);
+            positions[1] = new Vec2(WIDTH/20,7*HEIGHT/8);
+            positions[2] = new Vec2(19*WIDTH/20, HEIGHT/2);
+        } else if (numPlayers == 4) {
+            positions[0] = new Vec2(WIDTH/20,HEIGHT/8);
+            positions[1] = new Vec2(WIDTH/20,7*HEIGHT/8);
+            positions[2] = new Vec2(19*WIDTH/20, HEIGHT/8);
+            positions[3] = new Vec2(19*WIDTH/20, 7*HEIGHT/8);
         }
+        return positions;
     }
     
     public void initTeamAreas() {

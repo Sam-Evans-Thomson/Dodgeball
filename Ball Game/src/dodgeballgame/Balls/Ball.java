@@ -5,6 +5,7 @@
  */
 package dodgeballgame.Balls;
 
+import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.*;
 import dodgeballgame.HitBoxes.Hitbox;
@@ -77,8 +78,8 @@ public class Ball {
     }
     
     public void init() {
-        bounceFactor = GamePanel.arena.bounceFactor;
-        softBounceFactor = GamePanel.arena.softBounceFactor;
+        bounceFactor = ArenaManager.arena.bounceFactor;
+        softBounceFactor = ArenaManager.arena.softBounceFactor;
         inCatchArea = new boolean[GamePanel.numPlayers];
         bounceActive = true;
         prevPos = new Vec2(pos.getX(),pos.getY());
@@ -137,28 +138,28 @@ public class Ball {
             } else inCatchArea[p.pNumber] = false;
         }
             if (GamePanel.arenaManager.goalsActive) {
-                for(Hitbox hb : GamePanel.arena.arenaTeam1Goal) {
+                for(Hitbox hb : ArenaManager.arena.arenaTeam1Goal) {
                     if(hb.collision(ballHitbox)) {
                         hitGoal(player, 0);
                     }
                 }
-                for(Hitbox hb : GamePanel.arena.arenaTeam2Goal) {
+                for(Hitbox hb : ArenaManager.arena.arenaTeam2Goal) {
                     if(hb.collision(ballHitbox)) {
                         hitGoal(player, 1);
                     }
                 }
             }
         
-        for(Hitbox hb : GamePanel.arena.arenaBallHitbox) {
+        for(Hitbox hb : ArenaManager.arena.arenaBallHitbox) {
             if(hb.collision(ballHitbox)) {
-                hitWall(hb,GamePanel.arena.bounceFactor);
+                hitWall(hb,ArenaManager.arena.bounceFactor);
                 return;
             }
         }
         
-        for(Hitbox hb : GamePanel.arena.arenaSoftBallHitbox) {
+        for(Hitbox hb : ArenaManager.arena.arenaSoftBallHitbox) {
             if(hb.collision(ballHitbox)) {
-                hitWall(hb,GamePanel.arena.softBounceFactor);
+                hitWall(hb,ArenaManager.arena.softBounceFactor);
                 return;
             }
         }

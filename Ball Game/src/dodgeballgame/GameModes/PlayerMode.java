@@ -5,6 +5,7 @@
  */
 package dodgeballgame.GameModes;
 
+import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.GamePanel;
 import dodgeballgame.Player.Player;
 
@@ -73,13 +74,13 @@ public class PlayerMode extends GameMode{
     // Wall Bounce Factor - [0.1 to 3.0]
     public void wallBounceFactor() {
         double val = settings.getDouble(2);
-        GamePanel.arena.bounceFactor = val;
+        ArenaManager.arena.bounceFactor = val;
     }
     
     // Soft Back Wall - [0 or 1]
     public void softBackWall() {
         double val = settings.getDouble(3);
-        GamePanel.arena.softBounceFactor = (1-0.5*val)*GamePanel.arena.bounceFactor;
+        ArenaManager.arena.softBounceFactor = (1-0.5*val)*ArenaManager.arena.bounceFactor;
     }
     
     // Friendly Fire - [0 or 1]

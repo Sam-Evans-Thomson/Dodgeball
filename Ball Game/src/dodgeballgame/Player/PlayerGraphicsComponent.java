@@ -5,6 +5,7 @@
  */
 package dodgeballgame.Player;
 
+import dodgeballgame.GameModes.GameModeManager;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
 import dodgeballgame.Timer;
@@ -31,7 +32,7 @@ public class PlayerGraphicsComponent implements PlayerComponent{
 
     public BufferedImage playerImageA;
     public BufferedImage playerImageB;
-    public BufferedImage playerImage;
+    public BufferedImage playerImage, playerImageSmall;
     public BufferedImage ghostImage;
     
     private BufferedImage heart;
@@ -41,6 +42,7 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     public int playerScoreOffsetY;
     
     public ImageEditor imageEditor;
+    public ImageEditor ghostEditor;
     
     public PlayerGraphicsComponent(Player p) {
         this.p = p;
@@ -56,13 +58,11 @@ public class PlayerGraphicsComponent implements PlayerComponent{
             ball = ImageIO.read(new File("Images/Balls/ball.png"));
         } catch (IOException e) {
         }
-        playerImageA = Tools.sizeImage(playerImageA, 2*p.r);
-        playerImageB = Tools.sizeImage(playerImageB, 2*p.r);
-        ghostImage = Tools.sizeImage(ghostImage, 2*p.r);
-        heart = Tools.sizeImage(heart, 60);
-        ball = Tools.sizeImage(ball, 60);
+
+        changeImages(playerImageA,playerImageB);
         
-        playerImage = playerImageA;
+        heart = Tools.sizeImage(heart, 70);
+        ball = Tools.sizeImage(ball, 70);
         
         if (p.team == 0) {
             playerScoreOffsetX = p.pNumber*GamePanel.arenaWIDTH/4 + 20;
@@ -94,82 +94,92 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         playerImageA = Tools.sizeImage(a, 2*p.r);
         playerImageB = Tools.sizeImage(b, 2*p.r);
         playerImage = playerImageA;
+        ghostImage = Tools.sizeImage(ghostImage, 2*p.r);
+        ghostEditor = new ImageEditor(ghostImage);
+        playerImageSmall = Tools.scaleImage(playerImage, 0.7f);
     }
-    
-    @Override
-    public void update(float d) {
-        
-    }
-    
+
     public void render(Graphics2D g) {
         //Render Animation graphics
-        catchGlow(colors[0],g,p.pos);
-        grabItemGLow(colors[0],g,p.pos);
+        if (catchTime < catchTimeMax) catchGlow(colors[0],g,p.pos);
+        if (itemGlowTime < itemGlowTimeMax) grabItemGLow(colors[0],g,p.pos);
         
-        if (checkHit() && !playerImage.equals(playerImageA))playerImage = playerImageA;
-        
-        if (!p.isGhost)renderAim(g);
-        
-        if(p.isGhost) g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
-        else if (!p.solid) g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-        else g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-        
+        hitTime = hitTimer.getDifference();
+        if (hitTime > hitTimeMax && !playerImage.equals(playerImageA)){
+            playerImage = playerImageA;
+        }
+
         if(p.isGhost) {
-            ImageEditor im = new ImageEditor(ghostImage);
-            BufferedImage ghostImage2 = im.rotate(p.aimAngle.getAngle());
-            
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            BufferedImage ghostImage2 = ghostEditor.rotate(p.aimAngle.getAngle());
             g.drawImage(ghostImage2, (int)(p.pos.getX()-p.r), (int)(p.pos.getY()-p.r), null);
-        } else g.drawImage(playerImage, (int)(p.pos.getX()-p.r), (int)(p.pos.getY()-p.r), null);
-        
-        
-        
+        } else if (!p.solid){
+            renderAim(g);
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+            g.drawImage(playerImage, (int)(p.pos.getX()-p.r), (int)(p.pos.getY()-p.r), null);
+        } else {
+            renderAim(g);
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            g.drawImage(playerImage, (int)(p.pos.getX()-p.r), (int)(p.pos.getY()-p.r), null);
+        }
+
         renderPower(g);
         renderScore(g);
     }
     
     private void renderAim(Graphics2D g) {
-        double percentage = (7d-p.catchTimer.getDifference())/5d;
+        double percentage = (double)p.health/(double)Player.startHealth;
         if (percentage < 0) percentage = 0;
         else if (percentage > 1) percentage = 1;
         
         percentage = percentage*0.7 + 0.3;
         
+        double rad = 0.9*p.radius;
+        double x = p.pos.getX();
+        double y = p.pos.getY();
+        
         g.setColor(colors[0]);   
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));     
-        int[] xPoints = {(int)(p.pos.getX() + 1.15*0.9*p.radius*Math.cos(p.angle)),
-                        (int)(p.pos.getX() + p.radius*0.9*Math.cos(p.angle+0.1)),
-                        (int)(p.pos.getX() + p.radius*0.9*Math.cos(p.angle-0.1))};
-        int[] yPoints = {(int)(p.pos.getY() + 1.15*0.9*p.radius*Math.sin(p.angle)),
-                        (int)(p.pos.getY() + p.radius*0.9*Math.sin(p.angle+0.1)),
-                        (int)(p.pos.getY() + p.radius*0.9*Math.sin(p.angle-0.1))};
+        int[] xPoints = {(int)(x + 1.15*rad*Math.cos(p.angle)),
+                        (int)(x + rad*Math.cos(p.angle+0.1)),
+                        (int)(x + rad*Math.cos(p.angle-0.1))};
+        int[] yPoints = {(int)(y + 1.15*rad*Math.sin(p.angle)),
+                        (int)(y + rad*Math.sin(p.angle+0.1)),
+                        (int)(y + rad*Math.sin(p.angle-0.1))};
         g.fillPolygon(xPoints, yPoints, 3);
         
         if (p.catchOn) {
             g.setColor(colors[1]);        
-            g.fillArc((int)(p.pos.getX()-0.9*p.radius), (int)(p.pos.getY()-0.9*p.radius), (int)(2*0.9*p.radius), (int)(2*p.radius*0.9),
+            g.fillArc((int)(x-rad), (int)(y-rad), (int)(2*rad), (int)(2*rad),
                     (int)(Math.toDegrees(-p.angle-p.catchAngle/2+0.1)), (int)Math.toDegrees(p.catchAngle-0.2));
             g.setColor(colors[0]);  
-            g.fillArc((int)(p.pos.getX()-0.9*p.radius*percentage), (int)(p.pos.getY()-0.9*p.radius*percentage), (int)(2*0.9*p.radius*percentage), (int)(2*p.radius*0.9*percentage),
+            g.fillArc((int)(x-rad*percentage), (int)(y-rad*percentage), (int)(2*rad*percentage), (int)(2*rad*percentage),
                     (int)(Math.toDegrees(-p.angle-p.catchAngle/2+0.1)), (int)Math.toDegrees(p.catchAngle-0.2));
         }
     }
     
     private void renderScore(Graphics2D g) {
+        if (Player.knockoutOn) {
+            for(int i = p.lives; i > 1; i--) {
+                g.drawImage(heart, playerScoreOffsetX + 100 - 7*(i-1), playerScoreOffsetY-50, null);
+            }
+        } 
         
-        g.drawImage(Tools.scaleImage(playerImage,0.6), playerScoreOffsetX, playerScoreOffsetY-50, null);
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         g.drawImage(heart, playerScoreOffsetX + 100, playerScoreOffsetY-50, null);
         
-        g.setColor(new Color(0,0,0));
-        g.setFont(new Font("Sans Serif", Font.BOLD, 24));
+        g.drawImage(playerImageSmall, playerScoreOffsetX, playerScoreOffsetY-50, null);
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         
-        Tools.centreStringHor(("" + p.health), g, playerScoreOffsetX + 129, playerScoreOffsetY-14);
+        g.setColor(new Color(0,0,0));
+        g.setFont(new Font("Sans Serif", Font.BOLD, 27));
+        
+        Tools.centreStringHor(("" + p.health), g, playerScoreOffsetX + 133, playerScoreOffsetY-9);
 
         g.drawImage(ball, playerScoreOffsetX + 200, playerScoreOffsetY-50, null);
 
         g.drawImage(Tools.sizeImage(p.currentPower.image,60), playerScoreOffsetX + 300, playerScoreOffsetY-50, null);
 
-        Tools.centreStringHor(("" + p.numBalls), g, playerScoreOffsetX + 229, playerScoreOffsetY-14);
+        Tools.centreStringHor(("" + p.numBalls), g, playerScoreOffsetX + 233, playerScoreOffsetY-7);
     }
     
     private void renderPower(Graphics2D g) {
@@ -200,11 +210,6 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         hitTime = hitTimer.getDifference();
     }
     
-    public boolean checkHit() {
-        hitTime = hitTimer.getDifference();
-        return hitTime > hitTimeMax;
-    }
-    
     /////// CATCHING ///////////////
     
     public final Timer catchTimer = new Timer();
@@ -215,16 +220,13 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     private final Color glowColor = new Color(255,255,200);
     
     public Graphics2D catchGlow(Color c, Graphics2D g, Vec2 pos) {
-        
-        if (catchTime < catchTimeMax) {
-            float opacity = (float)(catchTimeMax - catchTime)*0.8f/(float)catchTimeMax;
-            g.setColor(glowColor);
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-            double size = 100.0 + (catchGlowRadius - 100)*catchTime/catchTimeMax;
-            g.fillOval((int)(pos.getX()-size/2), (int)(pos.getY()-size/2),(int)size, (int)size);
-            catchTime = catchTimer.getDifference();
-        }
-        
+
+        float opacity = (float)(catchTimeMax - catchTime)*0.8f/(float)catchTimeMax;
+        g.setColor(glowColor);
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+        double size = 100.0 + (catchGlowRadius - 100)*catchTime/catchTimeMax;
+        g.fillOval((int)(pos.getX()-size/2), (int)(pos.getY()-size/2),(int)size, (int)size);
+        catchTime = catchTimer.getDifference();
         return g;        
     }
     
@@ -237,18 +239,18 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     
     public final Timer itemGlowTimer = new Timer();
     private double itemGlowTime;
-    private final double powerUpTimeMax = 0.2;
+    private final double itemGlowTimeMax = 0.2;
     public int[][] powerUpGlow;
     public double powerUpGlowRadius = 200.0;
     private Color itemGlowColor;
     
     public Graphics2D grabItemGLow(Color c, Graphics2D g, Vec2 pos) {
         
-        if (itemGlowTime < powerUpTimeMax) {
-            float opacity = (float)(powerUpTimeMax - itemGlowTime)*0.8f/(float)powerUpTimeMax;
+        if (itemGlowTime < itemGlowTimeMax) {
+            float opacity = (float)(itemGlowTimeMax - itemGlowTime)*0.8f/(float)itemGlowTimeMax;
             g.setColor(itemGlowColor);
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-            double size = 100.0 + (powerUpGlowRadius - 100)*itemGlowTime/powerUpTimeMax;
+            double size = 100.0 + (powerUpGlowRadius - 100)*itemGlowTime/itemGlowTimeMax;
             g.fillOval((int)(pos.getX()-size/2), (int)(pos.getY()-size/2),(int)size, (int)size);
             itemGlowTime = itemGlowTimer.getDifference();
         }
@@ -269,6 +271,10 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     
 
     /////////// TOOLS //////////////////
+
+    @Override
+    public void update(float d) {
+    }
     
     
 }

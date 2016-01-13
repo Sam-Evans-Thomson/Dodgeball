@@ -5,6 +5,7 @@
  */
 package dodgeballgame.Items;
 
+import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.GamePanel;
 import dodgeballgame.Items.*;
 import dodgeballgame.Vec2;
@@ -83,7 +84,7 @@ public class ItemManager {
         refreshSpawner();
     }
     
-    private static void refreshSpawner() {
+    public static void refreshSpawner() {
         checkValues();
         spawner = new int[totalFreq()];
         
@@ -156,11 +157,11 @@ public class ItemManager {
     }
     
     public AddBall makeBall(int team) {
-        double wBuffer = (GamePanel.arena.teamAreas[team][1].getX() - 50) - (GamePanel.arena.teamAreas[team][0].getX() + 50);
-        double hBuffer = (GamePanel.arena.teamAreas[team][1].getY() - 50) - (GamePanel.arena.teamAreas[team][0].getY() + 50);
+        double wBuffer = (ArenaManager.arena.teamAreas[team][1].getX() - 50) - (ArenaManager.arena.teamAreas[team][0].getX() + 50);
+        double hBuffer = (ArenaManager.arena.teamAreas[team][1].getY() - 50) - (ArenaManager.arena.teamAreas[team][0].getY() + 50);
         
-        double x = (GamePanel.arena.teamAreas[team][0].getX() + 50 + rand.nextDouble()*wBuffer);
-        double y = (GamePanel.arena.teamAreas[team][0].getY() + 50 + rand.nextDouble()*hBuffer);
+        double x = (ArenaManager.arena.teamAreas[team][0].getX() + 50 + rand.nextDouble()*wBuffer);
+        double y = (ArenaManager.arena.teamAreas[team][0].getY() + 50 + rand.nextDouble()*hBuffer);
         Vec2 pos = new Vec2(x,y);
         return new AddBall(pos);
     }
@@ -189,44 +190,47 @@ public class ItemManager {
 
     public Item makeItem(int team) {
         
-        int seed = rand.nextInt(spawner.length);
-        Vec2 pos = new Vec2(0,0);
+        if (spawner.length > 0) {
+            int seed = rand.nextInt(spawner.length);
+            Vec2 pos = new Vec2(0,0);
 
-        switch (spawner[seed]) {
-        case 0 : return new AddHealth(pos);
-        case 1 : return new AddRunSpeed(pos);
-        case 2 : return new AddCatchAngle(pos);
-        case 3 : return new AddCatchRadius(pos);
-        case 4 : return new TakeHealth(pos);
-        case 5 : return new TakeRunSpeed(pos);
-        case 6 : return new TakeCatchAngle(pos);
-        case 7 : return new TakeCatchRadius(pos);
-        case 8 : return new AddThrowSpeed(pos);
-        case 9 : return new AddPoint(pos);
-        case 10 : return new MoreBalls(pos);  
-        case 11 : return new RandomItem(pos);
-        case 12 : return new TakeThrowSpeed(pos);
-        case 13 : return new TakePoint(pos);
-        case 14 : return new LessBalls(pos);
-        case 15 : return new Death(pos);   
+            switch (spawner[seed]) {
+            case 0 : return new AddHealth(pos);
+            case 1 : return new AddRunSpeed(pos);
+            case 2 : return new AddCatchAngle(pos);
+            case 3 : return new AddCatchRadius(pos);
+            case 4 : return new TakeHealth(pos);
+            case 5 : return new TakeRunSpeed(pos);
+            case 6 : return new TakeCatchAngle(pos);
+            case 7 : return new TakeCatchRadius(pos);
+            case 8 : return new AddThrowSpeed(pos);
+            case 9 : return new AddPoint(pos);
+            case 10 : return new MoreBalls(pos);  
+            case 11 : return new RandomItem(pos);
+            case 12 : return new TakeThrowSpeed(pos);
+            case 13 : return new TakePoint(pos);
+            case 14 : return new LessBalls(pos);
+            case 15 : return new Death(pos);   
+            }
         }
-
-        return new AddHealth(pos);
+        return null;
     } 
     
 
     public void addItem(int team) {
-        double wBuffer = (GamePanel.arena.teamAreas[team][1].getX() - 50) - (GamePanel.arena.teamAreas[team][0].getX() + 50);
-        double hBuffer = (GamePanel.arena.teamAreas[team][1].getY() - 50) - (GamePanel.arena.teamAreas[team][0].getY() + 50);
+        double wBuffer = (ArenaManager.arena.teamAreas[team][1].getX() - 50) - (ArenaManager.arena.teamAreas[team][0].getX() + 50);
+        double hBuffer = (ArenaManager.arena.teamAreas[team][1].getY() - 50) - (ArenaManager.arena.teamAreas[team][0].getY() + 50);
         
-        double x = (GamePanel.arena.teamAreas[team][0].getX() + 50 + rand.nextDouble()*wBuffer);
-        double y = (GamePanel.arena.teamAreas[team][0].getY() + 50 + rand.nextDouble()*hBuffer);
+        double x = (ArenaManager.arena.teamAreas[team][0].getX() + 50 + rand.nextDouble()*wBuffer);
+        double y = (ArenaManager.arena.teamAreas[team][0].getY() + 50 + rand.nextDouble()*hBuffer);
         Vec2 pos = new Vec2(x,y);
 
-        Item newItem = makeItem(team);
-        newItem.pos = pos;
-        newItem.hb.pos = pos;
-        
-        GamePanel.itemArray.add(newItem);
+        if (spawner.length > 0) {
+            Item newItem = makeItem(team);
+            newItem.pos = pos;
+            newItem.hb.pos = pos;
+
+            GamePanel.itemArray.add(newItem);        
+        }
     }   
 }

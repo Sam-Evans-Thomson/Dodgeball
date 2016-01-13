@@ -5,6 +5,7 @@
  */
 package dodgeballgame.Balls;
 
+import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.*;
 import dodgeballgame.ImageEditor;
@@ -34,8 +35,8 @@ public class Wrench extends Ball{
     
     @Override
     public void init() {
-        bounceFactor = GamePanel.arena.bounceFactor;
-        softBounceFactor = GamePanel.arena.softBounceFactor;
+        bounceFactor = ArenaManager.arena.bounceFactor;
+        softBounceFactor = ArenaManager.arena.softBounceFactor;
         inCatchArea = new boolean[GamePanel.numPlayers];
         bounceActive = true;
         r = 50;
@@ -97,14 +98,14 @@ public class Wrench extends Ball{
             }
         }
         
-        for(Hitbox hb : GamePanel.arena.arenaBallHitbox) {
+        for(Hitbox hb : ArenaManager.arena.arenaBallHitbox) {
             if(hb.collision(ballHitbox)) {               
                 GamePanel.ballArray.remove(this);
                 break;
             }
         }
         
-        for(Hitbox hb : GamePanel.arena.arenaSoftBallHitbox) {
+        for(Hitbox hb : ArenaManager.arena.arenaSoftBallHitbox) {
             if(hb.collision(ballHitbox)) {
                 GamePanel.ballArray.remove(this);
                 break;

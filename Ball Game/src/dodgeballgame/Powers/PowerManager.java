@@ -5,6 +5,7 @@
  */
 package dodgeballgame.Powers;
 
+import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.GamePanel;
 import dodgeballgame.Vec2;
 import java.util.ArrayList;
@@ -66,20 +67,24 @@ public class PowerManager {
     }
     
     public void addPower(int team) {
-        double wBuffer = (GamePanel.arena.teamAreas[team][1].getX() - 50) - (GamePanel.arena.teamAreas[team][0].getX() + 50);
-        double hBuffer = (GamePanel.arena.teamAreas[team][1].getY() - 50) - (GamePanel.arena.teamAreas[team][0].getY() + 50);
+        double wBuffer = (ArenaManager.arena.teamAreas[team][1].getX() - 50) - (ArenaManager.arena.teamAreas[team][0].getX() + 50);
+        double hBuffer = (ArenaManager.arena.teamAreas[team][1].getY() - 50) - (ArenaManager.arena.teamAreas[team][0].getY() + 50);
         
-        double x = (GamePanel.arena.teamAreas[team][0].getX() + 50 + rand.nextDouble()*wBuffer);
-        double y = (GamePanel.arena.teamAreas[team][0].getY() + 50 + rand.nextDouble()*hBuffer);
+        double x = (ArenaManager.arena.teamAreas[team][0].getX() + 50 + rand.nextDouble()*wBuffer);
+        double y = (ArenaManager.arena.teamAreas[team][0].getY() + 50 + rand.nextDouble()*hBuffer);
         Vec2 pos = new Vec2(x,y);
         
         add(makeRandom(pos));
     }
     
     public Power makeRandom(Vec2 pos) {
-        int seed = rand.nextInt(activePowers.size());
-        Power randomPower = activePowers.get(seed).copy();
-        randomPower.setPos(pos);
-        return randomPower;
+        if (activePowers.size() < 1) {
+            return null;
+        } else {
+            int seed = rand.nextInt(activePowers.size());
+            Power randomPower = activePowers.get(seed).copy();
+            randomPower.setPos(pos);
+            return randomPower;
+        }
     }
 }

@@ -16,8 +16,7 @@ import javax.imageio.ImageIO;
  * @author Sam
  */
 public class Loading {
-    
-    public static Player far = new Player(0,0,10000,10000);
+
     
     ///////////////////////////////////////////////////////////////////////////
     // Images
@@ -28,6 +27,8 @@ public class Loading {
     public static ImageEditor imageEditor;
     public static double imageWidth;
     public static double r = 15;
+    
+    public static Player closestPlayer = new Player(0,0,10000,10000);
     
     public Loading() {
         

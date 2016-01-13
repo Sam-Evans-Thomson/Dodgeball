@@ -34,7 +34,7 @@ public class Death extends Item {
     
     @Override
     public void applyEffect(Player p) {
-        p.death();
+        p.death(null);
 
         GamePanel.soundManager.takeHealth();
     }

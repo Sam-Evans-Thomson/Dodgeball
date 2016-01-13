@@ -50,12 +50,11 @@ public class GeneralSettings {
         if(setting == 4) {
             settings.get(4).changeValue(amount);
             numberOfPlayers();
-            GamePanel.newGame();
+            GamePanel.loadPlayers();
         } else {
             settings.get(setting).changeValue(amount);
             apply();
         }
-        
     }
     
     public void apply() {

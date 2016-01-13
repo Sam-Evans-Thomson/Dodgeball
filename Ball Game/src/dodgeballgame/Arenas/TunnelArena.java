@@ -27,6 +27,7 @@ public class TunnelArena extends HorizontalArena{
     
     @Override
     protected void renderHitboxes(Graphics2D g) {
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         g.setColor(Color.WHITE);
         for (Hitbox hb : renderHitboxes) hb.render(g);
     }
@@ -79,6 +80,7 @@ public class TunnelArena extends HorizontalArena{
         teamAreas[0] = new Vec2[]{new Vec2(HEIGHT/2,0), new Vec2(WIDTH,HEIGHT/2)};
         teamAreas[1] = new Vec2[]{new Vec2(HEIGHT/2,HEIGHT/2), new Vec2(WIDTH,HEIGHT)};
     }
+
     
     @Override
     protected void sideGoals(){

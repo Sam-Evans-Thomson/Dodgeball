@@ -5,6 +5,7 @@
  */
 package dodgeballgame.Player;
 
+import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.Balls.Ball;
 import dodgeballgame.Balls.HomingBall;
 import dodgeballgame.GamePanel;
@@ -110,9 +111,9 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     }
     
     private void resolveMove(Vec2 vec) {
-        resolveCollisions(vec, GamePanel.arena.arenaPlayerHitbox);
-        if(!p.isGhost && p.team == 0)         resolveCollisions(vec, GamePanel.arena.arenaTeam1Hitbox);
-        else if(!p.isGhost && p.team == 1)    resolveCollisions(vec, GamePanel.arena.arenaTeam2Hitbox);
+        resolveCollisions(vec, ArenaManager.arena.arenaPlayerHitbox);
+        if(!p.isGhost && p.team == 0)         resolveCollisions(vec, ArenaManager.arena.arenaTeam1Hitbox);
+        else if(!p.isGhost && p.team == 1)    resolveCollisions(vec, ArenaManager.arena.arenaTeam2Hitbox);
         //resolvePlayerCollisions(vec);
         p.distanceTravelled += prevPos.getMagnitude(p.pos);
     }
@@ -200,12 +201,12 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         b.setBall(relThrowSpeed, x, y, p.throwAngle, p.team, p);
         
         int count = 0;
-        for(Hitbox hb : GamePanel.arena.arenaBallHitbox) {
+        for(Hitbox hb : ArenaManager.arena.arenaBallHitbox) {
             if(hb.collision(b.ballHitbox)) {
                 count++;
             }
         }
-        for(Hitbox hb : GamePanel.arena.arenaSoftBallHitbox) {
+        for(Hitbox hb : ArenaManager.arena.arenaSoftBallHitbox) {
             if(hb.collision(b.ballHitbox)) {
                 count++;
             }

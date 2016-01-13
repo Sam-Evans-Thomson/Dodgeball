@@ -28,15 +28,23 @@ public class HorizontalArena extends Arena{
     }
     
     @Override
-    public void initPlayerPositions() {
-        numPlayers = GamePanel.numPlayers;
-        for (int p = 0; p < 4 ; p++) {
-            int team =2*p/numPlayers;
-            double y = HEIGHT/4 + HEIGHT*team/2;
-            double x = (p%2+1)*WIDTH/3;
-            
-            playerPos[p] = new Vec2(x,y);
+    public Vec2[] getPlayerPositions(int numPlayers) {
+        Vec2[] positions = new Vec2[numPlayers];
+        
+        if(numPlayers == 2) {
+            positions[0] = new Vec2(WIDTH/2,HEIGHT/8);
+            positions[1] = new Vec2(WIDTH/2, 7*HEIGHT/8);
+        } else if (numPlayers == 3) {
+            positions[0] = new Vec2(WIDTH/20,HEIGHT/8);
+            positions[1] = new Vec2(19*WIDTH/20,HEIGHT/8);
+            positions[2] = new Vec2(WIDTH/2, 7*HEIGHT/8);
+        } else if (numPlayers == 4) {
+            positions[0] = new Vec2(WIDTH/20,HEIGHT/8);
+            positions[1] = new Vec2(19*WIDTH/20,HEIGHT/8);
+            positions[2] = new Vec2(WIDTH/20,7*HEIGHT/8);
+            positions[3] = new Vec2(19*WIDTH/20, 7*HEIGHT/8);
         }
+        return positions;
     }
     
     @Override    
@@ -58,6 +66,7 @@ public class HorizontalArena extends Arena{
         Tools.centreStringHor("" + (int)GamePanel.winScore, g,WIDTH - 130,HEIGHT/2 - 10);
         Tools.centreStringHor("" + (int)GamePanel.winScore, g,WIDTH - 130,HEIGHT/2 + 150);
         g.fillRect(17*WIDTH/20, HEIGHT/2 - HEIGHT/6, WIDTH/60, HEIGHT/3);
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
     
     @Override

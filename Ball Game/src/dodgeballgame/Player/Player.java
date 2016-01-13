@@ -271,7 +271,7 @@ public class Player {
             health-= i;
             graphicsComp.hitPlayer();           
         }
-        else death();
+        else death(p);
     }
     
     public void hitOtherPlayer(Player p, int i) {
@@ -285,7 +285,8 @@ public class Player {
         spawnPowerCheck();
     }
     
-    public void death() {
+    public void death(Player p) {
+        if (p!=null) p.killedPlayer(this);
         deaths++;
         lives--;
         if (knockoutOn && lives == 0) becomeGhost();
@@ -328,6 +329,8 @@ public class Player {
     }
     
     private void spawnPowerCheck() {
+        System.out.println(killsCount);
+        System.out.println(killsPerPower);
         if(pointsCount>=pointsPerPower) {
             GamePanel.powerManager.addPower(team);
             pointsCount = 0;

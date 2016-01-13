@@ -37,8 +37,6 @@ import static org.lwjgl.glfw.GLFW.*;
  */
 public class GamePanel extends JPanel implements Runnable, KeyListener {
     
-    
-    
     private GLFWErrorCallback errorCallback;
     private GLFWKeyCallback   keyCallback;
     
@@ -60,7 +58,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     Timer timer;
     public int FPS;
     private double averageFPS;
-    public static final int FPSGoal = 60;
+    public static final int FPSGoal = 100;
     
     static int[] controllers = new int[16];
     static int[] playerControllers;
@@ -69,7 +67,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public static ArrayList<Ball> ballArray;
     public static ArrayList<Item> itemArray;
     public static ArrayList<Power> powerArray;
-    public static Arena arena;
     
     public static Loading loading;
     
@@ -158,7 +155,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         // Setup Timer
         timer = new Timer();
-        arena = new BasicArena();
+        ArenaManager.arena = new BasicArena();
         
         //Managers
         
@@ -184,6 +181,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         initControllers();
         generalSettings.numberOfPlayers();
         gameModeManager.setMode(0);
+
         newGame();
         
         g.setColor(Color.black);
@@ -193,6 +191,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     }
     
     public static void initControllers() {
+        
         // Setup the controllers
         numControllers = 0;        
         for(int d=0; d<16; d++) {
@@ -201,9 +200,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             numControllers++;
             }
         }
+
         
         playerControllers = new int[numControllers];
-        
         buttonStates = new int[numControllers][14];
         prevButtonStates = new int[numControllers][14];
         axesStates = new float[numControllers][6];
@@ -218,22 +217,30 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         
         team1Score = team2Score = 0;
         gameTimer.reset();
-        playerArray = new ArrayList<>();
+        
         ballArray = new ArrayList<>();
         itemArray = new ArrayList<>();
         powerArray = new ArrayList<>();
         
-        arena.init();
+        ArenaManager.arena.init();
+        
+        loadPlayers();
+        gameModeManager.gameMode.apply();
+    }
+    
+    public static void loadPlayers() {
+        Vec2[] playerPositions = ArenaManager.arena.getPlayerPositions(numPlayers);
+        
+        playerArray = new ArrayList<>();
         
         gameModeManager.gameMode.apply();
-        
         System.arraycopy(controllers, 0, playerControllers, 0, numPlayers);
         for (int p = 0; p<numPlayers; p++) {
             int team =2*p/numPlayers;
-            playerArray.add(new Player(team, p, arena.playerPos[p].getX(), arena.playerPos[p].getY()));
+            playerArray.add(new Player(team, p, playerPositions[p].getX(), playerPositions[p].getY()));
         }
         
-        gameModeManager.gameMode.apply();
+        for (Player p : playerArray) menuManager.characterMenu.chooseCharacter(p);
     }
     
     public void countIn() {
@@ -292,17 +299,17 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         long totalTime = 0;
         
         int frameCount = 0;
-        int maxFrameCount = 30;
 
-        double frameTime = 0;
+        double frameTime;
+        
+        float delta = 0;
+        float lastDelta;
         
         long targetTime = 1000 / FPSGoal;
         
         // Game Loop
         while(running) {
-            
-            
-            
+
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();
@@ -310,25 +317,27 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             // GAME LOOP
             
             if (gameState == PLAY) {
+                
                 frameTime = 0;
-                while(frameTime < 1f/FPSGoal) {
+                lastDelta = delta;
+
+                do {
                     startTime = System.nanoTime();
-                    float delta = ((float)(startTime - lastTime)/1000000000f);
-                    // Does this fix the player start mvoement issue?
-                    if (delta > 1f/20f) delta = 1f/20f;
-                    ///////
+                    delta = ((startTime - lastTime)/1000000000f);
+
                     input();
                     update(delta);
                     frameTime += (double)delta;
-                    lastTime = startTime;
-                }
-                render();
-                       
+                    lastTime = startTime;   
+                } while(frameTime < 1f/FPSGoal - lastDelta);
+                
+                render(); 
+                
             } else if (gameState == MENU) {
                 
                 input();
                 startTime = System.nanoTime();
-                float delta = ((float)(startTime - lastTime)/1000000000f);
+                delta = ((startTime - lastTime)/1000000000f);
                 updateMenu(delta);
                 renderMenu();
                 lastTime = startTime;
@@ -336,27 +345,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             } else if (gameState == COUNTIN) {
                 countIn();
                 gameState = PLAY;
-                startTime = System.nanoTime();
+                lastTime = System.nanoTime();
             }
             
             draw();
-            
-            // TIMING
-            URDTimeMillis = (System.nanoTime() - startTime)/1000000;
-            waitTime = targetTime - URDTimeMillis;
-            
-            try {
-                Thread.sleep(waitTime);
-            }
-            catch(Exception e) {}
-            
-            totalTime += System.nanoTime() - startTime;
-            frameCount++;
-            if(frameCount == maxFrameCount) {
-                averageFPS = 1000.0 / ((totalTime / frameCount) / 1000000);
-                frameCount = 0;
-                totalTime = 0;
-            }
+
         }
     }
     
@@ -477,7 +470,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     // Do necessary calculations
     private static void update(float delta) {
-        gameTimer.update();
+        GameTimer.update();
         
         for (int i = 0; i<ballArray.size(); i++) {
             ballArray.get(i).update(delta);
@@ -497,7 +490,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     //render to screen
     private void render() {
         
-        arena.render(g);
+        ArenaManager.arena.render(g);
         g.setColor(Color.white);
         g.fillRect(0, arenaHEIGHT,screenWIDTH , screenHEIGHT-arenaHEIGHT);
         
