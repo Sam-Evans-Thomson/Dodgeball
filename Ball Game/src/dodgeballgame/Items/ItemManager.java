@@ -64,6 +64,14 @@ public class ItemManager {
             itemFreqs[3][1] = 0;
             itemFreqs[3][3] = 0;
         }
+        
+        int nonZeros = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (itemFreqs[i][j] != 0) nonZeros++;
+            }
+        }
+        if (nonZeros == 1 && itemFreqs[2][3] != 0) itemFreqs[2][3]=0;
     }
     
     public static void none() {

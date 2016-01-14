@@ -5,24 +5,13 @@
  */
 package dodgeballgame.Arenas;
 
+import dodgeballgame.Arenas.ArenaGraphicsComponents.ArenaGC;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.Hitbox;
-import static dodgeballgame.GamePanel.arenaHEIGHT;
-import static dodgeballgame.GamePanel.arenaWIDTH;
 import dodgeballgame.HitBoxes.*;
-import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -44,39 +33,25 @@ public class Arena {
     
     public ArrayList<Hitbox> renderHitboxes;
     
+    public ArenaGC graphicsComp;
+    
     public static int SIDE_GOALS = 0;
     public static int CORNER_GOALS = 1;
     
     public double softBounceFactor = 0.2;
     public double bounceFactor = 0.9;
     public int buffer = 1000;
-    
-    public BufferedImage backgroundImage;
-    public BufferedImage scaledBackgroundImage;
-    
+
     int WIDTH = (int)GamePanel.arenaWIDTH;
     int HEIGHT = (int)GamePanel.arenaHEIGHT;
-    
-    public String imgPath;
+
         
     public Arena() {
-        
+
     }
         
     public void init() {
-        try {
-            backgroundImage = ImageIO.read(new File(imgPath));
-        } catch (IOException e) {
-        }  
-        scaledBackgroundImage = new BufferedImage(arenaWIDTH, 
-                arenaHEIGHT, 
-                BufferedImage.TYPE_INT_ARGB);
-        AffineTransform at = new AffineTransform();
-        at.scale((double)arenaWIDTH/1400.0, (double)arenaHEIGHT/800.0);
-        AffineTransformOp scaleOp = 
-           new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-        scaledBackgroundImage = scaleOp.filter(backgroundImage, scaledBackgroundImage);
-        
+        graphicsComp.init();
         arenaBallHitbox = new ArrayList<>();
         arenaSoftBallHitbox = new ArrayList<>();
         arenaPlayerHitbox = new ArrayList<>();
@@ -155,46 +130,10 @@ public class Arena {
     }
     
     public void render(Graphics2D g) {
-        g.drawImage(scaledBackgroundImage,0,0,null);
-        renderScore(g);
-        if (GamePanel.arenaManager.goalsActive) renderGoals(g);
-        renderHitboxes(g);
-        renderSpecific(g);
+        graphicsComp.render(g);
     }
-    
-    protected void renderHitboxes(Graphics2D g) {
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-        g.setColor(new Color(0,0,0));
-        for(Hitbox hb: arenaBallHitbox) { hb.render(g); }
-        g.setColor(new Color(100,100,100));
-        for(Hitbox hb: arenaSoftBallHitbox) { hb.render(g); }
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-    }
-    
-    protected void renderScore(Graphics2D g) {
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
-        g.setColor(new Color(250,250,250));
-        g.setFont(new Font("Sans Serif", Font.BOLD, 500));
-        Tools.centreStringHor("" + GamePanel.team1Score, g, WIDTH/2 - WIDTH/4, HEIGHT/2+150);
-        Tools.centreStringHor("" + GamePanel.team2Score, g, WIDTH/2 + WIDTH/4, HEIGHT/2+150);
-        g.setFont(new Font("Sans Serif", Font.BOLD, 200));
-        Tools.centreStringHor("" + (int)GamePanel.winScore, g,WIDTH/2 - 130,HEIGHT);
-        Tools.centreStringHor("" + (int)GamePanel.winScore, g,WIDTH/2 + 130,HEIGHT);
-        g.fillRect(WIDTH/2 - WIDTH/8, 16*HEIGHT/20,WIDTH/4, HEIGHT/40);
-    }
-    
-    protected void renderGoals(Graphics2D g) {
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-        g.setColor(new Color(255,100,100));
-        for(Hitbox hb: arenaTeam1Goal) { hb.render(g); }
-        g.setColor(new Color(100,100,255));
-        for(Hitbox hb: arenaTeam2Goal) { hb.render(g); }
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-    }
-    
-    public void renderSpecific(Graphics2D g) {
-        
-    }
+
+
     
     public Arena copy() {
         BasicArena temp = new BasicArena();

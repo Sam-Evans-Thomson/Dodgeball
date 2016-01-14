@@ -5,11 +5,9 @@
  */
 package dodgeballgame.Arenas;
 
-import dodgeballgame.GamePanel;
+import dodgeballgame.Arenas.ArenaGraphicsComponents.BarracksGC;
 import dodgeballgame.HitBoxes.*;
 import dodgeballgame.Vec2;
-import java.awt.Color;
-import java.awt.Graphics2D;
 
 /**
  *
@@ -20,16 +18,12 @@ public class BarracksArena extends Arena{
         
     public BarracksArena() {
         super();
-        imgPath = "Images/Arenas/vertical.png";
+        graphicsComp = new BarracksGC(this);
+        graphicsComp.imgPath = "Images/Arenas/vertical.png";
         arenaName = "BARRACKS";
     }
-    
-    @Override    
-    public void renderSpecific(Graphics2D g) {
-        g.setColor(Color.WHITE);
-        for(Hitbox hb : renderHitboxes) hb.render(g);
-    }
-    
+
+    @Override
     public void initTeamAreas() {
         teamAreas = new Vec2[2][2];
         teamAreas[0] = new Vec2[]{new Vec2(WIDTH/6 + 40,0), new Vec2(WIDTH/2,HEIGHT)};

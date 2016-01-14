@@ -36,7 +36,6 @@ public class AddBall extends Item {
     public void applyEffect(Player p) {
         p.numBalls++;
         GamePanel.soundManager.addBall();
-        p.catchTimer.refresh();
     }
     
     @Override

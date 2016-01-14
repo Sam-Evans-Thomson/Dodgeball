@@ -8,6 +8,7 @@ package dodgeballgame.Powers;
 import dodgeballgame.GamePanel;
 import dodgeballgame.Items.Item;
 import dodgeballgame.Player.Player;
+import dodgeballgame.SoundManager;
 import dodgeballgame.Vec2;
 
 /**
@@ -46,6 +47,7 @@ public class Power extends Item{
     
     public void collected(Player p) {
         p.currentPower = this;
+        GamePanel.soundManager.power();
     }
     
     @Override

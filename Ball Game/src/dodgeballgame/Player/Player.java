@@ -5,6 +5,7 @@
  */
 package dodgeballgame.Player;
 
+import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.ArcHitbox;
 import dodgeballgame.HitBoxes.CircleHitbox;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 public class Player {
     
     // Variables shared between Components
+    public Vec2 startPos;
     public int r;
     public Vec2 pos;
     public final int pNumber,gPad,team;
@@ -36,7 +38,6 @@ public class Player {
 
     // Timers
     public Timer hbTimer;
-    public Timer catchTimer;
     
     //States
     public boolean solid;       // Does the player collide with balls?
@@ -110,6 +111,7 @@ public class Player {
     public Player(int team, int pNumber, double x, double y) {
         this.pNumber = gPad = pNumber;
         pos = new Vec2(x,y);
+        startPos = new Vec2(x,y);
         this.team = team;
 
         init();
@@ -146,7 +148,6 @@ public class Player {
         invincibleTime = 2d;
         
         hbTimer = new Timer();
-        catchTimer = new Timer();
         
         kills = goals = ownKills = ownGoals = hits = ownHits = deaths = 0;
         gotHits = ownGotHits = points = 0;
@@ -215,10 +216,6 @@ public class Player {
     
     public void setGetHit() {
         graphicsComp.hitPlayer();
-    }
-    
-    public void refreshCatchTimer() {
-        catchTimer.refresh();
     }
     
     /*************************************************************/
@@ -303,6 +300,9 @@ public class Player {
         DELTA = new Vec2(0,0);
         aimAngle = new Vec2(0,0);
         numBalls = 0;
+        pos.set(startPos);
+        hbTimer.refresh();
+        graphicsComp.setDeathAnimation();
     }
     
     public void killedPlayer(Player p) {
@@ -324,7 +324,6 @@ public class Player {
         else ownGoals++;
         GamePanel.changeScore(team, pointsPerGoal);
         GamePanel.itemManager.addBall(1-team);
-        catchTimer.refresh();
         spawnPowerCheck();
     }
     

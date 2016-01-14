@@ -252,10 +252,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         while(gameTimer.countInTime<3){
             thisTime = (int)gameTimer.countInTime;
             if(thisTime != lastTime) soundManager.menu(6);
-            
-            playerArray.stream().forEach((p) -> {
-                p.refreshCatchTimer();
-            });
+
             render();
             g.setColor(Color.black);
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));

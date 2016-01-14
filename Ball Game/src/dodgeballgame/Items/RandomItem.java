@@ -20,11 +20,12 @@ import javax.imageio.ImageIO;
  */
 public class RandomItem extends Item {
 
-    
+    Item item;
     
     public RandomItem(Vec2 pos) {
         super(pos);
-        color = new Color(255,255,100);
+        item = GamePanel.itemManager.makeItem(0);
+        color = item.color;
         try {
             image = ImageIO.read(new File("Images/Items/random.png"));
         } catch (IOException e) {
@@ -34,11 +35,7 @@ public class RandomItem extends Item {
     
     @Override
     public void applyEffect(Player p) {
-        Item newItem = GamePanel.itemManager.makeItem(p.team);
-        newItem.applyEffect();
-
-        GamePanel.soundManager.takeHealth();
+        item.applyEffect(p);
     }
-
 
 }

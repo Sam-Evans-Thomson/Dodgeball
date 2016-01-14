@@ -5,7 +5,7 @@
  */
 package dodgeballgame.Player;
 
-import dodgeballgame.GameModes.GameModeManager;
+import dodgeballgame.Animation.GlowAnimation;
 import dodgeballgame.GamePanel;
 import dodgeballgame.ImageEditor;
 import dodgeballgame.Timer;
@@ -34,6 +34,10 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     public BufferedImage playerImageB;
     public BufferedImage playerImage, playerImageSmall;
     public BufferedImage ghostImage;
+    
+    public GlowAnimation deathAnimation;
+    public GlowAnimation catchAnimation;
+    public GlowAnimation itemAnimation;
     
     private BufferedImage heart;
     private BufferedImage ball;
@@ -80,14 +84,23 @@ public class PlayerGraphicsComponent implements PlayerComponent{
             colors[0]=new Color(0,0,255);
             colors[1]=new Color(200,200,255);
         }
-        
-        catchTime = 1.0;
-        catchTimer.init();
-        itemGlowTime = 1.0;
-        itemGlowTimer.init();
+
         hitTimer.init();
         hitTime = 1;
         hitTimeMax = Player.invincibleTime;
+        
+        /// initialize animations
+        deathAnimation  = new GlowAnimation(1.2);
+        deathAnimation.setColors(255,0,0,0,0,0);
+        deathAnimation.setRadius(160);
+        
+        catchAnimation  = new GlowAnimation(0.12);
+        catchAnimation.setColor(255,255,200);
+        catchAnimation.setRadius(160);
+        
+        itemAnimation  = new GlowAnimation(0.2);
+        itemAnimation.setRadius(160);
+        
     }
     
     public void changeImages(BufferedImage a, BufferedImage b) {
@@ -101,8 +114,9 @@ public class PlayerGraphicsComponent implements PlayerComponent{
 
     public void render(Graphics2D g) {
         //Render Animation graphics
-        if (catchTime < catchTimeMax) catchGlow(colors[0],g,p.pos);
-        if (itemGlowTime < itemGlowTimeMax) grabItemGLow(colors[0],g,p.pos);
+        if(catchAnimation.isActive()) catchAnimation.render(g, p.pos);
+        if (itemAnimation.isActive()) itemAnimation.render(g,p.pos);
+        if(deathAnimation.isActive()) deathAnimation.render(g, p.pos);
         
         hitTime = hitTimer.getDifference();
         if (hitTime > hitTimeMax && !playerImage.equals(playerImageA)){
@@ -128,11 +142,6 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     }
     
     private void renderAim(Graphics2D g) {
-        double percentage = (double)p.health/(double)Player.startHealth;
-        if (percentage < 0) percentage = 0;
-        else if (percentage > 1) percentage = 1;
-        
-        percentage = percentage*0.7 + 0.3;
         
         double rad = 0.9*p.radius;
         double x = p.pos.getX();
@@ -151,9 +160,6 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         if (p.catchOn) {
             g.setColor(colors[1]);        
             g.fillArc((int)(x-rad), (int)(y-rad), (int)(2*rad), (int)(2*rad),
-                    (int)(Math.toDegrees(-p.angle-p.catchAngle/2+0.1)), (int)Math.toDegrees(p.catchAngle-0.2));
-            g.setColor(colors[0]);  
-            g.fillArc((int)(x-rad*percentage), (int)(y-rad*percentage), (int)(2*rad*percentage), (int)(2*rad*percentage),
                     (int)(Math.toDegrees(-p.angle-p.catchAngle/2+0.1)), (int)Math.toDegrees(p.catchAngle-0.2));
         }
     }
@@ -210,59 +216,18 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         hitTime = hitTimer.getDifference();
     }
     
-    /////// CATCHING ///////////////
+    //////////Dying /////////////////////
     
-    public final Timer catchTimer = new Timer();
-    private double catchTime;
-    private final double catchTimeMax = 0.12;
-    public int[][] catchGlow;
-    public double catchGlowRadius = 160.0;
-    private final Color glowColor = new Color(255,255,200);
     
-    public Graphics2D catchGlow(Color c, Graphics2D g, Vec2 pos) {
+    public void setDeathAnimation() {deathAnimation.refresh();}
+    public void setCatchGlow() {catchAnimation.refresh();}
+    public void setItemGlow(Color color) {
+        itemAnimation.refresh();
+        itemAnimation.setColor(color);
+    }
+    
 
-        float opacity = (float)(catchTimeMax - catchTime)*0.8f/(float)catchTimeMax;
-        g.setColor(glowColor);
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-        double size = 100.0 + (catchGlowRadius - 100)*catchTime/catchTimeMax;
-        g.fillOval((int)(pos.getX()-size/2), (int)(pos.getY()-size/2),(int)size, (int)size);
-        catchTime = catchTimer.getDifference();
-        return g;        
-    }
-    
-    public void setCatchGlow() {        
-        catchTimer.refresh();
-        catchTime = catchTimer.getDifference();
-    }
-    
-    ////// ITEMS ////////////
-    
-    public final Timer itemGlowTimer = new Timer();
-    private double itemGlowTime;
-    private final double itemGlowTimeMax = 0.2;
-    public int[][] powerUpGlow;
-    public double powerUpGlowRadius = 200.0;
-    private Color itemGlowColor;
-    
-    public Graphics2D grabItemGLow(Color c, Graphics2D g, Vec2 pos) {
-        
-        if (itemGlowTime < itemGlowTimeMax) {
-            float opacity = (float)(itemGlowTimeMax - itemGlowTime)*0.8f/(float)itemGlowTimeMax;
-            g.setColor(itemGlowColor);
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
-            double size = 100.0 + (powerUpGlowRadius - 100)*itemGlowTime/itemGlowTimeMax;
-            g.fillOval((int)(pos.getX()-size/2), (int)(pos.getY()-size/2),(int)size, (int)size);
-            itemGlowTime = itemGlowTimer.getDifference();
-        }
-        
-        return g;        
-    }
 
-    public void setItemGlow(Color c) {
-        itemGlowColor = c;
-        itemGlowTimer.refresh();
-        itemGlowTime = itemGlowTimer.getDifference();
-    }
     
     /////// POWERS   ///////////////
     public void setPowerGlow(Color c) {
@@ -275,6 +240,5 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     @Override
     public void update(float d) {
     }
-    
-    
+
 }

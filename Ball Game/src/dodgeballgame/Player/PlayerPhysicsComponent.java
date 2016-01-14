@@ -168,12 +168,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         Vec2 throwDelta = new Vec2((movVelFactor*p.delta.getX()/d)+throwSpeed*Math.cos(p.angle),
                                     (movVelFactor*p.delta.getY()/d)+throwSpeed*Math.sin(p.angle));
         relThrowSpeed = throwDelta.getMagnitude();
-        
-        double catchFactor = 7-(int)p.catchTimer.getDifference();
-        if (catchFactor > 5) catchFactor = 5;
-        else if (catchFactor < 1) catchFactor = 1;
-        relThrowSpeed*= catchFactor/5d;
-        
+
         p.throwAngle = throwDelta.getAngle();
         p.throwAngle = Tools.refreshAngle(p.throwAngle);
     }
@@ -221,7 +216,6 @@ public class PlayerPhysicsComponent implements PlayerComponent{
             p.ballThrows++;
             GamePanel.ballArray.add(b);
             p.numBalls--;
-            p.catchTimer.refresh();
         }
     }
     
@@ -236,7 +230,6 @@ public class PlayerPhysicsComponent implements PlayerComponent{
                     p.graphicsComp.setCatchGlow();
                     GamePanel.ballArray.remove(b);
                     i--;
-                    p.catchTimer.refresh();
                 }
             }
             //Catch Item
@@ -249,7 +242,6 @@ public class PlayerPhysicsComponent implements PlayerComponent{
                     pUp.incPowerUpCount(p);
                     GamePanel.itemArray.remove(pUp);
                     i--;
-                    p.catchTimer.refresh();
                 }
             }
         }
@@ -265,7 +257,6 @@ public class PlayerPhysicsComponent implements PlayerComponent{
                 GamePanel.itemArray.remove(item);
                 GamePanel.itemArray.add(newItem);
                 i--;
-                p.catchTimer.refresh();
             }
         }
     }

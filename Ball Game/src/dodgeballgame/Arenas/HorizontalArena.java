@@ -5,15 +5,10 @@
  */
 package dodgeballgame.Arenas;
 
-import dodgeballgame.GamePanel;
+import dodgeballgame.Arenas.ArenaGraphicsComponents.HorizontalGC;
 import dodgeballgame.HitBoxes.Hitbox;
 import dodgeballgame.HitBoxes.*;
-import dodgeballgame.Tools;
 import dodgeballgame.Vec2;
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
 
 /**
  *
@@ -23,7 +18,8 @@ public class HorizontalArena extends Arena{
     
     public HorizontalArena() {
         super();
-        imgPath = "Images/Arenas/landscape.png";
+        graphicsComp = new HorizontalGC(this);
+        graphicsComp.imgPath = "Images/Arenas/landscape.png";
         arenaName = "HORIZON";
     }
     
@@ -54,20 +50,7 @@ public class HorizontalArena extends Arena{
         teamAreas[1] = new Vec2[]{new Vec2(0,HEIGHT/2), new Vec2(WIDTH,HEIGHT)};
     }
 
-    
-    @Override 
-    protected void renderScore(Graphics2D g) {
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
-        g.setColor(new Color(250,250,250));
-        g.setFont(new Font("Sans Serif", Font.BOLD, 500));
-        Tools.centreStringHor("" + GamePanel.team1Score, g, WIDTH/2, HEIGHT/2 - HEIGHT/16);
-        Tools.centreStringHor("" + GamePanel.team2Score, g, WIDTH/2, HEIGHT - HEIGHT/30);
-        g.setFont(new Font("Sans Serif", Font.BOLD, 200));
-        Tools.centreStringHor("" + (int)GamePanel.winScore, g,WIDTH - 130,HEIGHT/2 - 10);
-        Tools.centreStringHor("" + (int)GamePanel.winScore, g,WIDTH - 130,HEIGHT/2 + 150);
-        g.fillRect(17*WIDTH/20, HEIGHT/2 - HEIGHT/6, WIDTH/60, HEIGHT/3);
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-    }
+
     
     @Override
     public void initHitBoxes() {

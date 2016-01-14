@@ -52,6 +52,7 @@ public class SoundManager {
         sounds.add(new AudioPlayer("Sounds/menu6.wav"));    // echo click
         sounds.add(new AudioPlayer("Sounds/menu7.wav"));    // back/undo sound
         sounds.add(new AudioPlayer("Sounds/menu8.wav"));    // short Click
+        sounds.add(new AudioPlayer("Sounds/power.wav"));    // scale up
         
         music.add(new AudioPlayer("Sounds/fracture.wav"));
 
@@ -92,6 +93,8 @@ public class SoundManager {
     public void menu(int i) {
         if(soundIsOn) sounds.get(7+i).play();
     }
+    
+    public void power() { if(soundIsOn) sounds.get(16).play();}
     
     public void music() {
         if (musicIsOn) {

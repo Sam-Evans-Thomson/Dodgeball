@@ -5,12 +5,10 @@
  */
 package dodgeballgame.Arenas;
 
+import dodgeballgame.Arenas.ArenaGraphicsComponents.TunnelGC;
 import dodgeballgame.HitBoxes.Hitbox;
 import dodgeballgame.HitBoxes.*;
 import dodgeballgame.Vec2;
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics2D;
 
 /**
  *
@@ -20,31 +18,9 @@ public class TunnelArena extends HorizontalArena{
     
     public TunnelArena() {
         super();
-        imgPath = "Images/Arenas/landscape.png";
+        graphicsComp = new TunnelGC(this);
+        graphicsComp.imgPath = "Images/Arenas/landscape.png";
         arenaName = "TUNNEL";
-    }
-
-    
-    @Override
-    protected void renderHitboxes(Graphics2D g) {
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-        g.setColor(Color.WHITE);
-        for (Hitbox hb : renderHitboxes) hb.render(g);
-    }
-        
-    @Override
-    public void renderSpecific(Graphics2D g) {
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-        g.setColor(Color.WHITE);
-        int[] xPoints = new int[]{0,0,HEIGHT/3};
-        int[] yPoints = new int[]{0,HEIGHT/3,0};
-        g.fillPolygon(xPoints, yPoints, 3);
-        xPoints = new int[]{0,0,HEIGHT/3};
-        yPoints = new int[]{HEIGHT,2*HEIGHT/3,HEIGHT};
-        g.fillPolygon(xPoints, yPoints, 3);
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
-        g.fillRect(0,0, HEIGHT/2, HEIGHT);
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
     
     @Override
@@ -57,9 +33,14 @@ public class TunnelArena extends HorizontalArena{
         LineHitbox hbC2 = new LineHitbox (0,HEIGHT/2,Hitbox.DEG_0);
         arenaTeam2Hitbox.add(hbC2);
         
-        RectHitbox hbBallMiddle = new RectHitbox (WIDTH, HEIGHT/2,5*WIDTH/6,10);
+        RectHitbox hbBallMiddle = new RectHitbox (WIDTH, HEIGHT/2,5*WIDTH/6,40);
         arenaBallHitbox.add(hbBallMiddle);
         renderHitboxes.add(hbBallMiddle);
+        arenaPlayerHitbox.add(hbBallMiddle);
+        
+        CircleHitbox roundEnd = new CircleHitbox(WIDTH/6, HEIGHT/2, 40);
+        arenaBallHitbox.add(roundEnd);
+        renderHitboxes.add(roundEnd);
         
         LineHitbox thb = new LineHitbox(0,HEIGHT/3,-Math.PI/4);
         arenaBallHitbox.add(thb);
@@ -72,6 +53,27 @@ public class TunnelArena extends HorizontalArena{
         LineHitbox playerVert = new LineHitbox(HEIGHT/2,0,Hitbox.DEG_270);
         arenaPlayerHitbox.add(playerVert);
         renderHitboxes.add(playerVert);
+    }
+    
+        
+    @Override
+    public Vec2[] getPlayerPositions(int numPlayers) {
+        Vec2[] positions = new Vec2[numPlayers];
+        
+        if(numPlayers == 2) {
+            positions[0] = new Vec2(WIDTH/2,HEIGHT/8);
+            positions[1] = new Vec2(WIDTH/2, 7*HEIGHT/8);
+        } else if (numPlayers == 3) {
+            positions[0] = new Vec2(8*WIDTH/20,HEIGHT/8);
+            positions[1] = new Vec2(19*WIDTH/20,HEIGHT/8);
+            positions[2] = new Vec2(WIDTH/2, 7*HEIGHT/8);
+        } else if (numPlayers == 4) {
+            positions[0] = new Vec2(5*WIDTH/20,HEIGHT/8);
+            positions[1] = new Vec2(19*WIDTH/20,HEIGHT/8);
+            positions[2] = new Vec2(5*WIDTH/20,7*HEIGHT/8);
+            positions[3] = new Vec2(19*WIDTH/20, 7*HEIGHT/8);
+        }
+        return positions;
     }
     
     @Override
