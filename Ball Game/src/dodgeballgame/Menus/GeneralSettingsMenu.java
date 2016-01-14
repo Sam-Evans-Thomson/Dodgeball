@@ -71,16 +71,16 @@ public class GeneralSettingsMenu extends Menu{
         
         int x = (int)(INNER_X_START*2.8);
         int x2 = (int)(INNER_X_END - 1.8*INNER_X_START);
-        int y = (int)(INNER_Y_START * 1.3);
-        int yOffset = INNER_MENU_HEIGHT/10;
+        int y = (int)(INNER_Y_START * 1.3 + INNER_MENU_HEIGHT/6);
+        int yOffset = INNER_MENU_HEIGHT/8;
         
-        for (int i = 0; i < 9; i++) {
-            float opacity = (float)(5f-Math.sqrt((i-4)*(i-4)))/5f;
+        for (int i = 0; i < 5; i++) {
+            float opacity = (float)(3f-Math.sqrt((i-2)*(i-2)))/3f;
             
-            int cursorPlace = (cursors[0].y + i - 4) % NUM_SETTINGS;
+            int cursorPlace = (cursors[0].y + i - 2) % NUM_SETTINGS;
             if(cursorPlace < 0) cursorPlace += NUM_SETTINGS;      
             
-            if(i == 4) {
+            if(i == 2) {
                 g.setPaint(Color.white);
                 g.setFont(new Font("Sans Serif", Font.BOLD, fontSizeLarge));
                 g.fillRect(x2 - 80,y + i*yOffset - fontSizeSmall, 6,fontSizeSmall + 2);  

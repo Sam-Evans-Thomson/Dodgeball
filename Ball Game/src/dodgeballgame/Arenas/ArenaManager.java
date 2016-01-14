@@ -17,14 +17,15 @@ import javax.swing.JPanel;
  */
 public class ArenaManager extends JPanel{
     public BasicArena basicArena; 
-    public HorizontalArena horArena;
     public TunnelArena tunnelArena;
     public BarracksArena barracksArena;
+    public HorizontalArena horArena;
+    public MovingPanelArena movingPanelArena;
     
     public boolean goalsActive;
     
-    public static final int NUM_GOAL_POS = 2;
-    public static final int NUM_ARENAS = 4;
+    public static final int NUM_GOAL_POS = 3;
+    public static final int NUM_ARENAS = 5;
     
     public static ArrayList<Arena> arenas;
     public static Arena arena;
@@ -35,20 +36,27 @@ public class ArenaManager extends JPanel{
     
     public void init() {
         arenas = new ArrayList();
-        basicArena = new BasicArena();
         horArena = new HorizontalArena();
+        basicArena = new BasicArena();
         tunnelArena = new TunnelArena();
         barracksArena = new BarracksArena();
+        movingPanelArena = new MovingPanelArena();
         
         basicArena.init();
         horArena.init();
         tunnelArena.init();
         barracksArena.init();
+        movingPanelArena.init();
         
         arenas.add(basicArena);
         arenas.add(horArena);
         arenas.add(tunnelArena);
         arenas.add(barracksArena);
+        arenas.add(movingPanelArena);
+    }
+    
+    public void update(double d) {
+        arena.update(d);
     }
     
     public BufferedImage getArenaDisplay(int i, int goals) {

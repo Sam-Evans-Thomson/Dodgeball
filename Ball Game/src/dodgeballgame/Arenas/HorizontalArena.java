@@ -49,8 +49,6 @@ public class HorizontalArena extends Arena{
         teamAreas[0] = new Vec2[]{new Vec2(0,0), new Vec2(WIDTH,HEIGHT/2)};
         teamAreas[1] = new Vec2[]{new Vec2(0,HEIGHT/2), new Vec2(WIDTH,HEIGHT)};
     }
-
-
     
     @Override
     public void initHitBoxes() {
@@ -61,10 +59,18 @@ public class HorizontalArena extends Arena{
         // Team 2 middle Edge
         LineHitbox hbC2 = new LineHitbox (0,HEIGHT/2,Hitbox.DEG_0);
         arenaTeam2Hitbox.add(hbC2);
+        
+        for (int i= 0; i < 8; i++) {
+            CircleHitbox c = new CircleHitbox(WIDTH/16 + i*WIDTH/8, HEIGHT/2, 40);
+            arenaPlayerHitbox.add(c);
+            arenaBallHitbox.add(c);
+            renderHitbox.add(c);
+        }
+
     }
     
     @Override
-    protected void cornerGoals() {
+    public void cornerGoals() {
         int goalSize = 50;
         CircleHitbox goal1 = new CircleHitbox(0,0, goalSize);
         arenaTeam2Goal.add(goal1);
@@ -81,7 +87,7 @@ public class HorizontalArena extends Arena{
     
     
     @Override
-    protected void sideGoals(){
+    public void sideGoals(){
         RectHitbox goal1 = new RectHitbox(WIDTH/2,0,WIDTH/12, 15);
         arenaTeam2Goal.add(goal1);
         

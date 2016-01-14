@@ -44,6 +44,9 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     
     public int numBallsInArea;
     public boolean inCatchArea;
+    
+    public boolean beingPushed;
+    public int hitboxCount;
 
     public PlayerPhysicsComponent(Player p) {
         this.p = p;
@@ -51,6 +54,8 @@ public class PlayerPhysicsComponent implements PlayerComponent{
      
     @Override
     public void init() {
+        hitboxCount = 0;
+        beingPushed = false;
         p.solid = true;
         p.catchOn = true;
         
@@ -72,7 +77,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     // d is the time Delta
     @Override
     public void update(float d) {
-        
+        hitboxCount = 0;
         if (!p.solid && !p.isGhost) {
             double timeDelta = p.hbTimer.getDifference();
             if (timeDelta > p.invincibleTime) {
@@ -81,14 +86,17 @@ public class PlayerPhysicsComponent implements PlayerComponent{
         }
         
         this.d = d;
-
-        updateMovementValues(d);
         
-        updatePosition(p.delta);
-        resolveMove(p.delta); 
-        prevPos.set(p.pos);
+        if (!beingPushed) {
+            updateMovementValues(d);
+        
+            updatePosition(p.delta);
+            resolveMove(p.delta); 
+            prevPos.set(p.pos);
+        }
         
         updateThrowValues();
+        beingPushed = false;
         
     }
     
@@ -111,42 +119,63 @@ public class PlayerPhysicsComponent implements PlayerComponent{
     }
     
     private void resolveMove(Vec2 vec) {
-        resolveCollisions(vec, ArenaManager.arena.arenaPlayerHitbox);
-        if(!p.isGhost && p.team == 0)         resolveCollisions(vec, ArenaManager.arena.arenaTeam1Hitbox);
-        else if(!p.isGhost && p.team == 1)    resolveCollisions(vec, ArenaManager.arena.arenaTeam2Hitbox);
-        //resolvePlayerCollisions(vec);
-        p.distanceTravelled += prevPos.getMagnitude(p.pos);
+        hitboxCount++;
+        if(hitboxCount < 10) {
+            resolveCollisions(vec, ArenaManager.arena.arenaPlayerHitbox);
+            if(!p.isGhost && p.team == 0)         resolveCollisions(vec, ArenaManager.arena.arenaTeam1Hitbox);
+            else if(!p.isGhost && p.team == 1)    resolveCollisions(vec, ArenaManager.arena.arenaTeam2Hitbox);
+            //resolvePlayerCollisions(vec);
+            p.distanceTravelled += prevPos.getMagnitude(p.pos);
+        }
     }
     
     public void resolveCollisions(Vec2 vec, ArrayList<Hitbox> array) {
-        for(Hitbox hb : array) {
-            if(hb.collision(playerHitbox)) {
-                double angle = playerHitbox.bounceAngle(prevPos, vec.getAngle(), hb);
-                double magnitude = vec.getMagnitude();
-                Vec2 d2 = new Vec2(angle, magnitude,1);
-                
-                Vec2 newPos = p.pos.add(d2);
-                double newAngle = prevPos.getAngle(newPos);
-                double newMag = 0.5*prevPos.getMagnitude(newPos);
-                
-                Vec2 newD = new Vec2(newAngle, newMag,1);
-                p.pos.set(prevPos);
-                updatePosition(newD);
-                resolveMove(newD);
+        hitboxCount++;
+        if(hitboxCount < 10) {
+            for(Hitbox hb : array) {
+                if(hb.collision(playerHitbox)) {
+                    double angle = playerHitbox.bounceAngle(prevPos, vec.getAngle(), hb);
+                    double magnitude = vec.getMagnitude();
+                    Vec2 d2 = new Vec2(angle, magnitude,1);
+
+                    Vec2 newPos = p.pos.add(d2);
+                    double newAngle = prevPos.getAngle(newPos);
+                    double newMag = 0.5*prevPos.getMagnitude(newPos);
+
+                    Vec2 newD = new Vec2(newAngle, newMag,1);
+                    p.pos.set(prevPos);
+                    updatePosition(newD);
+                    resolveMove(newD);
+                }
             }
         }
     }
     
     public void resolvePlayerCollisions(Vec2 vec) {
+        hitboxCount++;
+        if(hitboxCount < 10) {
+            //check if in player
+            for(int i = 0; i < GamePanel.numPlayers; i++) {
+                Player player = GamePanel.playerArray.get(i);
 
-        //check if in player
-        for(int i = 0; i < GamePanel.numPlayers; i++) {
-            Player player = GamePanel.playerArray.get(i);
-
-            if (!(p.equals(player)) && player.physicsComp.playerHitbox.collision(playerHitbox)) {
-                pushPlayer(player, vec);
+                if (!(p.equals(player)) && player.physicsComp.playerHitbox.collision(playerHitbox)) {
+                    pushPlayer(player, vec);
+                }
             }
         }
+    }
+    
+    public void pushedBy(Hitbox hb, Vec2 delta) {
+        beingPushed = true;
+        double angle = hb.pos.getAngle(p.pos);  // angle away from this player.
+        double mag = delta.getMagnitude();
+        if(mag < 2) mag = 2;
+        Vec2 pdelta = new Vec2(angle,mag,1);
+        
+        updatePosition(pdelta);
+        resolveMove(pdelta);
+        prevPos.set(p.pos);
+        
     }
     
     public void pushPlayer(Player player, Vec2 delta) {

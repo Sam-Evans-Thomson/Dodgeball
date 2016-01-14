@@ -35,12 +35,12 @@ public class TunnelArena extends HorizontalArena{
         
         RectHitbox hbBallMiddle = new RectHitbox (WIDTH, HEIGHT/2,5*WIDTH/6,40);
         arenaBallHitbox.add(hbBallMiddle);
-        renderHitboxes.add(hbBallMiddle);
+        renderHitbox.add(hbBallMiddle);
         arenaPlayerHitbox.add(hbBallMiddle);
         
         CircleHitbox roundEnd = new CircleHitbox(WIDTH/6, HEIGHT/2, 40);
         arenaBallHitbox.add(roundEnd);
-        renderHitboxes.add(roundEnd);
+        renderHitbox.add(roundEnd);
         
         LineHitbox thb = new LineHitbox(0,HEIGHT/3,-Math.PI/4);
         arenaBallHitbox.add(thb);
@@ -52,7 +52,7 @@ public class TunnelArena extends HorizontalArena{
         
         LineHitbox playerVert = new LineHitbox(HEIGHT/2,0,Hitbox.DEG_270);
         arenaPlayerHitbox.add(playerVert);
-        renderHitboxes.add(playerVert);
+        renderHitbox.add(playerVert);
     }
     
         
@@ -85,7 +85,7 @@ public class TunnelArena extends HorizontalArena{
 
     
     @Override
-    protected void sideGoals(){
+    public void sideGoals(){
         RectHitbox goal1 = new RectHitbox(WIDTH,HEIGHT/4,15, HEIGHT/4);
         arenaTeam2Goal.add(goal1);
         
@@ -94,7 +94,7 @@ public class TunnelArena extends HorizontalArena{
     }
     
     @Override
-    protected void cornerGoals() {
+    public void cornerGoals() {
         int goalSize = 50;
         CircleHitbox goal1 = new CircleHitbox(0,0, goalSize);
         arenaTeam2Goal.add(goal1);

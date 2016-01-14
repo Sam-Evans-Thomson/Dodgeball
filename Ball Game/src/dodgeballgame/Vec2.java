@@ -19,6 +19,11 @@ public class Vec2 {
         this.y = y;
     }
     
+    public Vec2(Vec2 vec) {
+        this.x = vec.x;
+        this.y = vec.y;
+    }
+    
     public Vec2(int x, int y) {
         this.x = (double)x;
         this.y = (double)y;

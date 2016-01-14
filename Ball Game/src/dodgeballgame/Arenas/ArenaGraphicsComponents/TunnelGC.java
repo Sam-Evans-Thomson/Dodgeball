@@ -30,7 +30,7 @@ public class TunnelGC extends HorizontalGC{
     public void renderHitboxes(Graphics2D g) {
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         g.setColor(Color.WHITE);
-        for (Hitbox hb : arena.renderHitboxes) hb.render(g);
+        for (Hitbox hb : arena.renderHitbox) hb.render(g);
     }
         
     @Override

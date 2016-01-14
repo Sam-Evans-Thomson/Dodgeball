@@ -140,12 +140,12 @@ public class Ball {
             if (GamePanel.arenaManager.goalsActive) {
                 for(Hitbox hb : ArenaManager.arena.arenaTeam1Goal) {
                     if(hb.collision(ballHitbox)) {
-                        hitGoal(player, 0);
+                        hitGoal(player, 0, hb);
                     }
                 }
                 for(Hitbox hb : ArenaManager.arena.arenaTeam2Goal) {
                     if(hb.collision(ballHitbox)) {
-                        hitGoal(player, 1);
+                        hitGoal(player, 1, hb);
                     }
                 }
             }
@@ -219,14 +219,16 @@ public class Ball {
         }
     }
     
-    public void hitGoal(Player player, int team) {
+    public void hitGoal(Player player, int team, Hitbox hb) {
         
         if(player.team == team) {// if you hit your goal
             player.scoreGoal(team);
+            ArenaManager.arena.setGoalGlow(hb);
             GamePanel.soundManager.addHealth();
             delete();
         } else if(GamePanel.friendlyFire) {         //If friendly fire is off
             player.scoreGoal(team);
+            ArenaManager.arena.setGoalGlow(hb);
             GamePanel.soundManager.addHealth();
             delete();
         }

@@ -49,6 +49,8 @@ public class PowerManager {
     }
     
     public void loadActivePowers() {
+        
+        for (int i = 9; i < NUM_POWERS; i++) powers[i] = 0;
         Vec2 vec = new Vec2(0,0);
         activePowers = new ArrayList();
         if (powers[0] == 1) activePowers.add(new SlowPower(vec));

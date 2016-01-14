@@ -28,6 +28,6 @@ public class BarracksGC extends ArenaGC{
     @Override
     public void renderSpecific(Graphics2D g) {
         g.setColor(Color.WHITE);
-        for(Hitbox hb : arena.renderHitboxes) hb.render(g);
+        for(Hitbox hb : arena.renderHitbox) hb.render(g);
     }
 }

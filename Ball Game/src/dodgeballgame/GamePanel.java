@@ -469,6 +469,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private static void update(float delta) {
         GameTimer.update();
         
+        arenaManager.update(delta);
+        
         for (int i = 0; i<ballArray.size(); i++) {
             ballArray.get(i).update(delta);
         }

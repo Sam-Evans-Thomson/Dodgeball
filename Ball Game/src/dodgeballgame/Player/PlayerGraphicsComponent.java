@@ -165,6 +165,7 @@ public class PlayerGraphicsComponent implements PlayerComponent{
     }
     
     private void renderScore(Graphics2D g) {
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         if (Player.knockoutOn) {
             for(int i = p.lives; i > 1; i--) {
                 g.drawImage(heart, playerScoreOffsetX + 100 - 7*(i-1), playerScoreOffsetY-50, null);
@@ -174,7 +175,6 @@ public class PlayerGraphicsComponent implements PlayerComponent{
         g.drawImage(heart, playerScoreOffsetX + 100, playerScoreOffsetY-50, null);
         
         g.drawImage(playerImageSmall, playerScoreOffsetX, playerScoreOffsetY-50, null);
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         
         g.setColor(new Color(0,0,0));
         g.setFont(new Font("Sans Serif", Font.BOLD, 27));

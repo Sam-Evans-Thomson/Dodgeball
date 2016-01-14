@@ -81,8 +81,9 @@ public class CircleHitbox extends Hitbox{
     }
     
     @Override
-    public double bounceAngle(Vec2 prevPos, CircleHitbox circle) {
-        return circle.pos.getAngle(pos);
+    public double bounceAngle(Vec2 prevPos, double angle, CircleHitbox circle) {
+        double tangentAngle = Tools.refreshAngle(circle.pos.getAngle(prevPos) - DEG_90);
+        return 2d*tangentAngle - angle;
     }
     
     @Override

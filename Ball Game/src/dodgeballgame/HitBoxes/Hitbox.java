@@ -107,7 +107,7 @@ public class Hitbox {
     
     public double bounceAngle(Vec2 prevPos, double angle, Hitbox hitbox) {
         if(hitbox instanceof LineHitbox) return bounceAngle(angle, (LineHitbox)hitbox);
-        if(hitbox instanceof CircleHitbox) return bounceAngle(prevPos, (CircleHitbox)hitbox);
+        if(hitbox instanceof CircleHitbox) return bounceAngle(prevPos, angle, (CircleHitbox)hitbox);
         if(hitbox instanceof RectHitbox) return bounceAngle(prevPos, angle, (RectHitbox)hitbox);
         if(hitbox instanceof ArcHitbox) return bounceAngle(angle, (ArcHitbox)hitbox);
         return 0d;
@@ -117,7 +117,7 @@ public class Hitbox {
         return 0d;
     }
     
-    public double bounceAngle(Vec2 prevPos, CircleHitbox circle) {
+    public double bounceAngle(Vec2 prevPos, double angle, CircleHitbox circle) {
         return 0d;
     }
     

@@ -31,7 +31,7 @@ public class Arena {
     public ArrayList<Hitbox> arenaTeam1Goal;
     public ArrayList<Hitbox> arenaTeam2Goal;
     
-    public ArrayList<Hitbox> renderHitboxes;
+    public ArrayList<Hitbox> renderHitbox;
     
     public ArenaGC graphicsComp;
     
@@ -59,8 +59,8 @@ public class Arena {
         arenaTeam2Hitbox = new ArrayList<>();
         arenaTeam1Goal = new ArrayList<>();
         arenaTeam2Goal = new ArrayList<>();
-        renderHitboxes = new ArrayList();
-
+        renderHitbox = new ArrayList();
+        
         initBorders();
         if (GamePanel.arenaManager.goalsActive) {initGoals();}
         initHitBoxes();
@@ -117,6 +117,7 @@ public class Arena {
     
     public void initGoals() {
         sideGoals();
+        graphicsComp.loadGoals();
     }
 
     public void initHitBoxes() {
@@ -129,11 +130,15 @@ public class Arena {
         arenaTeam2Hitbox.add(hbC2);
     }
     
+    public void update(double d) {
+        
+    }
+    
     public void render(Graphics2D g) {
         graphicsComp.render(g);
     }
 
-
+    public void setGoalGlow(Hitbox hb) {graphicsComp.setGoalGlow(hb);}
     
     public Arena copy() {
         BasicArena temp = new BasicArena();
@@ -150,11 +155,14 @@ public class Arena {
                 break;
             case 1 : sideGoals();
                 break;
+            case 2 : specialGoals();
+                break;
         }
+        graphicsComp.loadGoals();
     }
     
     // GOALS
-    protected void cornerGoals() {
+    public void cornerGoals() {
         int goalSize = 50;
         CircleHitbox goal1 = new CircleHitbox(0,0, goalSize);
         arenaTeam2Goal.add(goal1);
@@ -169,11 +177,15 @@ public class Arena {
         arenaTeam1Goal.add(goal4);
     }
     
-    protected void sideGoals(){
+    public void sideGoals(){
         RectHitbox goal1 = new RectHitbox(0,HEIGHT/2, 15, HEIGHT/12);
         arenaTeam2Goal.add(goal1);
         
         RectHitbox goal2 = new RectHitbox(WIDTH,HEIGHT/2,15, HEIGHT/12);
         arenaTeam1Goal.add(goal2);
+    }
+    
+    public void specialGoals() {
+        
     }
 }

@@ -43,20 +43,20 @@ public class BarracksArena extends Arena{
         // Team1 Goal protectors
         RectHitbox main1 = new RectHitbox(WIDTH/6 + 20, HEIGHT/3, WIDTH/6 + 120, 2*HEIGHT/3,1);
         arenaBallHitbox.add(main1);
-        renderHitboxes.add(main1);
+        renderHitbox.add(main1);
         arenaTeam1Hitbox.add(main1);
         
         // Team2 Goal protectors
         RectHitbox main2 = new RectHitbox(5*WIDTH/6 - 120, HEIGHT/3, 5*WIDTH/6 - 20, 2*HEIGHT/3,1);
         arenaBallHitbox.add(main2);
-        renderHitboxes.add(main2);
+        renderHitbox.add(main2);
         arenaTeam2Hitbox.add(main2);
         
     }
     
         // GOALS
     @Override
-    protected void cornerGoals() {
+    public void cornerGoals() {
         int goalSize = 50;
         CircleHitbox goal1 = new CircleHitbox(0,0, goalSize);
         arenaTeam2Goal.add(goal1);
@@ -72,7 +72,16 @@ public class BarracksArena extends Arena{
     }
     
     @Override
-    protected void sideGoals(){
+    public void specialGoals(){
+        RectHitbox goal1 = new RectHitbox(WIDTH/6 + 25, HEIGHT/3 - 15, WIDTH/6 + 115, 2*HEIGHT/3 + 15,1);
+        arenaTeam2Goal.add(goal1);
+        
+        RectHitbox goal2 = new RectHitbox(5*WIDTH/6 - 115, HEIGHT/3 - 15, 5*WIDTH/6 - 25, 2*HEIGHT/3 + 15,1);
+        arenaTeam1Goal.add(goal2);
+    }
+    
+    @Override
+    public void sideGoals() {
         RectHitbox goal1 = new RectHitbox(WIDTH/6,HEIGHT/3+20, WIDTH/6 + 20, 2*HEIGHT/3 - 20,1);
         arenaTeam2Goal.add(goal1);
         
