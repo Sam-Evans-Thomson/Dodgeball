@@ -102,6 +102,12 @@ public class CircleHitbox extends Hitbox{
         } 
     }
     
+     @Override
+    public double bounceAngle(Vec2 prevPos, double angle, RectHitbox2 rect) {
+        LineHitbox line = rect.getLine(prevPos, this);
+        return bounceAngle(angle, line);
+    }
+    
     @Override
     public void render(Graphics2D g) {
         g.fillOval((int)(pos.getX() - r),(int)(pos.getY()-r),(int)(2*r),(int)(2*r));

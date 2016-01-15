@@ -105,12 +105,18 @@ public class Hitbox {
         return false;
     }
     
+    public boolean collision(RectHitbox2 rect) {
+        System.out.println("Not yet implemented.");
+        return false;
+    }
+    
     public double bounceAngle(Vec2 prevPos, double angle, Hitbox hitbox) {
         if(hitbox instanceof LineHitbox) return bounceAngle(angle, (LineHitbox)hitbox);
-        if(hitbox instanceof CircleHitbox) return bounceAngle(prevPos, angle, (CircleHitbox)hitbox);
-        if(hitbox instanceof RectHitbox) return bounceAngle(prevPos, angle, (RectHitbox)hitbox);
-        if(hitbox instanceof ArcHitbox) return bounceAngle(angle, (ArcHitbox)hitbox);
-        return 0d;
+        else if(hitbox instanceof CircleHitbox) return bounceAngle(prevPos, angle, (CircleHitbox)hitbox);
+        else if(hitbox instanceof RectHitbox) return bounceAngle(prevPos, angle, (RectHitbox)hitbox);
+        else if(hitbox instanceof RectHitbox2) return bounceAngle(prevPos, angle, (RectHitbox2)hitbox);
+        else if(hitbox instanceof ArcHitbox) return bounceAngle(angle, (ArcHitbox)hitbox);
+        else return 0d;
     }
     
     public double bounceAngle(double angle, LineHitbox line) {
@@ -122,6 +128,10 @@ public class Hitbox {
     }
     
     public double bounceAngle(Vec2 prevPos, double angle, RectHitbox rect) {
+        return 0d; 
+    }
+    
+    public double bounceAngle(Vec2 prevPos, double angle, RectHitbox2 rect) {
         return 0d; 
     }
     

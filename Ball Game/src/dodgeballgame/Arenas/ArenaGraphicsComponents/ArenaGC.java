@@ -7,8 +7,8 @@ package dodgeballgame.Arenas.ArenaGraphicsComponents;
 
 import dodgeballgame.Animation.GoalGlowAnimation;
 import dodgeballgame.Arenas.Arena;
+import dodgeballgame.Environment.BreakableBlock;
 import dodgeballgame.GamePanel;
-import static dodgeballgame.GamePanel.arenaWIDTH;
 import dodgeballgame.HitBoxes.Hitbox;
 import dodgeballgame.Tools;
 import java.awt.AlphaComposite;
@@ -45,6 +45,7 @@ public class ArenaGC {
     public String imgPath;
     
     ArrayList<GoalGlowAnimation> goalGlows;
+    ArrayList<BreakableBlock> breakBlocks;
     
     public ArenaGC(Arena arena) {
         this.arena=arena;
@@ -59,7 +60,7 @@ public class ArenaGC {
                 HEIGHT, 
                 BufferedImage.TYPE_INT_ARGB);
         AffineTransform at = new AffineTransform();
-        at.scale((double)arenaWIDTH/1400.0, (double)HEIGHT/800.0);
+        at.scale((double)WIDTH/1400.0, (double)HEIGHT/800.0);
         AffineTransformOp scaleOp = 
            new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
         scaledBackgroundImage = scaleOp.filter(backgroundImage, scaledBackgroundImage);
@@ -117,6 +118,10 @@ public class ArenaGC {
     
     public void renderSpecific(Graphics2D g) {
         
+    }
+        
+    public void setBreakBlocks(ArrayList<BreakableBlock> bb) {
+        breakBlocks = bb;
     }
     
     public void setGoalGlow(Hitbox hb) {

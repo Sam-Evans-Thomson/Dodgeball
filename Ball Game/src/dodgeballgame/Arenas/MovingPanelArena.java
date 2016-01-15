@@ -39,7 +39,6 @@ public class MovingPanelArena extends Arena{
         delta+=d;
         
         Vec2 move = new Vec2(0,distance*Math.sin(delta));
-        startPositions.get(0).print();
         for (int i = 0; i < positions.size(); i++) {    
             Vec2 newPos = startPositions.get(i).add(move);
             positions.set(i, newPos);

@@ -6,6 +6,7 @@
 package dodgeballgame.Balls;
 
 import dodgeballgame.Arenas.ArenaManager;
+import dodgeballgame.Environment.BreakableBlock;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.*;
 import dodgeballgame.HitBoxes.Hitbox;
@@ -157,6 +158,15 @@ public class Ball {
             }
         }
         
+        for(BreakableBlock bb : ArenaManager.arena.breakBlocks) {
+            Hitbox hb = bb.hb;
+            if(hb.collision(ballHitbox)) {
+                hitBreakBlock(bb);
+                hitWall(hb,ArenaManager.arena.bounceFactor);
+                return;
+            }
+        }
+        
         for(Hitbox hb : ArenaManager.arena.arenaSoftBallHitbox) {
             if(hb.collision(ballHitbox)) {
                 hitWall(hb,ArenaManager.arena.softBounceFactor);
@@ -217,6 +227,10 @@ public class Ball {
         } else {
             delete();
         }
+    }
+    
+    public void hitBreakBlock(BreakableBlock bb) {
+        bb.hit(this);
     }
     
     public void hitGoal(Player player, int team, Hitbox hb) {

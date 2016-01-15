@@ -21,11 +21,12 @@ public class ArenaManager extends JPanel{
     public BarracksArena barracksArena;
     public HorizontalArena horArena;
     public MovingPanelArena movingPanelArena;
+    public BreakArena breakArena;
     
     public boolean goalsActive;
     
     public static final int NUM_GOAL_POS = 3;
-    public static final int NUM_ARENAS = 5;
+    public static final int NUM_ARENAS = 6;
     
     public static ArrayList<Arena> arenas;
     public static Arena arena;
@@ -41,18 +42,21 @@ public class ArenaManager extends JPanel{
         tunnelArena = new TunnelArena();
         barracksArena = new BarracksArena();
         movingPanelArena = new MovingPanelArena();
+        breakArena = new BreakArena();
         
         basicArena.init();
         horArena.init();
         tunnelArena.init();
         barracksArena.init();
         movingPanelArena.init();
+        breakArena.init();
         
         arenas.add(basicArena);
         arenas.add(horArena);
         arenas.add(tunnelArena);
         arenas.add(barracksArena);
         arenas.add(movingPanelArena);
+        arenas.add(breakArena);
     }
     
     public void update(double d) {

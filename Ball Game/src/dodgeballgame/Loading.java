@@ -5,10 +5,12 @@
  */
 package dodgeballgame;
 
+import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.Player.Player;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 /**
@@ -30,6 +32,10 @@ public class Loading {
     
     public static Player closestPlayer = new Player(0,0,10000,10000);
     
+    // Break Blocks
+    
+    public static ArrayList<BufferedImage> breaks = new ArrayList<>();
+    
     public Loading() {
         
         // Ball
@@ -48,5 +54,17 @@ public class Loading {
         ball0 = imageEditor0.scale(2*r/imageWidth);
         ball1 = imageEditor1.scale(2*r/imageWidth);
         
+        
+        // BreakBlocks
+        BufferedImage break0,break1,break2;
+        try {
+            break0 = ImageIO.read(new File("Images/BreakBlocks/break0.png"));
+            break1 = ImageIO.read(new File("Images/BreakBlocks/break1.png"));
+            break2 = ImageIO.read(new File("Images/BreakBlocks/break2.png"));
+            breaks.add(Tools.sizeImage(break0, GamePanel.arenaHEIGHT/10));
+            breaks.add(Tools.sizeImage(break1, GamePanel.arenaHEIGHT/10));
+            breaks.add(Tools.sizeImage(break2, GamePanel.arenaHEIGHT/10));
+        } catch (IOException e) {
+        }
     }
 }

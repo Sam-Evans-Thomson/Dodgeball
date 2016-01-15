@@ -14,7 +14,7 @@ import java.awt.Graphics2D;
  */
 public class RectHitbox extends Hitbox{
     
-    
+
     
     public RectHitbox(double x, double y, double w, double h) {
         super(x,y);
@@ -27,6 +27,7 @@ public class RectHitbox extends Hitbox{
         super(x+(x2-x)/2d,y+(y2-y)/2d);
         w = (x2-x)/2d;
         h = (y2-y)/2d;
+        shape = RECT;
     }
     
     public RectHitbox(Vec2 pos, double w, double h) {

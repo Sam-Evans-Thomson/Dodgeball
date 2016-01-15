@@ -8,6 +8,7 @@ package dodgeballgame.Player;
 import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.Balls.Ball;
 import dodgeballgame.Balls.HomingBall;
+import dodgeballgame.Environment.BreakableBlock;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.*;
 import dodgeballgame.Items.Item;

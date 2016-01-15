@@ -6,6 +6,7 @@
 package dodgeballgame.Arenas;
 
 import dodgeballgame.Arenas.ArenaGraphicsComponents.ArenaGC;
+import dodgeballgame.Environment.BreakableBlock;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.Hitbox;
 import dodgeballgame.HitBoxes.*;
@@ -32,6 +33,7 @@ public class Arena {
     public ArrayList<Hitbox> arenaTeam2Goal;
     
     public ArrayList<Hitbox> renderHitbox;
+    public ArrayList<BreakableBlock> breakBlocks = new ArrayList<>();
     
     public ArenaGC graphicsComp;
     
@@ -187,5 +189,15 @@ public class Arena {
     
     public void specialGoals() {
         
+    }
+    
+    public void addBreakBlock(BreakableBlock bb) {
+        breakBlocks.add(bb);
+        arenaPlayerHitbox.add(bb.hb);
+    }
+    
+    public void removeBreakBlock(BreakableBlock bb) {
+        breakBlocks.remove(bb);
+        arenaPlayerHitbox.remove(bb.hb);
     }
 }
