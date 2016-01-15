@@ -35,6 +35,9 @@ public class PlayerStateComponent implements PlayerComponent{
     public StateComponent aimBot = new StateComponent(new double[]{},5);
     public AimBotPower aimBotPower = new AimBotPower(new Vec2(0,0));
     
+    public StateComponent throwBoost = new StateComponent(new double[]{},0.2);
+    
+    
     public StateComponent noState = new StateComponent(new double[]{0},0);
     
     public ArrayList<StateComponent> activeStates = new ArrayList();
@@ -51,6 +54,7 @@ public class PlayerStateComponent implements PlayerComponent{
         if(autoCatch.hasExpired()) endAutoCatch();
         if(invincible.hasExpired()) endInvincible();
         if(aimBot.hasExpired()) endAimBot();
+        if(throwBoost.hasExpired()) endThrowBoost();
     }
     
     public void largeCatchArea() {
@@ -137,6 +141,15 @@ public class PlayerStateComponent implements PlayerComponent{
         remove(aimBotPower, aimBot);
         
         p.nextBall = "NORMAL";
+    }
+    
+    public void throwBoost() {
+        throwBoost.apply();
+        p.throwBoost = true;
+    }
+    
+    public void endThrowBoost() {
+        p.throwBoost = false;
     }
     
     // Helpers

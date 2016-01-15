@@ -86,24 +86,8 @@ public class CircleHitbox extends Hitbox{
         return 2d*tangentAngle - angle;
     }
     
-    @Override
-    public double bounceAngle(Vec2 prevPos, double angle, RectHitbox rect) {
-        
-        CircleHitbox test1 = new CircleHitbox(pos.getX(), pos.getY() - 20*Math.sin(angle), r);
-        CircleHitbox test2 = new CircleHitbox(pos.getX() - 20*Math.cos(angle), pos.getY(), r);
-
-        if (rect.collision(test1) && !rect.collision(test2)) {
-            return Tools.refreshAngle(Math.PI - angle); 
-        } else if (rect.collision(test2) && !rect.collision(test1)) {
-            return Tools.refreshAngle(-angle);
-        } else {
-            return Tools.refreshAngle(Math.PI + angle);
-            
-        } 
-    }
-    
      @Override
-    public double bounceAngle(Vec2 prevPos, double angle, RectHitbox2 rect) {
+    public double bounceAngle(Vec2 prevPos, double angle, RectHitbox rect) {
         LineHitbox line = rect.getLine(prevPos, this);
         return bounceAngle(angle, line);
     }

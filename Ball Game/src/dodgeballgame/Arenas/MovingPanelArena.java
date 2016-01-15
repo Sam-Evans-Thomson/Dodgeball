@@ -30,7 +30,7 @@ public class MovingPanelArena extends Arena{
         graphicsComp = new BarracksGC(this);
         graphicsComp.imgPath = "Images/Arenas/vertical.png";
         arenaName = "SLIDER";
-        distance = HEIGHT/5;
+        distance = HEIGHT/6;
         delta = 0;
     }
     
@@ -42,7 +42,7 @@ public class MovingPanelArena extends Arena{
         for (int i = 0; i < positions.size(); i++) {    
             Vec2 newPos = startPositions.get(i).add(move);
             positions.set(i, newPos);
-            movingHitbox.get(i).pos = positions.get(i);
+            movingHitbox.get(i).moveTo(positions.get(i));
             
             // collision checking
             for(int j = 0; j < GamePanel.numPlayers; j++) {

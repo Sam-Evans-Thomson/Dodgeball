@@ -50,6 +50,10 @@ public class Hitbox {
     public void moveTo(double x, double y) {
         pos.set(x,y);
     }
+    
+    public void moveTo(Vec2 pos) {
+        this.pos = pos;
+    }
     // move by this much
     public void moveBy(double x, double y) {
         pos.add(new Vec2(x,y));
@@ -104,17 +108,12 @@ public class Hitbox {
         System.out.println("Not yet implemented.");
         return false;
     }
-    
-    public boolean collision(RectHitbox2 rect) {
-        System.out.println("Not yet implemented.");
-        return false;
-    }
+
     
     public double bounceAngle(Vec2 prevPos, double angle, Hitbox hitbox) {
         if(hitbox instanceof LineHitbox) return bounceAngle(angle, (LineHitbox)hitbox);
         else if(hitbox instanceof CircleHitbox) return bounceAngle(prevPos, angle, (CircleHitbox)hitbox);
         else if(hitbox instanceof RectHitbox) return bounceAngle(prevPos, angle, (RectHitbox)hitbox);
-        else if(hitbox instanceof RectHitbox2) return bounceAngle(prevPos, angle, (RectHitbox2)hitbox);
         else if(hitbox instanceof ArcHitbox) return bounceAngle(angle, (ArcHitbox)hitbox);
         else return 0d;
     }
@@ -130,10 +129,7 @@ public class Hitbox {
     public double bounceAngle(Vec2 prevPos, double angle, RectHitbox rect) {
         return 0d; 
     }
-    
-    public double bounceAngle(Vec2 prevPos, double angle, RectHitbox2 rect) {
-        return 0d; 
-    }
+
     
     public double bounceAngle(double angle, ArcHitbox rect) {
         return 0d; 

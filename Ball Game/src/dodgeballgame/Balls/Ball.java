@@ -6,6 +6,7 @@
 package dodgeballgame.Balls;
 
 import dodgeballgame.Arenas.ArenaManager;
+import dodgeballgame.Environment.BallTeleporter;
 import dodgeballgame.Environment.BreakableBlock;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.*;
@@ -40,7 +41,7 @@ public class Ball {
     
     public boolean[] inCatchArea;
     
-    public CircleHitbox ballHitbox;
+    public CircleHitbox hb;
     
     public BufferedImage ball = Loading.ball;
     public BufferedImage ball0 = Loading.ball0;
@@ -87,7 +88,7 @@ public class Ball {
         delta = new Vec2(0,0);
         prevDelta = new Vec2(0,0);
         
-        ballHitbox = new CircleHitbox(pos.getX(),pos.getY(),r);
+        hb = new CircleHitbox(pos.getX(),pos.getY(),r);
 
         if (!GamePanel.friendlyFire) {
             if(team == 0) ball = ball0;
@@ -118,7 +119,7 @@ public class Ball {
     
     public void checkHitboxes() {
         for(Player p : GamePanel.playerArray) {
-            if(p.getPlayerHitbox().collision(ballHitbox)) {
+            if(p.getPlayerHitbox().collision(hb)) {
                 
                 if(!GamePanel.friendlyFire && p.team == team) {
                     p.numBalls++;
@@ -138,21 +139,22 @@ public class Ball {
                 if(p.autoCatchOn) p.physicsComp.catchObject();
             } else inCatchArea[p.pNumber] = false;
         }
-            if (GamePanel.arenaManager.goalsActive) {
-                for(Hitbox hb : ArenaManager.arena.arenaTeam1Goal) {
-                    if(hb.collision(ballHitbox)) {
-                        hitGoal(player, 0, hb);
-                    }
-                }
-                for(Hitbox hb : ArenaManager.arena.arenaTeam2Goal) {
-                    if(hb.collision(ballHitbox)) {
-                        hitGoal(player, 1, hb);
-                    }
+        
+        if (GamePanel.arenaManager.goalsActive) {
+            for(Hitbox hb : ArenaManager.arena.arenaTeam1Goal) {
+                if(hb.collision(this.hb)) {
+                    hitGoal(player, 0, hb);
                 }
             }
+            for(Hitbox hb : ArenaManager.arena.arenaTeam2Goal) {
+                if(hb.collision(this.hb)) {
+                    hitGoal(player, 1, hb);
+                }
+            }
+        }
         
         for(Hitbox hb : ArenaManager.arena.arenaBallHitbox) {
-            if(hb.collision(ballHitbox)) {
+            if(hb.collision(this.hb)) {
                 hitWall(hb,ArenaManager.arena.bounceFactor);
                 return;
             }
@@ -160,7 +162,7 @@ public class Ball {
         
         for(BreakableBlock bb : ArenaManager.arena.breakBlocks) {
             Hitbox hb = bb.hb;
-            if(hb.collision(ballHitbox)) {
+            if(hb.collision(this.hb)) {
                 hitBreakBlock(bb);
                 hitWall(hb,ArenaManager.arena.bounceFactor);
                 return;
@@ -168,22 +170,26 @@ public class Ball {
         }
         
         for(Hitbox hb : ArenaManager.arena.arenaSoftBallHitbox) {
-            if(hb.collision(ballHitbox)) {
+            if(hb.collision(this.hb)) {
                 hitWall(hb,ArenaManager.arena.softBounceFactor);
                 return;
             }
         }
         
         for(Item pu : GamePanel.itemArray) {
-            if(pu.hb.collision(ballHitbox)) {
+            if(pu.hb.collision(hb)) {
                 pu.hitBall();
                 return;
             }
         }
+        
+        for(BallTeleporter bt : ArenaManager.arena.teleporters) {
+            bt.collision(this);
+        }
     }
     
     public void updateHitbox() {
-        ballHitbox.moveTo((int)pos.getX(),(int)pos.getY());
+        hb.moveTo((int)pos.getX(),(int)pos.getY());
     }
     
     public void render(Graphics2D g) {
@@ -191,7 +197,7 @@ public class Ball {
     }
     
     public void bouncePlayer(Player p) {
-        angle = ballHitbox.bounceAngle(prevPos, angle, p.getPlayerHitbox());
+        angle = hb.bounceAngle(prevPos, angle, p.getPlayerHitbox());
         
         double playerAngle = p.physicsComp.prevPos.getAngle(p.pos);
         double xFactor = Math.cos(angle)*p.delta.getX();
@@ -218,7 +224,7 @@ public class Ball {
     
     public void hitWall(Hitbox hb, double bf) {
         if (bounceActive) {
-            angle = ballHitbox.bounceAngle(prevPos, angle, hb);
+            angle = this.hb.bounceAngle(prevPos, angle, hb);
             speed = bf*speed;
             if(speed>maxSpeed) speed = maxSpeed;
             pos = prevPos;

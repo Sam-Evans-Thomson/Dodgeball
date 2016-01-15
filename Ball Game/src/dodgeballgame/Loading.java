@@ -5,8 +5,10 @@
  */
 package dodgeballgame;
 
+import dodgeballgame.Arenas.Arena;
 import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.Player.Player;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -66,5 +68,32 @@ public class Loading {
             breaks.add(Tools.sizeImage(break2, GamePanel.arenaHEIGHT/10));
         } catch (IOException e) {
         }
+    }
+    
+    public static ArrayList<BufferedImage[]> arenaDisplays = new ArrayList<>();
+    public static void arenaDisplays(ArrayList<Arena> arenas, int numArenas, int goals) {
+        
+        for (int i = 0; i < numArenas; i++) {
+            
+            BufferedImage[] arena = new BufferedImage[goals+1];
+            
+            for (int j = 0; j < goals + 1; j++) {
+                
+                BufferedImage image = new BufferedImage(GamePanel.arenaWIDTH, 
+                GamePanel.arenaHEIGHT, 
+                BufferedImage.TYPE_INT_RGB);
+                Graphics2D g = image.createGraphics();
+
+                Arena temp = arenas.get(i).copy();
+                if (j<goals) temp.setGoals(j);
+                else ArenaManager.goalsActive = false;
+                temp.render(g);
+                
+                arena[j] = image;
+            }
+            
+            arenaDisplays.add(arena);
+        }
+        
     }
 }

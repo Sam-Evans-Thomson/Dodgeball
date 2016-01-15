@@ -54,7 +54,7 @@ public class BreakArena extends Arena{
                 Vec2 vec = new Vec2(
                         WIDTH/2 - 7*width + 4*j*width + (i%2)*2*width, 
                         width + 2*i*width);
-                RectHitbox2 hb = new RectHitbox2(vec,width, width);
+                RectHitbox hb = new RectHitbox(vec,width, width);
                 addBreakBlock(new BreakableBlock(hb));
             }
         };

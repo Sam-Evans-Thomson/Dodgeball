@@ -45,7 +45,7 @@ public class Wrench extends Ball{
         prevDelta = new Vec2(0,0);
         speed += 100;
         
-        ballHitbox = new CircleHitbox((int)pos.getX(),(int)pos.getY(),r-3);
+        hb = new CircleHitbox((int)pos.getX(),(int)pos.getY(),r-3);
         
         try {
             ball = ImageIO.read(new File("Images/Balls/wrench.png"));
@@ -87,7 +87,7 @@ public class Wrench extends Ball{
     @Override
     public void checkHitboxes() {
         for(Player p : GamePanel.playerArray) {
-            if(p.getPlayerHitbox().collision(ballHitbox)) {
+            if(p.getPlayerHitbox().collision(hb)) {
                 
                 if(!GamePanel.friendlyFire && p.team == team) {
 
@@ -99,21 +99,21 @@ public class Wrench extends Ball{
         }
         
         for(Hitbox hb : ArenaManager.arena.arenaBallHitbox) {
-            if(hb.collision(ballHitbox)) {               
+            if(hb.collision(this.hb)) {               
                 GamePanel.ballArray.remove(this);
                 break;
             }
         }
         
         for(Hitbox hb : ArenaManager.arena.arenaSoftBallHitbox) {
-            if(hb.collision(ballHitbox)) {
+            if(hb.collision(this.hb)) {
                 GamePanel.ballArray.remove(this);
                 break;
             }
         }
         
         for(Item pu : GamePanel.itemArray) {
-            if(pu.hb.collision(ballHitbox)) {
+            if(pu.hb.collision(hb)) {
 
                 pu.hitBall();
                 break;

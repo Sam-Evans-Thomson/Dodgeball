@@ -64,11 +64,6 @@ public class LineHitbox extends Hitbox{
     public boolean collision(ArcHitbox arc) {
         return super.collision(arc);
     }
-
-    @Override
-    public boolean collision(RectHitbox rect) {
-        return super.collision(rect);
-    }
     
         
     @Override

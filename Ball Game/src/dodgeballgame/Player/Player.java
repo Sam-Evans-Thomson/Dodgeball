@@ -45,6 +45,7 @@ public class Player {
     public boolean isGhost;
     public boolean autoCatchOn;
     public boolean invincible;
+    public boolean throwBoost;
     
     public String nextBall;
 
@@ -124,6 +125,7 @@ public class Player {
     private void init() {
         initStats();
         lives = startingLives;
+        throwBoost = false;
         knockoutOn = false;
         isGhost = false;
         invincible = false;
@@ -216,6 +218,10 @@ public class Player {
     
     public void setGetHit() {
         graphicsComp.hitPlayer();
+    }
+    
+    public void throwBoost() {
+        stateComp.throwBoost();
     }
     
     /*************************************************************/

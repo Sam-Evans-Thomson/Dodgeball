@@ -6,6 +6,7 @@
 package dodgeballgame.Arenas;
 
 import dodgeballgame.GamePanel;
+import dodgeballgame.Loading;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -22,11 +23,12 @@ public class ArenaManager extends JPanel{
     public HorizontalArena horArena;
     public MovingPanelArena movingPanelArena;
     public BreakArena breakArena;
+    public TeleArena teleArena;
     
-    public boolean goalsActive;
+    public static boolean goalsActive;
     
     public static final int NUM_GOAL_POS = 3;
-    public static final int NUM_ARENAS = 6;
+    public static final int NUM_ARENAS = 7;
     
     public static ArrayList<Arena> arenas;
     public static Arena arena;
@@ -43,6 +45,7 @@ public class ArenaManager extends JPanel{
         barracksArena = new BarracksArena();
         movingPanelArena = new MovingPanelArena();
         breakArena = new BreakArena();
+        teleArena = new TeleArena();
         
         basicArena.init();
         horArena.init();
@@ -50,6 +53,7 @@ public class ArenaManager extends JPanel{
         barracksArena.init();
         movingPanelArena.init();
         breakArena.init();
+        teleArena.init();
         
         arenas.add(basicArena);
         arenas.add(horArena);
@@ -57,23 +61,23 @@ public class ArenaManager extends JPanel{
         arenas.add(barracksArena);
         arenas.add(movingPanelArena);
         arenas.add(breakArena);
+        arenas.add(teleArena);
+        
+        Loading.arenaDisplays(arenas, NUM_ARENAS, NUM_GOAL_POS);
+        goalsActive = true;
     }
     
     public void update(double d) {
         arena.update(d);
     }
     
+    public void updateArenaDisplay() {
+        
+    }
+    
     public BufferedImage getArenaDisplay(int i, int goals) {
-        BufferedImage image = new BufferedImage(GamePanel.arenaWIDTH, 
-                GamePanel.arenaHEIGHT, 
-                BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = image.createGraphics();
-        
-        Arena temp = arenas.get(i).copy();
-        if(goalsActive) temp.setGoals(goals);
-        temp.render(g);
-        
-        return image;
+        if(!goalsActive) return Loading.arenaDisplays.get(i)[NUM_GOAL_POS];
+        else return Loading.arenaDisplays.get(i)[goals];
     }
     
     public String getName(int i) {

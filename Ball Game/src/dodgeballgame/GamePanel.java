@@ -183,11 +183,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         gameModeManager.setMode(0);
 
         newGame();
+        arenaManager.init();   
         
         g.setColor(Color.black);
         g.fillRect(0,0,screenWIDTH, screenHEIGHT);
         draw();
-        arenaManager.init();        
+             
     }
     
     public static void initControllers() {

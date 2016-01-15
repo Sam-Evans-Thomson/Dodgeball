@@ -8,7 +8,6 @@ package dodgeballgame.Player;
 import dodgeballgame.Arenas.ArenaManager;
 import dodgeballgame.Balls.Ball;
 import dodgeballgame.Balls.HomingBall;
-import dodgeballgame.Environment.BreakableBlock;
 import dodgeballgame.GamePanel;
 import dodgeballgame.HitBoxes.*;
 import dodgeballgame.Items.Item;
@@ -222,22 +221,22 @@ public class PlayerPhysicsComponent implements PlayerComponent{
             y = p.pos.getY()+ 1.02*(p.r + b.r)*Math.sin(p.angle);
         }
         
-        
-        b.setBall(relThrowSpeed, x, y, p.throwAngle, p.team, p);
+        if (p.throwBoost) b.setBall(1.3*relThrowSpeed, x, y, p.throwAngle, p.team, p);
+        else b.setBall(relThrowSpeed, x, y, p.throwAngle, p.team, p);
         
         int count = 0;
         for(Hitbox hb : ArenaManager.arena.arenaBallHitbox) {
-            if(hb.collision(b.ballHitbox)) {
+            if(hb.collision(b.hb)) {
                 count++;
             }
         }
         for(Hitbox hb : ArenaManager.arena.arenaSoftBallHitbox) {
-            if(hb.collision(b.ballHitbox)) {
+            if(hb.collision(b.hb)) {
                 count++;
             }
         }
         for(Player player : GamePanel.playerArray) {
-            if(player.physicsComp.playerHitbox.collision(b.ballHitbox)) {
+            if(player.physicsComp.playerHitbox.collision(b.hb)) {
                 count++;
             }
         }
@@ -260,6 +259,7 @@ public class PlayerPhysicsComponent implements PlayerComponent{
                     p.graphicsComp.setCatchGlow();
                     GamePanel.ballArray.remove(b);
                     i--;
+                    p.throwBoost();
                 }
             }
             //Catch Item
